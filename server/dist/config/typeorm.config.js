@@ -6,7 +6,7 @@ exports.typeOrmConfig = {
     host: 'localhost',
     port: 5432,
     username: 'postgres',
-    password: 'minhthong48',
+    password: 'admin12345678',
     database: 'contract_dat',
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
