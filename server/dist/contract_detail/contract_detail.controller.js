@@ -28,8 +28,11 @@ let ContractDetailController = class ContractDetailController {
     deleteById(id) {
         return this.contractDetailService.deleteContractDetailById(id);
     }
-    createATaskDetail(id, contract_id, product_id, quantity) {
+    createAContractDetail(id, contract_id, product_id, quantity) {
         return this.contractDetailService.createContractDetail(id, contract_id, product_id, quantity);
+    }
+    updateContractDetail(id, quantity) {
+        return this.contractDetailService.updateContractDetail(id, quantity);
     }
 };
 __decorate([
@@ -61,7 +64,15 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String, Number]),
     __metadata("design:returntype", Promise)
-], ContractDetailController.prototype, "createATaskDetail", null);
+], ContractDetailController.prototype, "createAContractDetail", null);
+__decorate([
+    (0, common_1.Patch)('/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('quantity', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number]),
+    __metadata("design:returntype", Promise)
+], ContractDetailController.prototype, "updateContractDetail", null);
 ContractDetailController = __decorate([
     (0, common_1.Controller)('contract-detail'),
     __metadata("design:paramtypes", [contract_detail_service_1.ContractDetailService])
