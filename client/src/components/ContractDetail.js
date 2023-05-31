@@ -66,12 +66,12 @@ export default function ContractDetail() {
   return (
     <>
       <Stack spacing={2} direction="row">
-        <Button variant="contained" sx={{ marginLeft: "auto" }}>
+        <Button variant="contained" sx={{ marginLeft: "auto", marginTop: "20px", marginRight:"20px", marginBottom:"20px"}}>
           Tạo Hợp Đồng
         </Button>
       </Stack>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 440, marginLeft:"10px", marginRight:"30px", padding:"5px" }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
