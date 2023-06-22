@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
+
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,9 +12,19 @@ import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
+import { IconButton,  } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+function handleClick(id) {
+  // Define the logic for handling the button click here
+  console.log(`Button clicked for row with id ${id}`);
+}
 
 const columns = [
   { id: "id", label: "ID", minWidth: 170 },
+  { id: "customerid", label: "ID Khach Hang", minWidth: 170 },
+
   { id: "tenkhachhang", label: "Ten Khach Hang", minWidth: 100 },
   {
     id: "ngayhopdong",
@@ -25,6 +37,12 @@ const columns = [
     label: "Email",
     minWidth: 170,
     align: "right",
+  },
+  {
+    id: "button",
+    label: "",
+    minWidth: 170,
+    align: "center",
   },
 ];
 
@@ -43,14 +61,9 @@ const rows = [
   createData("008", "H", "08/01", "H@gmail.com"),
   createData("009", "I", "09/01", "I@gmail.com"),
   createData("010", "J", "10/01", "J@gmail.com"),
-  createData("011", "K", "11/01", "K@gmail.com"),
-  createData("012", "L", "12/01", "L@gmail.com"),
-  createData("013", "M", "13/01", "M@gmail.com"),
-  createData("014", "N", "14/01", "N@gmail.com"),
-  createData("015", "O", "15/01", "O@gmail.com"),
 ];
 
-export default function ContractDetail() {
+export default function Contract() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -65,13 +78,34 @@ export default function ContractDetail() {
 
   return (
     <>
-      <Stack spacing={2} direction="row">
-        <Button variant="contained" sx={{ marginLeft: "auto", marginTop: "20px", marginRight:"20px", marginBottom:"20px"}}>
-          Tạo Hợp Đồng
-        </Button>
-      </Stack>
+      <Box
+        spacing={2}
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-end"
+      >
+        <Link className="nav-link active" to="/create_contract">
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "20px",
+              marginRight: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            Tạo Hợp Đồng
+          </Button>
+        </Link>
+      </Box>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440, marginLeft:"10px", marginRight:"30px", padding:"5px" }}>
+        <TableContainer
+          sx={{
+            maxHeight: 440,
+            marginLeft: "10px",
+            marginRight: "30px",
+            padding: "5px",
+          }}
+        >
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -107,6 +141,19 @@ export default function ContractDetail() {
                           </TableCell>
                         );
                       })}
+                      <TableCell align="left">
+                        <Button
+                          variant="contained"
+                          onClick={() => handleClick(row.id)}
+                        >
+                          Edit
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <IconButton aria-label="delete">
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
