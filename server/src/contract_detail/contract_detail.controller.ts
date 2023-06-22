@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ContractDetailService } from './contract_detail.service';
 import { ContractDetail } from './contract_detail.entity';
 
@@ -22,7 +22,7 @@ export class ContractDetailController {
     }
 
     @Post()
-    createAContractDetail(
+    createATaskDetail(
         @Body('id') id: string,
         @Body('contract_id') contract_id:string,
         @Body('product_id') product_id: string,
@@ -31,11 +31,4 @@ export class ContractDetailController {
         return this.contractDetailService.createContractDetail(id, contract_id, product_id, quantity)
     }
     
-    @Patch('/:id')
-    updateContractDetail(
-        @Param('id') id: string,
-        @Body('quantity', ParseIntPipe) quantity: number
-    ): Promise<ContractDetail>{
-        return this.contractDetailService.updateContractDetail(id, quantity)
-    }
 }

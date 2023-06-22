@@ -55,11 +55,6 @@ let ContractDetailService = class ContractDetailService {
         await contractDetail.save();
         return contractDetail;
     }
-    async updateContractDetail(id, quantity) {
-        const result = await this.getDetailById(id);
-        result.quantity = quantity;
-        return result;
-    }
 };
 ContractDetailService = __decorate([
     (0, common_1.Injectable)(),
