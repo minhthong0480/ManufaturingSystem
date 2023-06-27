@@ -11,7 +11,7 @@ const ContractCreateForm = (props) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [value, setValue] = useState(null);
 
-  console.log(values);
+  // console.log(values);
 
   return (
     <Fragment>

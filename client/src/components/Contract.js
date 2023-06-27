@@ -1,4 +1,5 @@
-import * as React from "react";
+import { Fragment, useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
 
 import Paper from "@mui/material/Paper";
@@ -167,37 +168,69 @@ import DeleteIcon from "@mui/icons-material/Delete";
 // }
 //  export default Contract;
 
-const Contract = (h ) => {
+
+const Contract = () => {
   const rows = [
-    { id: 1, contractid: h.contract_id, product_id: "aa", quantity: 1 },
+    { id: 1, contractid: "A", product_id: "aa", quantity: 1 },
     { id: 2, contractid: "B", product_id: "bb", quantity: 1 },
     { id: 3, contractid: "C", product_id: "cc", quantity: 1 },
     { id: 3, contractid: "D", product_id: "dd", quantity: 1 },
   ];
 
+  const [contract, setContract] = useState([]);
+
+  const loadConstract = async () =>{
+    setContract(data);
+  }
+
+  useEffect(() => {
+    loadConstract();
+  }, []);
+
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Contract ID</TableCell>
-            <TableCell>Product ID</TableCell>
-            <TableCell>Quantity</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
-              <TableCell>{row.contractid}</TableCell>
-              <TableCell>{row.product_id}</TableCell>
-              <TableCell>{row.quantity}</TableCell>
+    <Fragment>
+      <Box
+        spacing={2}
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-end"
+      >
+        <Link className="nav-link active" to="/create_contract">
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: "20px",
+              marginRight: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            Tạo Hợp Đồng
+          </Button>
+        </Link>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Contract ID</TableCell>
+              <TableCell>Product ID</TableCell>
+              <TableCell>Quantity</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.contractid}</TableCell>
+                <TableCell>{row.product_id}</TableCell>
+                <TableCell>{row.quantity}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Fragment>
   );
 };
 

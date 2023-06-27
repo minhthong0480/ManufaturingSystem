@@ -38,10 +38,6 @@ const ContractCreate = () => {
     // customerData.append("email", email);
 
     // console.log([...customerData]);
-
-    // setSelectedDateTime(null);
-
-    //  dispatch(create(token, petData));
     try {
       let res = await create({
         ...values,
@@ -52,7 +48,7 @@ const ContractCreate = () => {
       toast.success("New Contract added");
       setTimeout(() => {
         //window.location.reload();
-        navigate("/user/dashboard");
+        navigate("/contract");
       }, 3000);
     } catch (err) {
       console.log(err);
@@ -82,7 +78,7 @@ const ContractCreate = () => {
               values={values}
               setValues={setValues}
               handleChange={handleChange}
-              onChange={(date) => setSelectedDateTime(date)}
+              // onChange={(date) => setSelectedDateTime(date)}
               handleSubmit={handleSubmit}
             />
           </div>
