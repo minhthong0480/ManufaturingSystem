@@ -16,6 +16,8 @@ import { Box } from "@mui/material";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { getall } from "../action/contract-detail";
+
 // const Contract = ({h}) => {
 
 //   // function handleClick(id) {
@@ -170,22 +172,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 
 const Contract = () => {
-  const rows = [
-    { id: 1, contractid: "A", product_id: "aa", quantity: 1 },
-    { id: 2, contractid: "B", product_id: "bb", quantity: 1 },
-    { id: 3, contractid: "C", product_id: "cc", quantity: 1 },
-    { id: 3, contractid: "D", product_id: "dd", quantity: 1 },
-  ];
-
+  
   const [contract, setContract] = useState([]);
-
-  const loadConstract = async () =>{
-    setContract(data);
+  
+  useEffect(() => {
+    loadContract();
+  }, []);
+  
+  const loadContract = async () =>{
+    let res = await getall();
+    // console.log(res)
+    setContract(res.data);
   }
 
-  useEffect(() => {
-    loadConstract();
-  }, []);
+  console.log(contract)
+  
+  
+  // let row = [
+  //   { id: contract.id, productid: contract.product_id, contractid: contract.contract_id, quantity: contract.quantity },
+  // // //   // { id: 2, contractid: "B", productid: "bb", quantity: 1 },
+  // // //   // { id: 3, contractid: "C", productid: "cc", quantity: 1 },
+  // // //   // { id: 3, contractid: "D", productid: "dd", quantity: 1 },
+  // ];
 
   return (
     <Fragment>
@@ -204,7 +212,7 @@ const Contract = () => {
               marginBottom: "20px",
             }}
           >
-            Tạo Hợp Đồng
+            Create Contract
           </Button>
         </Link>
       </Box>
@@ -219,11 +227,11 @@ const Contract = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {contract.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.id}</TableCell>
                 <TableCell>{row.contractid}</TableCell>
-                <TableCell>{row.product_id}</TableCell>
+                <TableCell>{row.productid}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
               </TableRow>
             ))}

@@ -62,7 +62,7 @@ const ContractCreateForm = (props) => {
           </Grid>
         </Grid> */}
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <TextField
               label=" ID"
               name="id"
@@ -71,7 +71,7 @@ const ContractCreateForm = (props) => {
               required
               fullWidth
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <TextField
               label="Customer ID"
