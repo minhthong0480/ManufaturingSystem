@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import {Contract} from '../contract/contract.entity';
 
 @Entity()
 export class ContractDetail extends BaseEntity {
-    @PrimaryColumn()
+    // @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: string;
 
     @OneToOne(() => Contract, {eager: true})
