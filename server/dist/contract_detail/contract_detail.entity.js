@@ -15,7 +15,7 @@ const contract_entity_1 = require("../contract/contract.entity");
 let ContractDetail = class ContractDetail extends typeorm_1.BaseEntity {
 };
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", String)
 ], ContractDetail.prototype, "id", void 0);
 __decorate([
