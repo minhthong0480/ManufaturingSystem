@@ -177,15 +177,15 @@ const Contract = () => {
     { id: 3, contractid: "D", product_id: "dd", quantity: 1 },
   ];
 
-  const [contract, setContract] = useState([]);
+  // const [contract, setContract] = useState([]);
 
-  const loadConstract = async () =>{
-    setContract(data);
-  }
+  // const loadConstract = async () =>{
+  //   setContract(data);
+  // }
 
-  useEffect(() => {
-    loadConstract();
-  }, []);
+  // useEffect(() => {
+  //   loadConstract();
+  // }, []);
 
   return (
     <Fragment>
