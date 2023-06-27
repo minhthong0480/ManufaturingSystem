@@ -7,19 +7,12 @@ import { ContractDetail } from './contract_detail.entity';
 export class ContractDetailController {
     constructor( private contractDetailService: ContractDetailService){}
 
-    @Get('/:id')
-    getById( @Param('id') id: string): Promise<ContractDetail>{
-        return this.contractDetailService.getDetailById(id)
-    }
     @Get()
     getAll(): Promise<ContractDetail[]>{
         return this.contractDetailService.getAllContractDetail()
     }
 
-    @Delete('/:id')
-    deleteById(@Param('id') id: string): Promise<void>{
-        return this.contractDetailService.deleteContractDetailById(id)
-    }
+    
 
     @Post()
     createATaskDetail(
@@ -30,5 +23,14 @@ export class ContractDetailController {
     ): Promise<ContractDetail>{
         return this.contractDetailService.createContractDetail(id, contract_id, product_id, quantity)
     }
+    @Get('/:id')
+    getById( @Param('id') id: string): Promise<ContractDetail>{
+        return this.contractDetailService.getDetailById(id)
+    }
     
+
+    @Delete('/:id')
+    deleteById(@Param('id') id: string): Promise<void>{
+        return this.contractDetailService.deleteContractDetailById(id)
+    }
 }

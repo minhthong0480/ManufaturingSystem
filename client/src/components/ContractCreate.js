@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import ContractCreateForm from "../forms/ContractCreateForm";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
+import { create } from "../action/contract-detail";
 
 const ContractCreate = () => {
   //   const { auth } = useSelector((state) => ({ ...state }));
@@ -13,10 +14,10 @@ const ContractCreate = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
-    customerid: "",
-    customername: "",
-    selectedDateTime: "",
-    email: "",
+    id: "",
+    contract_id: "",
+    product_id: "",
+    quantity: "",
   });
 
   //destructing variable from state
@@ -26,32 +27,40 @@ const ContractCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let customerData = new FormData();
-    customerData.append("customerid", customerid);
-    customerData.append("customername", customername);
-    customerData.append("selectedDateTime", selectedDateTime);
-    customerData.append("email", email);
+    // let customerData = new FormData();
+    // customerData.append("id", id);
+    // customerData.append("contract_id", contract_id);
+    // customerData.append("product_id", product_id);
+    // customerData.append("quantity", quantity);
+    // customerData.append("customerid", customerid);
+    // customerData.append("customername", customername);
+    // // customerData.append("selectedDateTime", selectedDateTime);
+    // customerData.append("email", email);
 
-    console.log([...customerData]);
+    // console.log([...customerData]);
 
-    setSelectedDateTime(null);
+    // setSelectedDateTime(null);
 
     //  dispatch(create(token, petData));
-    // try {
-    //   let res = await create(customerData);
-    //   console.log("CONTRACT CREATE RES", res);
-    //   toast.success("New Contract added");
-    //   setTimeout(() => {
-    //     //window.location.reload();
-    //     navigate("/user/dashboard");
-    //   }, 3000);
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error(err.response.data);
-    // }
+    try {
+      let res = await create({
+        ...values,
+        quantity: parseInt(values.quantity),
+      });
+      console.log(values);
+      console.log("CONTRACT CREATE RES", res);
+      toast.success("New Contract added");
+      setTimeout(() => {
+        //window.location.reload();
+        navigate("/user/dashboard");
+      }, 3000);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data);
+    }
   };
 
-  // console.log(values);
+  console.log(values);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
