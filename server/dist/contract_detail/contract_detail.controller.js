@@ -19,39 +19,25 @@ let ContractDetailController = class ContractDetailController {
     constructor(contractDetailService) {
         this.contractDetailService = contractDetailService;
     }
-    getById(id) {
-        return this.contractDetailService.getDetailById(id);
-    }
     getAll() {
         return this.contractDetailService.getAllContractDetail();
-    }
-    deleteById(id) {
-        return this.contractDetailService.deleteContractDetailById(id);
     }
     createATaskDetail(id, contract_id, product_id, quantity) {
         return this.contractDetailService.createContractDetail(id, contract_id, product_id, quantity);
     }
+    getById(id) {
+        return this.contractDetailService.getDetailById(id);
+    }
+    deleteById(id) {
+        return this.contractDetailService.deleteContractDetailById(id);
+    }
 };
-__decorate([
-    (0, common_1.Get)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], ContractDetailController.prototype, "getById", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ContractDetailController.prototype, "getAll", null);
-__decorate([
-    (0, common_1.Delete)('/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], ContractDetailController.prototype, "deleteById", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)('id')),
@@ -62,6 +48,20 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String, Number]),
     __metadata("design:returntype", Promise)
 ], ContractDetailController.prototype, "createATaskDetail", null);
+__decorate([
+    (0, common_1.Get)('/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ContractDetailController.prototype, "getById", null);
+__decorate([
+    (0, common_1.Delete)('/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ContractDetailController.prototype, "deleteById", null);
 ContractDetailController = __decorate([
     (0, common_1.Controller)('contract-detail'),
     __metadata("design:paramtypes", [contract_detail_service_1.ContractDetailService])
