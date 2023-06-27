@@ -9,5 +9,4 @@ export declare class ContractDetailService {
     deleteContractDetailById(id: string): Promise<void>;
     getDetailById(id: string): Promise<ContractDetail>;
     createContractDetail(id: string, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
-    updateContractDetail(id: string, quantity: number): Promise<ContractDetail>;
 }

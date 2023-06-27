@@ -1,26 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import Contact from "./components/Contract";
+import ContractCreate from "./components/ContractCreate";
+import LoginPage from "./components/LoginPage";
+import Navbar from "./components/Navbar";
+import RegisterPage from "./components/RegisterPage";
+import CreateContractForm from "./forms/ContractCreateForm";
+
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar />
+      
+      <Routes>
+        <Route exact path="/contract" element={<Contact />} />
+        <Route exact path="/create_contract" element={<ContractCreate />} />
+        <Route exact path="/login" element={<LoginPage />} />
+        <Route exact path="/register" element={<RegisterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
-  //test
 }
 
 export default App;

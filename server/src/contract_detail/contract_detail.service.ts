@@ -63,11 +63,5 @@ export class ContractDetailService {
             await contractDetail.save()
             return contractDetail
     }
-    async updateContractDetail(id: string, quantity: number): Promise<ContractDetail>{
-        const result = await this.getDetailById(id)
-
-        result.quantity = quantity
-        return result
-    }
 
 }
