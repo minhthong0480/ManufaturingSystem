@@ -14,7 +14,7 @@ const ContractCreate = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
-    id: "",
+    
     contract_id: "",
     product_id: "",
     quantity: "",
@@ -27,17 +27,6 @@ const ContractCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // let customerData = new FormData();
-    // customerData.append("id", id);
-    // customerData.append("contract_id", contract_id);
-    // customerData.append("product_id", product_id);
-    // customerData.append("quantity", quantity);
-    // customerData.append("customerid", customerid);
-    // customerData.append("customername", customername);
-    // // customerData.append("selectedDateTime", selectedDateTime);
-    // customerData.append("email", email);
-
-    // console.log([...customerData]);
     try {
       let res = await create({
         ...values,
@@ -56,7 +45,7 @@ const ContractCreate = () => {
     }
   };
 
-  console.log(values);
+  // console.log(values);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });

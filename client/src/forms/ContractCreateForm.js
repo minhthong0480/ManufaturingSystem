@@ -1,7 +1,5 @@
 import { Fragment, React, useState } from "react";
-import { TextField, Button, Grid, Box } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import { Form, Input, Button } from 'antd';
 
 const ContractCreateForm = (props) => {
   const { values, setValues, handleChange, handleSubmit } = props;
@@ -11,119 +9,48 @@ const ContractCreateForm = (props) => {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [value, setValue] = useState(null);
 
+  const onFinish = (values) => {
+    console.log('Form values:', values);
+  };
+
   // console.log(values);
 
   return (
-    <Fragment>
-      <form onSubmit={handleSubmit}>
-        {/* <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Customer ID"
-              name="customerid"
-              value={customerid}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Customer Name"
-              name="customername"
-              value={customername}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
+    <Form onFinish={onFinish} onClick={handleSubmit}>
+      <Form.Item
+        label="Contract ID"
+        name="contractid"
+        value={contract_id}
+        onChange={handleChange}
+        rules={[{ required: true, message: 'Contract ID' }]}
+      >
+        <Input />
+      </Form.Item>
 
-          <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label="Pick Date"
-                value={value}
-                onChange={(newValue) => setValue(newValue)}
-                format="DD-MM-YYYY HH:mm"
-              />
-            </LocalizationProvider>
-          </Grid>
+      <Form.Item
+        label="Product ID"
+        name="productid"
+        value={product_id}
+        onChange={handleChange}
+        rules={[{ required: true, message: 'Contract ID' }]}
+      >
+        <Input />
+      </Form.Item>
 
-          <Grid item xs={12}>
-            <TextField
-              label="Email"
-              name="email"
-              // type="email"
-              value={email}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-        </Grid> */}
-        <Grid container spacing={2}>
-          {/* <Grid item xs={12}>
-            <TextField
-              label=" ID"
-              name="id"
-              value={id}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid> */}
-          <Grid item xs={12}>
-            <TextField
-              label="Customer ID"
-              name="contract_id"
-              value={contract_id}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
+      <Form.Item
+        label="Quantity"
+        name="quantity"
+        value={quantity}
+        onChange={handleChange}
+        rules={[{ required: true, message: 'Quantity' }]}
+      >
+        <Input />
+      </Form.Item>
 
-          {/* <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-                label="Pick Date"
-                value={value}
-                onChange={(newValue) => setValue(newValue)}
-                format="DD-MM-YYYY HH:mm"
-              />
-            </LocalizationProvider>
-          </Grid> */}
-          <Grid item xs={12}>
-            <TextField
-              label="Product ID"
-              name="product_id"
-              // type="email"
-              value={product_id}
-              onChange={handleChange}
-              required
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              label="Quantity"
-              name="quantity"
-              value={quantity}
-              onChange={handleChange}
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            />
-          </Grid>
-        </Grid>
-        <Box
-          sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
-        >
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </Box>
-      </form>
-    </Fragment>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" >Submit</Button>
+      </Form.Item>
+    </Form>
   );
 };
 

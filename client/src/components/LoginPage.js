@@ -1,66 +1,43 @@
-import React, { useState } from "react";
-import { TextField, Button, Container, Typography, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Form, Input, Button } from 'antd';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Perform login logic here
-    console.log("Username:", username);
-    console.log("Password:", password);
-    // Reset the form
-    setUsername("");
-    setPassword("");
+  const handleLogin = (values) => {
+    setLoading(true);
+    // Simulating login request
+    setTimeout(() => {
+      setLoading(false);
+      console.log('Logged in with:', values);
+    }, 2000);
   };
 
   return (
-    <Container maxWidth="xs">
-      <Typography variant="h4" align="center" gutterBottom>
-        Login
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Username"
-              variant="outlined"
-              fullWidth
-              value={username}
-              onChange={handleUsernameChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Password"
-              variant="outlined"
-              type="password"
-              fullWidth
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Log In
-            </Button>
-          </Grid>
-          <Grid sx={{ margin: "10px" }} component={Link} to="/forgotpass">
-            Forgot Password
-          </Grid>
-        </Grid>
-      </form>
-    </Container>
+    <div style={{ maxWidth: 400, margin: '0 auto' }}>
+      <h2>Login Page</h2>
+      <Form onFinish={handleLogin}>
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: 'Please enter your username' }]}
+        >
+          <Input placeholder="Username" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Please enter your password' }]}
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} block>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
