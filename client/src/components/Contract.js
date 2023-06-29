@@ -1,8 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
-import { Button, Row, Col } from "antd";
+import { Button, Row, Col, Input } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
-
 
 import React from "react";
 import { Table } from "antd";
@@ -11,16 +10,41 @@ import { deleteOne, getall } from "../action/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearchText(value);
+  };
 
   useEffect(() => {
-    loadContract();
+    const fetchData = async () => {
+      try {
+        let res = await getall(); 
+        setContract(res.data);
+        setFilteredData(res.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   }, []);
 
-  const loadContract = async () => {
-    let res = await getall();
-    // console.log(res)
-    setContract(res.data);
-  };
+  useEffect(() => {
+    const filtered = contract.filter((item) =>
+      item.contract_id.id.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredData(filtered);
+    // loadContract();
+  }, [searchText, contract]);
+
+  // const loadContract = async () => {
+  //   let res = await getall();
+  //   // console.log(res)
+  //   setContract(res.data);
+  // };
+  console.log(contract);
 
   const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
@@ -33,11 +57,10 @@ const Contract = () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deleteOne(id).then((res) => {
       toast.success("Contract Deleted");
-      loadContract();
+      // loadContract();
     });
   };
 
-  console.log(contract);
   // console.log(contract.quantity);
 
   const columns = [
@@ -77,6 +100,12 @@ const Contract = () => {
     <Fragment>
       <Row justify="end">
         <Col>
+          <Input.Search
+            placeholder="Search name..."
+            value={searchText}
+            onChange={handleSearch}
+            style={{ marginBottom: 16 }}
+          />
           <Button
             style={{ marginTop: "10px" }}
             type="primary"
@@ -86,7 +115,7 @@ const Contract = () => {
           </Button>
         </Col>
       </Row>
-      <Table dataSource={contract} columns={columns} />
+      <Table dataSource={filteredData} columns={columns} />
     </Fragment>
   );
 };
