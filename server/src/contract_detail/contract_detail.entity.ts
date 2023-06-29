@@ -6,7 +6,7 @@ import {Contract} from '../contract/contract.entity';
 export class ContractDetail extends BaseEntity {
     // @PrimaryColumn()
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @OneToOne(() => Contract, {eager: true})
     @JoinColumn({name: 'contract_id'})

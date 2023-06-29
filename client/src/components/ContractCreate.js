@@ -34,7 +34,7 @@ const ContractCreate = () => {
         quantity: parseInt(values.quantity),
       });
       // console.log(values);
-      console.log("CONTRACT CREATE RES", res);
+      console.log("CONTRACT CREATE RES");
       toast.success("New Contract added");
       setTimeout(() => {
         //window.location.reload();
@@ -51,7 +51,7 @@ const ContractCreate = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     // setValues({ ...values, [e.target.name]: e.target.value });
-    setValues((prevData) => ({...prevData, [name]:value,}))
+    setValues((prevData) => ({ ...prevData, [name]: value }));
   };
 
   return (

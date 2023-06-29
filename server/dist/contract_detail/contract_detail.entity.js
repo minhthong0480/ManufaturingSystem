@@ -16,7 +16,7 @@ let ContractDetail = class ContractDetail extends typeorm_1.BaseEntity {
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], ContractDetail.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => contract_entity_1.Contract, { eager: true }),

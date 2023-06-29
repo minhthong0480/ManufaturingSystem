@@ -6,7 +6,7 @@ export declare class ContractDetailService {
     private contract;
     constructor(contract_detail: Repository<ContractDetail>, contract: Repository<Contract>);
     getAllContractDetail(): Promise<ContractDetail[]>;
-    deleteContractDetailById(id: string): Promise<void>;
-    getDetailById(id: string): Promise<ContractDetail>;
-    createContractDetail(id: string, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
+    deleteContractDetailById(id: number): Promise<void>;
+    getDetailById(id: number): Promise<ContractDetail>;
+    createContractDetail(id: number, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
 }

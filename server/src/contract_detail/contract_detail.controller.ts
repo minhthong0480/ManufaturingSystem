@@ -16,7 +16,7 @@ export class ContractDetailController {
 
     @Post()
     createATaskDetail(
-        @Body('id') id: string,
+        @Body('id') id: number,
         @Body('contract_id') contract_id:string,
         @Body('product_id') product_id: string,
         @Body('quantity', ParseIntPipe) quantity: number
@@ -24,13 +24,13 @@ export class ContractDetailController {
         return this.contractDetailService.createContractDetail(id, contract_id, product_id, quantity)
     }
     @Get('/:id')
-    getById( @Param('id') id: string): Promise<ContractDetail>{
+    getById( @Param('id') id: number): Promise<ContractDetail>{
         return this.contractDetailService.getDetailById(id)
     }
     
 
     @Delete('/:id')
-    deleteById(@Param('id') id: string): Promise<void>{
+    deleteById(@Param('id') id: number): Promise<void>{
         return this.contractDetailService.deleteContractDetailById(id)
     }
 }

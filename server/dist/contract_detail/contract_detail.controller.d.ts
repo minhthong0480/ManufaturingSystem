@@ -4,7 +4,7 @@ export declare class ContractDetailController {
     private contractDetailService;
     constructor(contractDetailService: ContractDetailService);
     getAll(): Promise<ContractDetail[]>;
-    createATaskDetail(id: string, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
-    getById(id: string): Promise<ContractDetail>;
-    deleteById(id: string): Promise<void>;
+    createATaskDetail(id: number, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
+    getById(id: number): Promise<ContractDetail>;
+    deleteById(id: number): Promise<void>;
 }

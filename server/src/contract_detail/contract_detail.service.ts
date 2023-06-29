@@ -23,7 +23,7 @@ export class ContractDetailService {
         return result
     }
 
-    async deleteContractDetailById(id: string): Promise<void>{
+    async deleteContractDetailById(id: number): Promise<void>{
         const found = await this.getDetailById(id) 
         const result = await this.contract_detail.delete(id)
         
@@ -34,7 +34,7 @@ export class ContractDetailService {
         
     }
 
-    async getDetailById (id: string): Promise<ContractDetail>{
+    async getDetailById (id: number): Promise<ContractDetail>{
         const found = await this.contract_detail.findOneBy({id: id})
         console.log(found['contract_id']['id']);
         
@@ -45,7 +45,7 @@ export class ContractDetailService {
         return found
     }
     async createContractDetail(
-        id: string, 
+        id: number, 
         contract_id: string, 
         product_id: string, 
         quantity: number): Promise<ContractDetail>{

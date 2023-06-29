@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { Button, Row, Col } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 
-import { Link } from "react-router-dom";
 
 import React from "react";
 import { Table } from "antd";
 
-import { getall } from "../action/contract-detail";
+import { deleteOne, getall } from "../action/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
@@ -26,11 +26,19 @@ const Contract = () => {
     console.log("Button clicked for record:", record);
   };
 
-  const handleDelete = (record) => {
-    console.log("Button clicked for delete", record);
+  // const handleDelete = (record) => {
+  //   console.log("Button clicked for delete", record);
+  // };
+  const handleDelete = async (id) => {
+    if (!window.confirm("Do you want to delete this contract?")) return;
+    deleteOne(id).then((res) => {
+      toast.success("Contract Deleted");
+      loadContract();
+    });
   };
 
   console.log(contract);
+  // console.log(contract.quantity);
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -44,14 +52,21 @@ const Contract = () => {
     { title: "Quantity", dataIndex: "quantity", key: "quantity" },
 
     {
-      title: 'Actions',
-      dataIndex: 'actions',
+      title: "Actions",
+      dataIndex: "actions",
       render: (_, record) => (
         <div>
-          <Button type="primary" onClick={() => handleEdit(record)} style={{ marginRight: '10px' }}>
+          <Button
+            type="primary"
+            onClick={() => handleEdit(record)}
+            style={{ marginRight: "10px" }}
+          >
             Edit
           </Button>
-          <DeleteOutlined onClick={() => handleDelete(record)} style={{ marginLeft: '10px', fontSize:'20px' }}>
+          <DeleteOutlined
+            onClick={() => handleDelete(record.id)}
+            style={{ marginLeft: "10px", fontSize: "20px" }}
+          >
             Delete
           </DeleteOutlined>
         </div>
