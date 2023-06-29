@@ -28,11 +28,6 @@ const Contract = () => {
   
   console.log(contract);
 
-  // const dataSource = [
-  //   { key: "1", name: "John Doe", age: 30, address: "123 Street, City" },
-  //   { key: "2", name: "Jane Smith", age: 28, address: "456 Avenue, Town" },
-  //   { key: "3", name: "Mike Johnson", age: 35, address: "789 Road, Village" },
-  // ];
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     {

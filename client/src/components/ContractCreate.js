@@ -14,25 +14,26 @@ const ContractCreate = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
-    
     contract_id: "",
     product_id: "",
     quantity: "",
   });
 
+  // console.log(values);
+
   //destructing variable from state
-  const { customerid, customername, email } = values;
-  const [selectedDateTime, setSelectedDateTime] = useState(null);
+  // const { customerid, customername, email } = values;
+  // const [selectedDateTime, setSelectedDateTime] = useState(null);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     try {
       let res = await create({
         ...values,
         quantity: parseInt(values.quantity),
       });
-      console.log(values);
+      // console.log(values);
       console.log("CONTRACT CREATE RES", res);
       toast.success("New Contract added");
       setTimeout(() => {
@@ -48,7 +49,9 @@ const ContractCreate = () => {
   // console.log(values);
 
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // setValues({ ...values, [e.target.name]: e.target.value });
+    setValues((prevData) => ({...prevData, [name]:value,}))
   };
 
   return (
