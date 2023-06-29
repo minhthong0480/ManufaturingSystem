@@ -3,7 +3,6 @@ import { Button, Row, Col, Input } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
-
 import React from "react";
 import { Table } from "antd";
 
@@ -11,10 +10,16 @@ import { deleteOne, getall } from "../action/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
+  const [filteredData, setFilteredData] = useState(contract);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    loadContract();
-  }, []);
+    const filtered = contract.filter((item) =>
+      item.contract_id.id.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredData(filtered);
+    // loadContract();
+  }, [searchText]);
 
   const loadContract = async () => {
     let res = await getall();
@@ -37,18 +42,10 @@ const Contract = () => {
     });
   };
 
-  const [searchText, setSearchText] = useState('');
-  const [filteredData, setFilteredData] = useState(contract); // assuming data is the array of table data
-
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearchText(value);
-
-    const filtered = contract.filter((item) =>
-      item.contract_id.id.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredData(filtered);
-  }
+  };
 
   console.log(contract);
   // console.log(contract.quantity);
@@ -90,12 +87,12 @@ const Contract = () => {
     <Fragment>
       <Row justify="end">
         <Col>
-        <Input.Search
-        placeholder="Search name..."
-        value={searchText}
-        onChange={handleSearch}
-        style={{ marginBottom: 16 }}
-      />
+          <Input.Search
+            placeholder="Search name..."
+            value={searchText}
+            onChange={handleSearch}
+            style={{ marginBottom: 16 }}
+          />
           <Button
             style={{ marginTop: "10px" }}
             type="primary"
