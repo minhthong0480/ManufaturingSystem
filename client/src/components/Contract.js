@@ -22,10 +22,14 @@ const Contract = () => {
     setContract(res.data);
   };
 
-  const handleButtonClick = (record) => {
-    console.log('Button clicked for record:', record);
+  const handleEdit = (record) => {
+    console.log("Button clicked for record:", record);
   };
-  
+
+  const handleDelete = (record) => {
+    console.log("Button clicked for delete", record);
+  };
+
   console.log(contract);
 
   const columns = [
@@ -40,10 +44,17 @@ const Contract = () => {
     { title: "Quantity", dataIndex: "quantity", key: "quantity" },
 
     {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Button onClick={() => handleButtonClick(record)}>Edit</Button>
+      title: 'Actions',
+      dataIndex: 'actions',
+      render: (_, record) => (
+        <div>
+          <Button type="primary" onClick={() => handleEdit(record)} style={{ marginRight: '10px' }}>
+            Edit
+          </Button>
+          <DeleteOutlined onClick={() => handleDelete(record)} style={{ marginLeft: '10px', fontSize:'20px' }}>
+            Delete
+          </DeleteOutlined>
+        </div>
       ),
     },
   ];
