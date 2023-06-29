@@ -10,8 +10,26 @@ import { deleteOne, getall } from "../action/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
-  const [filteredData, setFilteredData] = useState(contract);
+  const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearchText(value);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let res = await getall(); 
+        setContract(res.data);
+        setFilteredData(res.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const filtered = contract.filter((item) =>
@@ -19,13 +37,14 @@ const Contract = () => {
     );
     setFilteredData(filtered);
     // loadContract();
-  }, [searchText]);
+  }, [searchText, contract]);
 
-  const loadContract = async () => {
-    let res = await getall();
-    // console.log(res)
-    setContract(res.data);
-  };
+  // const loadContract = async () => {
+  //   let res = await getall();
+  //   // console.log(res)
+  //   setContract(res.data);
+  // };
+  console.log(contract);
 
   const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
@@ -38,16 +57,10 @@ const Contract = () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deleteOne(id).then((res) => {
       toast.success("Contract Deleted");
-      loadContract();
+      // loadContract();
     });
   };
 
-  const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearchText(value);
-  };
-
-  console.log(contract);
   // console.log(contract.quantity);
 
   const columns = [
