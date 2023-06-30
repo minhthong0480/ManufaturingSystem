@@ -61,7 +61,6 @@ const Contract = () => {
     });
   };
 
-  // console.log(contract.quantity);
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
