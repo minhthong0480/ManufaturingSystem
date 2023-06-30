@@ -17,17 +17,17 @@ const Contract = () => {
     const { value } = e.target;
     setSearchText(value);
   };
+  const fetchData = async () => {
+    try {
+      let res = await getall();
+      setContract(res.data);
+      setFilteredData(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let res = await getall(); 
-        setContract(res.data);
-        setFilteredData(res.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     fetchData();
   }, []);
 
@@ -57,10 +57,9 @@ const Contract = () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deleteOne(id).then((res) => {
       toast.success("Contract Deleted");
-      // loadContract();
+      fetchData();
     });
   };
-
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
