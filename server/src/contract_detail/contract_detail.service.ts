@@ -2,8 +2,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ContractDetail } from './contract_detail.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Contract } from 'src/contract/contract.entity';
+import { isEmpty } from 'rxjs';
 
 
 @Injectable()
@@ -62,6 +63,12 @@ export class ContractDetailService {
             
             await contractDetail.save()
             return contractDetail
+    }
+    async updateById( id: string, quantity: number): Promise<ContractDetail>{
+            const foundContractDetail = await this.getDetailById(id)
+            foundContractDetail.quantity = quantity
+            await foundContractDetail.save()
+            return foundContractDetail
     }
 
 }

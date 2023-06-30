@@ -7,4 +7,5 @@ export declare class ContractDetailController {
     getAll(): Promise<ContractDetail[]>;
     deleteById(id: string): Promise<void>;
     createATaskDetail(id: string, contract_id: string, product_id: string, quantity: number): Promise<ContractDetail>;
+    updateById(id: string, quantity: number): Promise<ContractDetail>;
 }
