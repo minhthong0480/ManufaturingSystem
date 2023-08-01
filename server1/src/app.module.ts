@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ContractModule } from './contract/contract.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Contract } from './contract/contract.entity';
 
 @Module({
   imports: [
@@ -11,10 +12,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'ubuntu',
       password: 'password',
       database: 'postgres',
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      entities: [Contract],
       synchronize: true,
     }),
     ContractModule],
   
 })
 export class AppModule {}
+//__dirname + '/../**/*.entity.{js,ts}'
