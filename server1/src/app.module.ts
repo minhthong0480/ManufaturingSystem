@@ -6,11 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'ec2-18-143-76-192.ap-southeast-1.compute.amazonaws.com',
       port: 5432,
       username: 'ubuntu',
       password: 'password',
-      database: 'capstone_db',
+      database: 'postgres',
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: true,
     }),
