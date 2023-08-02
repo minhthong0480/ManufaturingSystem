@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getall = async () =>
-await axios.get(`${process.env.REACT_APP_API}/post`, {
+await axios.get(`${process.env.REACT_APP_API}`, {
     // headers: {
     //   Authorization: `Bearer ${token}`,
     // },
@@ -10,7 +10,7 @@ await axios.get(`${process.env.REACT_APP_API}/post`, {
   export const create = async (data) => {
     // console.log(data);
   
-    await axios.post(`${process.env.REACT_APP_API}/post`, data, {
+    await axios.post(`${process.env.REACT_APP_API}`, data, {
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },
@@ -19,7 +19,7 @@ await axios.get(`${process.env.REACT_APP_API}/post`, {
 
 export const deleteOne = async (id) =>
   await axios.delete(
-    `${process.env.REACT_APP_API}/post/${id}`,
+    `${process.env.REACT_APP_API}`,
     {
       // headers: {
       //   Authorization: `Bearer ${token}`,
@@ -29,7 +29,7 @@ export const deleteOne = async (id) =>
 
 export const getOne = async (id) =>
   await axios.get(
-    `${process.env.REACT_APP_API}/post/contract-detail/${id}`,
+    `${process.env.REACT_APP_API}`,
     {
       // headers: {
       //   Authorization: `Bearer ${token}`,
@@ -39,7 +39,7 @@ export const getOne = async (id) =>
 
 export const update = async (token, data, id) =>
   await axios.put(
-    `${process.env.REACT_APP_API}/post/contract-detail/updateContract/${id}`,
+    `${process.env.REACT_APP_API}`,
     data
     // {
     //   headers: {

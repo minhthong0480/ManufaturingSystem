@@ -31,13 +31,13 @@ const Contract = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const filtered = contract.filter((item) =>
-      item.contract_id.id.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFilteredData(filtered);
-    // loadContract();
-  }, [searchText, contract]);
+  // useEffect(() => {
+  //   const filtered = contract.filter((item) =>
+  //     item.contract_number.toLowerCase().includes(searchText.toLowerCase())
+  //   );
+  //   setFilteredData(filtered);
+  //   // loadContract();
+  // }, [searchText, contract]);
 
   // const loadContract = async () => {
   //   let res = await getall();
@@ -53,24 +53,25 @@ const Contract = () => {
   // const handleDelete = (record) => {
   //   console.log("Button clicked for delete", record);
   // };
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
-    deleteOne(id).then((res) => {
+    deleteOne().then((res) => {
       toast.success("Contract Deleted");
       fetchData();
     });
   };
 
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Contract ID", dataIndex: "Contract ID", key: "id" },
     {
-      title: "Customer ID",
-      dataIndex: "contract_id",
-      key: "contractid",
-      render: (contract_id) => <span>{contract_id.id}</span>,
+      title: "Contract Number",
+      dataIndex: "Contract Number",
+      key: "contractnumber",
     },
-    { title: "Product ID", dataIndex: "product_id", key: "productid" },
-    { title: "Quantity", dataIndex: "quantity", key: "quantity" },
+    { title: "Customer ID", dataIndex: "Customer ID", key: "customerid" },
+    { title: "Start Date", dataIndex: "Start Date", key: "startdate" },
+    { title: "Deadline", dataIndex: "Dealine", key: "deadline" },
+    { title: "Total", dataIndex: "Total", key: "quantity" },
 
     {
       title: "Actions",
@@ -85,7 +86,7 @@ const Contract = () => {
             Edit
           </Button>
           <DeleteOutlined
-            onClick={() => handleDelete(record.id)}
+            onClick={() => handleDelete()}
             style={{ marginLeft: "10px", fontSize: "20px" }}
           >
             Delete
