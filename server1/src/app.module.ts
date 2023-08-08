@@ -14,8 +14,7 @@ import { UsersModule } from './users/users.module';
       username: 'ubuntu',
       password: 'password',
       database: 'postgres',
-      // Add vào đây
-      entities: [Contract, User], 
+      entities: [__dirname + '/**/*.entity.{js,ts}'], 
       synchronize: true,
     }),
     ContractModule,
@@ -25,4 +24,4 @@ import { UsersModule } from './users/users.module';
   
 })
 export class AppModule {}
-//__dirname + '/../**/*.entity.{js,ts}'
+//__dirname + '/**/*.entity.{js,ts}'
