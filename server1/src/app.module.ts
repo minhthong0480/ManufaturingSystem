@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ContractModule } from './contract/contract.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Contract } from './contract/contract.entity';
-import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,10 +12,11 @@ import { User } from './users/user.entity';
       username: 'ubuntu',
       password: 'password',
       database: 'postgres',
-      entities: [Contract, User], 
+      entities: [__dirname + '**/*.entity.{js,ts}'],
       synchronize: true,
     }),
-    ContractModule],
+    ContractModule,
+    AuthModule],
   
 })
 export class AppModule {}
