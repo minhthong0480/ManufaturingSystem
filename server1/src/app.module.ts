@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ContractModule } from './contract/contract.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contract } from './contract/contract.entity';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { Contract } from './contract/contract.entity';
       username: 'ubuntu',
       password: 'password',
       database: 'postgres',
-      entities: [Contract],
+      entities: [Contract, User], 
       synchronize: true,
     }),
     ContractModule],
