@@ -14,11 +14,14 @@ import { UsersModule } from './users/users.module';
       username: 'ubuntu',
       password: 'password',
       database: 'postgres',
+      // Add vào đây
       entities: [Contract, User], 
       synchronize: true,
     }),
     ContractModule,
-  UsersModule],
+
+    //Add vào đây
+    UsersModule],
   
 })
 export class AppModule {}
