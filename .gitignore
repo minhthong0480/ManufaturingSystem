@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+mansys-server/dist
+mansys-server/node_modules
+
 # Logs
 logs
 *.log
