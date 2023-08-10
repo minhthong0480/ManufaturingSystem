@@ -7,6 +7,7 @@ import dbConfig from './config/db.config';
 import { UserModule } from './modules/users/user.module';
 import { User } from './modules/users/entities/user.entity';
 import { UsersBootstrapService } from './bootstrap/user-bootstrap.service';
+import { MaterialModule } from './material/material.module';
 
 @Module({
   imports:
@@ -19,7 +20,8 @@ import { UsersBootstrapService } from './bootstrap/user-bootstrap.service';
       TypeOrmModule.forRootAsync({
         useFactory: dbConfig
       }),
-      UserModule
+      UserModule,
+      MaterialModule
     ],
   controllers: [AppController],
   providers: [AppService],
