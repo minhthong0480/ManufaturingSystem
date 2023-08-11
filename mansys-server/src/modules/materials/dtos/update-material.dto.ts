@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
-export class CreateMaterialDto {
+export class UpdateMaterialDto {
     @IsOptional()
     @IsString()
     name: string;

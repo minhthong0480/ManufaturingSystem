@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Material } from '../entities/material.entity';
 import { CreateMaterialDto } from '../dtos/create-material.dto';
+import { UpdateMaterialDto } from '../dtos/update-material.dto';
 
 @Injectable()
 export class MaterialService {
@@ -24,10 +25,10 @@ export class MaterialService {
         return this.materialRepository.find();
     }
 
-    async update(id: number, updateData: Partial<Material>) {
+    async update(id: number, updateMaterialDto: UpdateMaterialDto) {
         const material = await this.materialRepository.preload({
             id,
-            ...updateData,
+            ...updateMaterialDto,
         });
 
         if (!material) {

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Param, Body, Query, ParseIntPipe } from '@nestjs/common';
 import { MaterialService } from '../services/material.service';
 import { CreateMaterialDto } from '../dtos/create-material.dto';
 
@@ -22,7 +22,7 @@ export class MaterialController {
     }
 
     @Put('/:id')
-        updateMaterial(@Param('id') id: number, @Body() updateData: CreateMaterialDto) {
+        updateMaterial(@Param('id', ParseIntPipe) id, @Body() updateData: CreateMaterialDto) {
         return this.materialService.update(id, updateData);
     }
 
