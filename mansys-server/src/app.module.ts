@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import dbConfig from './config/db.config';
 import { UserModule } from './modules/users/user.module';
 import { MaterialModule } from './modules/materials/material.module';
+import { CustomersModule } from './modules/customers/customers.module';
 
 @Module({
   imports:
@@ -19,7 +20,8 @@ import { MaterialModule } from './modules/materials/material.module';
         useFactory: dbConfig
       }),
       UserModule,
-      MaterialModule
+      MaterialModule,
+      CustomersModule
     ],
   controllers: [AppController],
   providers: [AppService],

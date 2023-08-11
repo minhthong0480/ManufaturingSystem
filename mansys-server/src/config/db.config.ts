@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from '../modules/users/entities/user.entity';
 import { Material } from 'src/modules/materials/entities/material.entity';
+import { Customer } from 'src/modules/customers/customers.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'postgres',
@@ -9,6 +10,6 @@ export default (): TypeOrmModuleOptions => ({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Material], 
+  entities: [User, Material, Customer], 
   synchronize: true,
 });
