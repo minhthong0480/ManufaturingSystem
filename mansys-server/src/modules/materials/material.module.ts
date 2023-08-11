@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MaterialService } from './material.service';
-import { MaterialController } from './material.controller';
-import { Material } from './material.entity';
+import { MaterialService } from './services/material.service';
+import { MaterialController } from './controller/material.controller';
+import { Material } from './entities/material.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
