@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MaterialModule } from './modules/materials/material.module';
 import dbConfig from './config/db.config';
 
 @Module({
@@ -19,6 +20,7 @@ import dbConfig from './config/db.config';
         useFactory: dbConfig
       }),
       UserModule,
+      MaterialModule,
       AuthModule
     ],
   controllers: [AppController],
