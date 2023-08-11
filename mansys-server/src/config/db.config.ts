@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from '../modules/users/entities/user.entity';
 import { Material } from 'src/modules/materials/entities/material.entity';
-import { Customer } from 'src/modules/customers/customers.entity';
+import { Customer } from 'src/modules/customers/entities/customers.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'postgres',
