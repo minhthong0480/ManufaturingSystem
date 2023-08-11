@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { User } from '../entities/user.entity';
+import { User, toUserDto } from '../entities/user.entity';
+import { UserDto } from '../dto/user.dto';
+import { LoginUserDto } from '../dto/login-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,27 +15,32 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<UserDto> {
     const username = createUserDto.username;
-    const user = await this.usersRepository.findOneBy({ username });
+    let user = await this.usersRepository.findOneBy({ username });
     if (user) {
       throw new HttpException(
         `Username existed. Please use another`,
         HttpStatus.BAD_REQUEST,
       );
     }
-    return await this.usersRepository.save(createUserDto);
+    const saltOrRounds = 10;
+    createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
+
+    user = await this.usersRepository.save(createUserDto)
+    return toUserDto(user);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const user = await this.findOne(id);
     try {
-      return this.usersRepository.save({
+      const updatedUser = await this.usersRepository.save({
         ...user,
         ...updateUserDto,
-      });
+      })
+      return toUserDto(updatedUser);
     } catch (error) {
       this.logger.error('Update user by id error: ', error.message ?? error);
       throw new HttpException(
@@ -42,9 +50,10 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<UserDto> {
     try {
-      return await this.usersRepository.findOneByOrFail({ id });
+      const user = await this.usersRepository.findOneByOrFail({ id })
+      return toUserDto(user);
     } catch (error) {
       this.logger.error('Get user by id error: ', error.message ?? error);
       throw new HttpException(
@@ -54,9 +63,10 @@ export class UsersService {
     }
   }
 
-  async findOneByUsername(username: string): Promise<User> {
+  async findOneByUsername(username: string): Promise<UserDto> {
     try {
-      return await this.usersRepository.findOneByOrFail({ username });
+      const user = await this.usersRepository.findOneByOrFail({ username })
+      return toUserDto(user);
     } catch (error) {
       this.logger.error('Get user by username error: ', error.message ?? error);
       throw new HttpException(
@@ -66,9 +76,33 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<User[]> {
+  async findByLogin({ username, password }: LoginUserDto): Promise<UserDto> {
+    const user = await this.usersRepository.findOne({ where: { username } });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
+
+    // Note: compare(plain password, hashed password)
+    const areEqual = await bcrypt.compare(password, user.password);
+
+    if (!areEqual) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return toUserDto(user);
+  }
+
+  async findByPayload({ username }: any): Promise<UserDto> {
+    return await this.usersRepository.findOne({
+      where: { username }
+    });
+  }
+
+  async findAll(): Promise<UserDto[]> {
     try {
-      return await this.usersRepository.find();
+      const users = await this.usersRepository.find();
+      return users.map(user => toUserDto(user));
     } catch (error) {
       this.logger.error('Get all users error: ', error.message ?? error);
       throw new HttpException(

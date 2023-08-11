@@ -3,21 +3,27 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Logger,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UsersService } from '../services/users.service';
+import { AuthGuard } from '../../auth/guards/auth.guard';
 
 @Controller({ path: '/users' })
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    @Inject(UsersService)
+    private readonly userService: UsersService,
+  ) { }
 
   @Get()
   findAll() {
@@ -34,11 +40,13 @@ export class UsersController {
     return this.userService.create(user);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id, @Body() user: UpdateUserDto) {
     return this.userService.update(id, user);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id) {
     return this.userService.remove(id);
