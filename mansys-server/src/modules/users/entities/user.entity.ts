@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
+import { UserDto } from '../dto/user.dto';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,7 +19,7 @@ export class User {
   password: string;
 
   @Column({
-    type:"date",
+    type: "date",
     nullable: false,
     default: new Date(),
   })
@@ -39,3 +40,9 @@ export class User {
   })
   userRole: UserRole;
 }
+
+export const toUserDto = (data: User): UserDto => {
+  const { id, username } = data;
+  let userDto: UserDto = { id, username };
+  return userDto;
+};
