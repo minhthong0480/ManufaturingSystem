@@ -6,7 +6,7 @@ import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 @Injectable()
 export class UsersBootstrapService implements OnApplicationBootstrap {
   private readonly logger = new Logger(UsersBootstrapService.name);
-  
+
   constructor(private readonly usersService: UsersService) {}
 
   onApplicationBootstrap() {
@@ -17,10 +17,12 @@ export class UsersBootstrapService implements OnApplicationBootstrap {
     try {
       await this.usersService.findOneByUsername('admin');
     } catch (error) {
-      this.logger.log("Default admin not found. Creating...");
+      this.logger.log('Default admin not found. Creating...');
       const defaultAdmin: CreateUserDto = {
-        username: 'admin',
-        password: 'admin',
+        username: process.env.DEFAULT_USERNAME,
+        password: process.env.DEFAULT_PASSWORD,
+        email: process.env.DEFAULT_EMAIL,
+        phone: process.env.DEFAULT_PHONE,
         userRole: UserRole.admin,
       };
       this.usersService.create(defaultAdmin);
