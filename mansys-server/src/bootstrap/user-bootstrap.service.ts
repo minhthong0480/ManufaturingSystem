@@ -9,15 +9,19 @@ export class UsersBootstrapService implements OnApplicationBootstrap {
 
   constructor(private readonly usersService: UsersService) {}
 
-  onApplicationBootstrap() {
+  async onApplicationBootstrap() {
+    this.logger.log('Running seeding!')
     this.createDefaultUser();
   }
 
   async createDefaultUser() {
     try {
-      await this.usersService.findOneByUsername('admin');
-    } catch (error) {
-      this.logger.log('Default admin not found. Creating...');
+      var user = await this.usersService.findOneByUsername(process.env.DEFAULT_USERNAME);
+      if(user) {
+        this.logger.log('Already had an admin user!');
+        return;
+      };
+
       const defaultAdmin: CreateUserDto = {
         username: process.env.DEFAULT_USERNAME,
         password: process.env.DEFAULT_PASSWORD,
@@ -25,7 +29,11 @@ export class UsersBootstrapService implements OnApplicationBootstrap {
         phone: process.env.DEFAULT_PHONE,
         userRole: UserRole.admin,
       };
-      this.usersService.create(defaultAdmin);
+      await this.usersService.create(defaultAdmin);
+      this.logger.log('Create a default admin user sucessfully!');
+
+    } catch (error) {
+      this.logger.log('Cannot create a default admin user!');
     }
   }
 }

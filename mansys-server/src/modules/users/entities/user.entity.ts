@@ -54,7 +54,8 @@ export class User {
 }
 
 export const toUserDto = (data: User): UserDto => {
-  const { id, username, email, phone } = data;
-  let userDto: UserDto = { id, username, email, phone };
+  if(!data) return null;
+  const { id, username, email, phone , userRole} = data;
+  let userDto: UserDto = { id, username, email, phone, roles: [userRole] };
   return userDto;
 };

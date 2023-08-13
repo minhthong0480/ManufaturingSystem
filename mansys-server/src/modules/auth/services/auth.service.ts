@@ -51,8 +51,8 @@ export class AuthService {
     };
   }
 
-  private _createToken({ username }: UserDto): any {
-    const user: JwtPayload = { username };
+  private _createToken({ id, username, roles }: UserDto): any {
+    const user: JwtPayload = { id, username, roles : roles };
     const accessToken = this.jwtService.sign(user);
     return {
       expiresIn: process.env.EXPIRESIN,
@@ -61,10 +61,10 @@ export class AuthService {
   }
 
   async validateUser(payload: JwtPayload): Promise<UserDto> {
-    const user = await this.usersService.findByPayload(payload);
-    if (!user) {
+    const resultModel = await this.usersService.findByPayload(payload);
+    if (!resultModel.indicateSuccess()) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
-    return user;
+    return resultModel.data;
   }
 }
