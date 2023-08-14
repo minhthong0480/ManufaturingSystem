@@ -7,7 +7,9 @@ import { UserModule } from './modules/users/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MaterialModule } from './modules/materials/material.module';
 import { CustomersModule } from './modules/customers/customers.module';
+import { CategoryModule } from './modules/category/category.module';
 import dbConfig from './config/db.config';
+
 
 @Module({
   imports:
@@ -18,12 +20,13 @@ import dbConfig from './config/db.config';
         expandVariables: true
       }),
       TypeOrmModule.forRootAsync({
-        useFactory: dbConfig
+        useFactory: dbConfig,
       }),
       UserModule,
       MaterialModule,
       CustomersModule,
-      AuthModule
+      AuthModule,
+      CategoryModule
     ],
   controllers: [AppController],
   providers: [AppService],

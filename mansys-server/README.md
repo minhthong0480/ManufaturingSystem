@@ -45,6 +45,18 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running migration
+
+```bash
+# create a migration
+npm run mg:create
+
+# apply the migration
+npm run mg:run
+
+# revert the migration
+npm run mg:revert
+```
 ## Test
 
 ```bash

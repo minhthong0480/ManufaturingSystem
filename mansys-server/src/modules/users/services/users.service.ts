@@ -6,6 +6,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { User, toUserDto } from '../entities/user.entity';
 import { UserDto } from '../dto/user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
+import {ResultModel} from '../../../common/resultModel';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -50,34 +51,20 @@ export class UsersService {
     }
   }
 
-  async findOne(id: number): Promise<UserDto> {
-    try {
-      const user = await this.usersRepository.findOneByOrFail({ id })
-      return toUserDto(user);
-    } catch (error) {
-      this.logger.error('Get user by id error: ', error.message ?? error);
-      throw new HttpException(
-        `User with id ${id} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+  async findOne(id: number): Promise<ResultModel<UserDto>> {
+      const user = await this.usersRepository.findOne({ where: {id : id , isActive : true} });
+      if(!user) return ResultModel.fail(null, "User not found or no longer existing!");
+      return ResultModel.success(toUserDto(user), "Success");
   }
 
   async findOneByUsername(username: string): Promise<UserDto> {
-    try {
-      const user = await this.usersRepository.findOneByOrFail({ username })
+      const user = await this.usersRepository.findOne({ where : {username} });
+      if(!user) return null;
       return toUserDto(user);
-    } catch (error) {
-      this.logger.error('Get user by username error: ', error.message ?? error);
-      throw new HttpException(
-        `User with username: ${username} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
   }
 
   async findByLogin({ username, password }: LoginUserDto): Promise<UserDto> {
-    const user = await this.usersRepository.findOne({ where: { username } });
+    const user = await this.usersRepository.findOne({ where: { username : username, isActive : true } });
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
@@ -93,10 +80,21 @@ export class UsersService {
     return toUserDto(user);
   }
 
-  async findByPayload({ username }: any): Promise<UserDto> {
-    return await this.usersRepository.findOne({
+  async findByPayload({ username }: any): Promise<ResultModel<UserDto>> {
+    let user =  await this.usersRepository.findOne({
       where: { username }
     });
+
+    if(!user) return ResultModel.fail(null, 'User not found!');
+
+    let userDto = new UserDto();
+
+    userDto.id = user.id;
+    userDto.email = user.email;
+    userDto.phone = user.phone;
+    userDto.username = user.username;
+    userDto.roles = [user.userRole];
+    return ResultModel.success<UserDto>(userDto, 'Success');
   }
 
   async findAll(): Promise<UserDto[]> {
@@ -112,17 +110,11 @@ export class UsersService {
     }
   }
 
-  async remove(id: number): Promise<HttpStatus> {
-    const user = await this.findOne(id);
-    try {
-      await this.usersRepository.delete(user.id);
-      return HttpStatus.OK;
-    } catch (error) {
-      this.logger.error('Remove user by id error: ', error.message ?? error);
-      throw new HttpException(
-        `Remove user with id ${id} failed`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async deactivate(id: number): Promise<ResultModel<boolean>> {
+      var user = await this.usersRepository.findOne({where : {id}});
+      if(!user) return ResultModel.fail(false, "User not found!");
+      user.isActive = false;
+      await this.usersRepository.save(user);
+      return ResultModel.success(true, "Deactive user sucess!");
   }
 }

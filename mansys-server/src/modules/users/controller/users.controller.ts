@@ -15,7 +15,14 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UsersService } from '../services/users.service';
 import { AuthGuard } from '../../auth/guards/auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { ApiBearerAuth, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
+import {Roles} from '../../../common/role.decorator';
 
+
+@ApiTags('user')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller({ path: '/users' })
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
@@ -25,30 +32,27 @@ export class UsersController {
     private readonly userService: UsersService,
   ) { }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(id);
   }
 
-  @Post()
-  create(@Body() user: CreateUserDto) {
-    return this.userService.create(user);
-  }
-
-  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id, @Body() user: UpdateUserDto) {
     return this.userService.update(id, user);
   }
+  
+  @Post()
+  @UseGuards(RolesGuard) @Roles('admin')
+  @ApiBody({type : CreateUserDto})
+  async create(@Body() user: CreateUserDto) {
+    return this.userService.create(user);
+  }
 
-  @UseGuards(AuthGuard)
+  @ApiParam({name : 'id', required: true})
+  @UseGuards(RolesGuard) @Roles('admin')
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id) {
-    return this.userService.remove(id);
+  async deactivate(@Param('id', ParseIntPipe) id) {
+    return await this.userService.deactivate(id);
   }
 }

@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
 import { UserDto } from '../dto/user.dto';
+import { IsEmail } from 'class-validator';
 
 @Entity('user')
 export class User {
@@ -9,7 +10,7 @@ export class User {
 
   @Column({
     nullable: false,
-    unique: true
+    unique: true,
   })
   username: string;
 
@@ -18,8 +19,19 @@ export class User {
   })
   password: string;
 
+  @IsEmail()
   @Column({
-    type: "date",
+    nullable: false,
+  })
+  email: string;
+
+  @Column({
+    nullable: true,
+  })
+  phone: string;
+
+  @Column({
+    type: 'date',
     nullable: false,
     default: new Date(),
   })
@@ -28,7 +40,7 @@ export class User {
   @Column({
     type: 'boolean',
     nullable: false,
-    default: true
+    default: true,
   })
   isActive: boolean = true;
 
@@ -42,7 +54,8 @@ export class User {
 }
 
 export const toUserDto = (data: User): UserDto => {
-  const { id, username } = data;
-  let userDto: UserDto = { id, username };
+  if(!data) return null;
+  const { id, username, email, phone , userRole} = data;
+  let userDto: UserDto = { id, username, email, phone, roles: [userRole] };
   return userDto;
 };
