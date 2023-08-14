@@ -20,7 +20,7 @@ import dbConfig from './config/db.config';
         expandVariables: true
       }),
       TypeOrmModule.forRootAsync({
-        useFactory: dbConfig
+        useFactory: dbConfig,
       }),
       UserModule,
       MaterialModule,
