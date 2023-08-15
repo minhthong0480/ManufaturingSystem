@@ -48,11 +48,27 @@ $ npm run start:prod
 ## Running migration
 
 ```bash
-# create a migration
+# Navigate to folder src/migrations then delete all migration files
+# Then navigate to src/config/migration-data.config.ts
+# Import your desire entites to the file on the head of the file
+# For example: import { Contract } from '../modules/contract/entities/contract.entity';
+# Then add your entities to the "entities" array list in the DataSourceOptions
+# For example : "entities" : [x, y,z , yourEntity1, yourEntity2, yourEntity3]
+# Then open terminal 
+# Run this line of code to genrate migration file in the folder .src/migrations
 npm run mg:create
 
-# apply the migration
+# After creating the migration file
+# You can run this line of code 
+# In case of this line of code produces error
+# You should open the created file in the folder /src/migrations/xxxxxx-Migration.ts
+# Then copy the code in the public async up(queryRunner: QueryRunner): Promise<void>
+# And run it in the sql studio(Postgres Studio) 
+# Run from top to bottom
 npm run mg:run
+
+# Never run this line of code
+# In case of wanting do undo your migrations, please do it by running sql in sql studio
 
 # revert the migration
 npm run mg:revert
