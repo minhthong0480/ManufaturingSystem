@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 
 export class updateCustomerDto {
     
@@ -17,5 +17,9 @@ export class updateCustomerDto {
     @IsOptional()
     @IsString()
     taxNumber: string;
+
+    @IsOptional()
+    @IsBoolean()
+    isActive: boolean;
 
 }

@@ -4,6 +4,7 @@ import { Material } from '../modules/materials/entities/material.entity';
 import { User } from '../modules/users/entities/user.entity';
 import { Category } from '../modules/category/category.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
+import { Timeline } from '../modules/timeline/entities/timeline.entity'
 
 export default (): DataSourceOptions =>
   ({

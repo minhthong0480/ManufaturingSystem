@@ -5,6 +5,7 @@ import { Customer } from '../modules/customers/entities/customers.entity';
 import { Category } from '../modules/category/category.entity';
 import { BillOfMaterial} from '../modules/billOfMaterial/entities/billOfMaterial.entity'
 import { Product } from 'src/modules/products/entities/product.entity';
+import { Timeline} from '../modules/timeline/entities/timeline.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'postgres',
@@ -15,7 +16,7 @@ export default (): TypeOrmModuleOptions => ({
   username: process.env.DB_USERNAME || 'ubuntu',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'dev',
-  entities: [User, Material, Customer, Category, BillOfMaterial, Product],
+  entities: [User, Material, Customer, Category, BillOfMaterial, Product, Timeline],
   // migrations: ['src/migrations/*.{ts,js}'],
   // migrationsRun: true,
   synchronize: true,

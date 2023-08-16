@@ -13,6 +13,7 @@ import dbConfig from './config/db.config';
 import { ProductsModule } from './modules/products/products.module';
 import { ProductsController } from './modules/products/controller/products.controller';
 import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
+import { TimelineModule } from './modules/timeline/timeline.module';
 
 
 @Module({
@@ -32,7 +33,8 @@ import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.mo
       AuthModule,
       CategoryModule,
       ProductsModule,
-      BillOfMaterialModule
+      BillOfMaterialModule,
+      TimelineModule,
     ],
   controllers: [AppController, ProductsController],
   providers: [AppService],

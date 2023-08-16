@@ -1,7 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserRole } from '../enums/user-role.enum';
 import { UserDto } from '../dto/user.dto';
 import { IsEmail } from 'class-validator';
+import { Timeline } from '../../timeline/entities/timeline.entity'
+
 
 @Entity('user')
 export class User {
@@ -51,6 +53,9 @@ export class User {
     default: UserRole.user,
   })
   userRole: UserRole;
+
+  @OneToMany(() => Timeline, timeline => timeline.user)
+  timeline: Timeline[];
 }
 
 export const toUserDto = (data: User): UserDto => {

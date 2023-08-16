@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ContractItem } from './contractItem.entity';
+import { Timeline } from '../../timeline/entities/timeline.entity';
+
 @Entity('contract')
 export class Contract {
   @PrimaryGeneratedColumn()
@@ -42,6 +44,9 @@ export class Contract {
 
   @OneToMany(() => ContractItem, contractItem => contractItem.contract)
   contractItems: ContractItem[];
+
+  @OneToMany(() => Timeline, timeline => timeline.contract)
+  timeline: Timeline[];
 
   @Column({
     type: 'boolean',

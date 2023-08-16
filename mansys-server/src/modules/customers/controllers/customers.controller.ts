@@ -30,8 +30,8 @@ export class CustomersController {
 
 
     @Delete("/:id")
-    async delete(@Param('id') id: string) {
-        return await this.customersService.deleteCustomer(parseInt(id));
+    async deactive(@Param('id') id: string) {
+        return await this.customersService.deactiveCustomer(parseInt(id));
     }
 
 }
