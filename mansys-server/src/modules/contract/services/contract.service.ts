@@ -82,4 +82,13 @@ export class ContractService {
 
     return ResultListModel.success(contracts, totalRows, "Filtered contracts!");
   }
+
+  async deactivate(id : number) : Promise<ResultModel<boolean>>{
+    var contract  = await this.contractRepository.findOne({where : {"id" : id, "isActive" : true}});
+    if(contract){
+      contract.isActive = false;
+      await this.contractRepository.save(contract);
+    }
+    return ResultModel.success(true, null);
+  }
 }
