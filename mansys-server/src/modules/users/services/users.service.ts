@@ -198,7 +198,6 @@ export class UsersService {
   }
 
   async deleteAllUsers() {
-    console.log("here")
     const users = await this.findWithFilter({
       limit: 1000,
       role: UserRole.user
