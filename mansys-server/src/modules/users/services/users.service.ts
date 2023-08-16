@@ -139,40 +139,48 @@ export class UsersService {
     const query = this.createQueryBuilder();
     const page = parseInt(q.page as any) || 1;
     const limit = parseInt(q.limit as any) || 10;
-
-    query.offset((page - 1) * limit).limit(limit);
     
     if (q.role) {
       query.where({ userRole: q.role });
     }
+
     if (q.username) {
       query.andWhere('users.username like :username', {
         username: '%' + q.username + '%',
       });
     }
+
     if (q.email) {
       query.andWhere('users.email like :email', {
         email: '%' + q.email + '%',
       });
     }
+
     if (q.phone) {
       query.andWhere('users.phone like :phone', {
         phone: '%' + q.phone + '%',
       });
     }
+
     if (q.id) {
       query.andWhere('users.id like :id', {
         id: '%' + q.id + '%',
       });
     }
+
     if (q.joinDate) {
       query.andWhere({
         joinDate: q.joinDate,
       });
     }
 
+    const totalRows = await query.getCount();
+
+    const skip = (page - 1) * limit;
+    query.offset(skip).limit(limit);
+
     const users = await query.getMany();
-    return ResultListModel.success(users, 'All filtered users');
+    return ResultListModel.success(users, totalRows, 'All filtered users');
   }
 
   createQueryBuilder() {

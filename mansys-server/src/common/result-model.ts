@@ -19,7 +19,7 @@ export class ResultModel<T>{
        result.isSuccess = true;
        result.code = ResultModel.const_code_success;
        result.data = value;
-       result.message = this.const_message_success;
+       result.message = !message ? this.const_message_success : message;
        return result;
     }
 
@@ -28,7 +28,7 @@ export class ResultModel<T>{
         result.isSuccess = false;
         result.code = ResultModel.const_code_fail;
         result.data = value;
-        result.message = this.const_message_fail;
+        result.message = !message ?  this.const_message_fail : message;
         return result;
      }
 

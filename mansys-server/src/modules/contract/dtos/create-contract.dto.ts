@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsDate, IsDateString, IsDecimal, IsNotEmpty, IsNumber } from "class-validator";
+import { IsArray, IsBoolean, IsDateString, IsNotEmpty, IsNumber } from "class-validator";
 import { ContractItem } from "../entities/contract-item.entity";
 
 
