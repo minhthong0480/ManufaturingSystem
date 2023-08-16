@@ -1,3 +1,4 @@
+import dbConfig from './config/db.config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,12 +9,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MaterialModule } from './modules/materials/material.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { CategoryModule } from './modules/category/category.module';
-
-import dbConfig from './config/db.config';
 import { ProductsModule } from './modules/products/products.module';
 import { ProductsController } from './modules/products/controller/products.controller';
 import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
-
+import { ContractModule } from './modules/contract/contract.module';
 
 @Module({
   imports:
@@ -32,7 +31,8 @@ import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.mo
       AuthModule,
       CategoryModule,
       ProductsModule,
-      BillOfMaterialModule
+      BillOfMaterialModule,
+      ContractModule
     ],
   controllers: [AppController, ProductsController],
   providers: [AppService],
