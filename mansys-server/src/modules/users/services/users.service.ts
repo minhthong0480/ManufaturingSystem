@@ -14,8 +14,9 @@ import { UserDto } from '../dto/user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ResultModel } from '../../../common/result-model';
 import * as bcrypt from 'bcrypt';
-import { query } from 'express';
 import { ResultListModel } from 'src/common/result-list-model';
+import * as faker from 'faker';
+import { UserRole } from '../enums/user-role.enum';
 
 @Injectable()
 export class UsersService {
@@ -134,42 +135,79 @@ export class UsersService {
     return ResultModel.success(true, 'Deactive user sucess!');
   }
 
-  async findWithFilter(@Query() query) {
-    const queryBuilder = this.createQueryBuilder();
-    if (query.role) {
-      queryBuilder.where({ userRole: query.role });
+  async findWithFilter(@Query() q) {
+    const query = this.createQueryBuilder();
+    const page = parseInt(q.page as any) || 1;
+    const limit = parseInt(q.limit as any) || 10;
+
+    query.offset((page - 1) * limit).limit(limit);
+    
+    if (q.role) {
+      query.where({ userRole: q.role });
     }
-    if (query.username) {
-      queryBuilder.andWhere('users.username like :username', {
-        username: '%' + query.username + '%',
+    if (q.username) {
+      query.andWhere('users.username like :username', {
+        username: '%' + q.username + '%',
       });
     }
-    if (query.email) {
-      queryBuilder.andWhere('users.email like :email', {
-        email: '%' + query.email + '%',
+    if (q.email) {
+      query.andWhere('users.email like :email', {
+        email: '%' + q.email + '%',
       });
     }
-    if (query.phone) {
-      queryBuilder.andWhere('users.phone like :phone', {
-        phone: '%' + query.phone + '%',
+    if (q.phone) {
+      query.andWhere('users.phone like :phone', {
+        phone: '%' + q.phone + '%',
       });
     }
-    if (query.id) {
-      queryBuilder.andWhere('users.id like :id', {
-        id: '%' + query.id + '%',
+    if (q.id) {
+      query.andWhere('users.id like :id', {
+        id: '%' + q.id + '%',
       });
     }
-    if (query.joinDate) {
-      queryBuilder.andWhere({
-        joinDate: query.joinDate,
+    if (q.joinDate) {
+      query.andWhere({
+        joinDate: q.joinDate,
       });
     }
 
-    const users = await queryBuilder.getMany();
+    const users = await query.getMany();
     return ResultListModel.success(users, 'All filtered users');
   }
 
   createQueryBuilder() {
     return this.usersRepository.createQueryBuilder('users');
+  }
+
+  async seedUsers(total: number) {
+    while (total > 0) {
+      try {
+        this.usersRepository.create({
+          username: faker.internet.userName(),
+          password: 'password',
+          email: faker.internet.email(),
+          phone: faker.phone.phoneNumber(),
+          userRole: UserRole.user,
+        });
+        total--;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    return ResultModel.success(total, "");
+  }
+
+  async deleteAllUsers() {
+    console.log("here")
+    const users = await this.findWithFilter({
+      limit: 1000,
+      role: UserRole.user
+    });
+
+    users.data.forEach(user => {
+      this.usersRepository.remove(user);
+    });
+
+    return ResultModel.success("","");
   }
 }
