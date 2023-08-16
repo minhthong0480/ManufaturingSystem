@@ -65,4 +65,14 @@ export class UsersController {
   async deactivate(@Param('id', ParseIntPipe) id) {
     return await this.userService.deactivate(id);
   }
+
+  @Get('/seed/:total')
+  seedUsers(@Param('total', ParseIntPipe) total) {
+    return this.userService.seedUsers(total);
+  }
+
+  @Delete('/seeed/')
+  deleteSeedUsers() {
+    return this.userService.deleteAllUsers();
+  }
 }
