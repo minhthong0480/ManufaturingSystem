@@ -23,6 +23,7 @@ export class ContractController {
 
     @Get()
     async filterContracts(@Query() filterDto: ContractFilterDTO){
+        filterDto.applyDefaultPaginationSetting();
         return await this.contractService.filter(filterDto);
     }
 }
