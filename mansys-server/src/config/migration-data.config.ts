@@ -3,7 +3,7 @@ import { Customer } from '../modules/customers/entities/customers.entity';
 import { Material } from '../modules/materials/entities/material.entity';
 import { User } from '../modules/users/entities/user.entity';
 import { Category } from '../modules/category/category.entity';
-import { Product } from 'src/modules/products/entities/product.entity';
+import { Product } from '../modules/products/entities/product.entity';
 
 export default (): DataSourceOptions =>
   ({

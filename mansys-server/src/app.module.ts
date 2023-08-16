@@ -13,6 +13,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { ProductsController } from './modules/products/controller/products.controller';
 import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
 import { ContractModule } from './modules/contract/contract.module';
+import { ContractStatusModule } from './modules/contract_status/contract_status.module'
 
 @Module({
   imports:
@@ -32,7 +33,8 @@ import { ContractModule } from './modules/contract/contract.module';
       CategoryModule,
       ProductsModule,
       BillOfMaterialModule,
-      ContractModule
+      ContractModule,
+      ContractStatusModule
     ],
   controllers: [AppController, ProductsController],
   providers: [AppService],
