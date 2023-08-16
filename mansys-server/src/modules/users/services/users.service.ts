@@ -6,7 +6,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { User, toUserDto } from '../entities/user.entity';
 import { UserDto } from '../dto/user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
-import {ResultModel} from '../../../common/resultModel';
+import {ResultModel} from '../../../common/result-model';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
