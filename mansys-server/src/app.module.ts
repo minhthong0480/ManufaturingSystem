@@ -8,7 +8,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MaterialModule } from './modules/materials/material.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { CategoryModule } from './modules/category/category.module';
+
 import dbConfig from './config/db.config';
+import { ProductsModule } from './modules/products/products.module';
+import { ProductsController } from './modules/products/controller/products.controller';
+import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
 
 
 @Module({
@@ -26,9 +30,11 @@ import dbConfig from './config/db.config';
       MaterialModule,
       CustomersModule,
       AuthModule,
-      CategoryModule
+      CategoryModule,
+      ProductsModule,
+      BillOfMaterialModule
     ],
-  controllers: [AppController],
+  controllers: [AppController, ProductsController],
   providers: [AppService],
 })
 export class AppModule { }
