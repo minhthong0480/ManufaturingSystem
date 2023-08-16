@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -17,8 +18,8 @@ import { UsersService } from '../services/users.service';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { ApiBearerAuth, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
-import {Roles} from '../../../common/role.decorator';
-
+import { Roles } from '../../../common/role.decorator';
+import { query } from 'express';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -30,7 +31,14 @@ export class UsersController {
   constructor(
     @Inject(UsersService)
     private readonly userService: UsersService,
-  ) { }
+  ) {}
+
+  @Get()
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  findWithFilder(@Query() query) {
+    return this.userService.findWithFilter(query);
+  }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -41,16 +49,18 @@ export class UsersController {
   update(@Param('id', ParseIntPipe) id, @Body() user: UpdateUserDto) {
     return this.userService.update(id, user);
   }
-  
+
   @Post()
-  @UseGuards(RolesGuard) @Roles('admin')
-  @ApiBody({type : CreateUserDto})
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @ApiBody({ type: CreateUserDto })
   async create(@Body() user: CreateUserDto) {
     return this.userService.create(user);
   }
 
-  @ApiParam({name : 'id', required: true})
-  @UseGuards(RolesGuard) @Roles('admin')
+  @ApiParam({ name: 'id', required: true })
+  @UseGuards(RolesGuard)
+  @Roles('admin')
   @Delete(':id')
   async deactivate(@Param('id', ParseIntPipe) id) {
     return await this.userService.deactivate(id);
