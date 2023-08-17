@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Timeline } from '../../timeline/entities/timeline.entity'
 
 @Entity('contract_status')
 export class ContractStatus {
@@ -23,4 +24,7 @@ export class ContractStatus {
         nullable: true,
     })
     next_stage_ids: string;
+
+    @OneToMany(() => Timeline, timeline => timeline.contractStatus)
+    timeline: Timeline[];
 }

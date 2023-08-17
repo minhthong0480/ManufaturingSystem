@@ -16,7 +16,7 @@ export default (): DataSourceOptions =>
     username: process.env.DB_USERNAME || 'ubuntu',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'dev',
-    entities: [User, Material, Customer, Category, Product],
+    entities: [User, Material, Customer, Category, Product, Timeline],
     migrations: ['src/migrations/*.{ts,js}'],
     migrationsRun: true,
     synchronize: true,

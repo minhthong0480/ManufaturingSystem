@@ -49,8 +49,8 @@ export class Contract {
   })
   contractItems: ContractItem[];
 
-  @OneToMany(() => Timeline, timeline => timeline.contract)
-  timeline: Timeline[];
+  // @OneToMany(() => Timeline, timeline => timeline.contract)
+  // timeline: Timeline[];
 
   @Column({
     type: 'boolean',
