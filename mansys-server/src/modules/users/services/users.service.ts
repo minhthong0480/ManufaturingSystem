@@ -17,6 +17,8 @@ import * as bcrypt from 'bcrypt';
 import { ResultListModel } from 'src/common/result-list-model';
 import * as faker from 'faker';
 import { UserRole } from '../enums/user-role.enum';
+import { FilterUserDto } from '../dto/filter-user.dto';
+import { Roles } from '../../../common/role.decorator';
 
 @Injectable()
 export class UsersService {
@@ -135,42 +137,48 @@ export class UsersService {
     return ResultModel.success(true, 'Deactive user sucess!');
   }
 
-  async findWithFilter(@Query() q) {
+  async findWithFilter(filter: FilterUserDto) {
     const query = this.createQueryBuilder();
-    const page = parseInt(q.page as any) || 1;
-    const limit = parseInt(q.limit as any) || 10;
-    
-    if (q.role) {
-      query.where({ userRole: q.role });
+    const page = parseInt(filter.page as any) || 1;
+    const limit = parseInt(filter.pageSize as any) || 10;
+
+    if (filter.role) {
+      query.where({ userRole: filter.role });
     }
 
-    if (q.username) {
+    if (filter.username) {
       query.andWhere('users.username like :username', {
-        username: '%' + q.username + '%',
+        username: '%' + filter.username + '%',
       });
     }
 
-    if (q.email) {
+    if (filter.email) {
       query.andWhere('users.email like :email', {
-        email: '%' + q.email + '%',
+        email: '%' + filter.email + '%',
       });
     }
 
-    if (q.phone) {
+    if (filter.phone) {
       query.andWhere('users.phone like :phone', {
-        phone: '%' + q.phone + '%',
+        phone: '%' + filter.phone + '%',
       });
     }
 
-    if (q.id) {
+    if (filter.id) {
       query.andWhere('users.id like :id', {
-        id: '%' + q.id + '%',
+        id: '%' + filter.id + '%',
       });
     }
 
-    if (q.joinDate) {
-      query.andWhere({
-        joinDate: q.joinDate,
+    if (filter.joinDateFrom) {
+      query.andWhere('users.joinDate >= :joinDateFrom', {
+        joinDateFrom: '%' + filter.joinDateFrom + '%',
+      });
+    }
+
+    if (filter.joinDateTo) {
+      query.andWhere('users.joinDate <= :joinDateTo', {
+        joinDateTo: '%' + filter.joinDateTo + '%',
       });
     }
 
@@ -202,19 +210,19 @@ export class UsersService {
         console.log(error);
       }
     }
-    return ResultModel.success(total, "");
+    return ResultModel.success(total, '');
   }
 
   async deleteAllUsers() {
-    const users = await this.findWithFilter({
-      limit: 1000,
-      role: UserRole.user
+    const role = UserRole.user;
+    const users = await this.usersRepository.findBy({
+      userRole: role,
     });
 
-    users.data.forEach(user => {
+    users.forEach((user) => {
       this.usersRepository.remove(user);
     });
 
-    return ResultModel.success("","");
+    return ResultModel.success('', '');
   }
 }
