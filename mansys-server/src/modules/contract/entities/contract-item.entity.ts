@@ -1,4 +1,10 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 import { Contract } from './contract.entity';
 
 @Entity('contract_products')
@@ -9,10 +15,15 @@ export class ContractItem {
   @PrimaryColumn()
   productId: number;
 
-  @ManyToOne(() => Contract, contract => contract.contractItems, {
-    onDelete: "CASCADE"
+  @ManyToOne(() => Contract, (contract) => contract.contractItems, {
+    onDelete: 'CASCADE',
   })
   contract: Contract;
+
+  @Column({
+    default: 0,
+  })
+  quanity: number;
 
   @Column({
     type: 'boolean',
@@ -21,7 +32,9 @@ export class ContractItem {
   })
   isActive: boolean = true;
 
-  @CreateDateColumn({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({
+    type: 'timestamp with time zone',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 }
-
