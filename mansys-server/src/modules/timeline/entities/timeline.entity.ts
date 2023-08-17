@@ -11,8 +11,8 @@ export class Timeline {
     @ManyToOne(() => ContractStatus, contractStatus => contractStatus.timeline)
     contractStatus: ContractStatus;
 
-    // @ManyToOne(() => Contract, contract => contract.timeline)
-    // contract: Contract;
+    @ManyToOne(() => Contract, contract => contract.timeline)
+    contract: Contract;
 
 
     @ManyToOne(() => User, user => user.timeline)
