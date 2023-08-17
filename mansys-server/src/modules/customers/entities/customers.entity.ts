@@ -17,4 +17,11 @@ export class Customer {
     @Column()
     taxNumber: string;
 
+    @Column({
+        type: 'boolean',
+        nullable: false,
+        default: true,
+      })
+      isActive: boolean = true;
+    
 }

@@ -12,6 +12,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProductsController } from './modules/products/controller/products.controller';
 import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
+import { TimelineModule } from './modules/timeline/timeline.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module'
 
@@ -33,6 +34,7 @@ import { ContractStatusModule } from './modules/contract_status/contract_status.
       CategoryModule,
       ProductsModule,
       BillOfMaterialModule,
+      TimelineModule,
       ContractModule,
       ContractStatusModule
     ],

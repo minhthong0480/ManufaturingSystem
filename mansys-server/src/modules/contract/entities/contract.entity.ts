@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ContractItem } from './contract-item.entity';
+import { Timeline } from '../../timeline/entities/timeline.entity';
+
 @Entity('contract')
 export class Contract {
   @PrimaryGeneratedColumn()
@@ -46,6 +48,9 @@ export class Contract {
     cascade: ['insert']
   })
   contractItems: ContractItem[];
+
+  @OneToMany(() => Timeline, timeline => timeline.contract)
+  timeline: Timeline[];
 
   @Column({
     type: 'boolean',

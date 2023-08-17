@@ -3,6 +3,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from '../entities/customers.entity';
 import { CreateCustomerDto } from '../dtos/create-customer.dto';
+import { ResultModel } from '../../../common/result-model';
+import { ResultListModel } from '../../../common/result-list-model';
 
 @Injectable()
 export class CustomersService {
@@ -38,15 +40,23 @@ export class CustomersService {
     }
 
 
-    async deleteCustomer(id: number): Promise<Customer> {
+    // async deleteCustomer(id: number): Promise<Customer> {
+    //     const customer = await this.findOne(id);
+    //     if (!customer) {
+    //         throw new NotFoundException('Customer not found');
+    //     }
+    //     return await this.repo.remove(customer);
+    // }
+
+    async deactiveCustomer(id: number): Promise<ResultModel<Customer>> {
         const customer = await this.findOne(id);
         if (!customer) {
             throw new NotFoundException('Customer not found');
         }
-        return await this.repo.remove(customer);
+        customer.isActive = false;
+        await this.repo.save(customer);
+        return ResultModel.success(customer,'Deactive customer successfully');
     }
 
 
 }
-
-

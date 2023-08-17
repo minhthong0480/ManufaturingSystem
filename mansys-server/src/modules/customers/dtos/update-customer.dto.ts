@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString, IsBoolean } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateCustomerDto {
@@ -22,5 +22,9 @@ export class UpdateCustomerDto {
     @IsOptional()
     @IsString()
     taxNumber: string;
+
+    @IsOptional()
+    @IsBoolean()
+    isActive: boolean;
 
 }
