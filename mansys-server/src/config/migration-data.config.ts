@@ -5,6 +5,9 @@ import { User } from '../modules/users/entities/user.entity';
 import { Category } from '../modules/category/category.entity';
 import { Product } from '../modules/products/entities/product.entity';
 import { Timeline } from '../modules/timeline/entities/timeline.entity'
+import { ContractStatus } from '../modules/contract_status/entities/contract_status.entity'
+import { Contract } from '../modules/contract/entities/contract.entity'
+import { ContractItem } from '../modules/contract/entities/contract-item.entity'
 
 export default (): DataSourceOptions =>
   ({
@@ -16,7 +19,7 @@ export default (): DataSourceOptions =>
     username: process.env.DB_USERNAME || 'ubuntu',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'dev',
-    entities: [User, Material, Customer, Category, Product, Timeline],
+    entities: [User, Timeline, ContractStatus, Contract, ContractItem],
     migrations: ['src/migrations/*.{ts,js}'],
     migrationsRun: true,
     synchronize: true,
