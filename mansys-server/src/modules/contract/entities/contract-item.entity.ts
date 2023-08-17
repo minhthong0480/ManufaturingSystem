@@ -9,7 +9,9 @@ export class ContractItem {
   @PrimaryColumn()
   productId: number;
 
-  @ManyToOne(() => Contract, contract => contract.contractItems)
+  @ManyToOne(() => Contract, contract => contract.contractItems, {
+    onDelete: "CASCADE"
+  })
   contract: Contract;
 
   @Column({
