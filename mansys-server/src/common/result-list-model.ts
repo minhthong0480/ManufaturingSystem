@@ -1,9 +1,10 @@
-export class ResultListModel<Array> {
+export class ResultListModel<T> {
   public isSuccess: boolean;
   public code: number;
   public subCode: number;
   public message: string;
-  public data: Array;
+  public data: Array<T>;
+  public totalRows: number;
 
   private static readonly const_code_success = 200;
   private static readonly const_code_fail = 400;
@@ -14,27 +15,30 @@ export class ResultListModel<Array> {
     return this.isSuccess == true;
   }
 
-  public static success<Array>(
-    value: Array,
+  public static success<T>(
+    value: Array<T>,
+    totalRows : number,
     message: string,
-  ): ResultListModel<Array> {
-    const result = new ResultListModel<Array>();
+  ): ResultListModel<T> {
+    const result = new ResultListModel<T>();
     result.isSuccess = true;
     result.code = ResultListModel.const_code_success;
     result.data = value;
-    result.message = this.const_message_success;
+    result.totalRows = totalRows;
+    result.message = !message ? this.const_message_success : message;
     return result;
   }
 
-  public static fail<Array>(
-    value: Array,
+  public static fail<T>(
+    value: Array<T>,
     message: string,
-  ): ResultListModel<Array> {
-    const result = new ResultListModel<Array>();
+  ): ResultListModel<T> {
+    const result = new ResultListModel<T>();
     result.isSuccess = false;
     result.code = ResultListModel.const_code_fail;
     result.data = value;
-    result.message = this.const_message_fail;
+    result.totalRows = 0;
+    result.message = !message ? this.const_message_fail : message;
     return result;
   }
 }
