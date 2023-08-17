@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { ContractItem } from './contractItem.entity';
+import { ContractItem } from './contract-item.entity';
 import { Timeline } from '../../timeline/entities/timeline.entity';
 
 @Entity('contract')
@@ -10,7 +10,7 @@ export class Contract {
   @Column({
     nullable: false,
     unique: true,
-    length : 100
+    length: 100
   })
   contractNumber: string;
 
@@ -34,15 +34,19 @@ export class Contract {
     type: 'date',
     nullable: false
   })
-   deadline: Date;
+  deadline: Date;
 
-@Column({ 
+  @Column({
     type: 'decimal',
     precision: 10,
-    scale: 2 })
+    scale: 2
+  })
   total: number;
 
-  @OneToMany(() => ContractItem, contractItem => contractItem.contract)
+  @OneToMany(() => ContractItem, contractItem => contractItem.contract, {
+    eager: false,
+    cascade: ['insert']
+  })
   contractItems: ContractItem[];
 
   // @OneToMany(() => Timeline, timeline => timeline.contract)

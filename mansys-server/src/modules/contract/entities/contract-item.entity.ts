@@ -9,7 +9,6 @@ export class ContractItem {
   @PrimaryColumn()
   productId: number;
 
-
   @ManyToOne(() => Contract, contract => contract.contractItems)
   contract: Contract;
 

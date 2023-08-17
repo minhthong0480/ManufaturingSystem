@@ -19,7 +19,6 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { ApiBearerAuth, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 import { Roles } from '../../../common/role.decorator';
-import { query } from 'express';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -71,7 +70,7 @@ export class UsersController {
     return this.userService.seedUsers(total);
   }
 
-  @Delete('/seeed/')
+  @Delete('/seed/all/')
   deleteSeedUsers() {
     return this.userService.deleteAllUsers();
   }
