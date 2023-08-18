@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Button, Row, Col, Input } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 import React from "react";
@@ -67,6 +67,13 @@ const Contract = () => {
       dataIndex: "actions",
       render: (_, record) => (
         <div>
+          <EyeOutlined 
+            onClick={() => handleDelete()}
+            style={{ marginRight: "10px", fontSize: "20px" }}
+          >
+            View
+          </EyeOutlined>
+          
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
@@ -74,6 +81,7 @@ const Contract = () => {
           >
             Edit
           </Button>
+
           <DeleteOutlined
             onClick={() => handleDelete()}
             style={{ marginLeft: "10px", fontSize: "20px" }}
@@ -88,14 +96,14 @@ const Contract = () => {
     <Fragment>
       <Row justify="end">
         <Col>
-          <Input.Search
+          <Input.Search st
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 16, marginTop:20 }}
           />
           <Button
-            style={{ marginTop: "10px" }}
+            style={{ marginTop: "10px", marginBottom: 10 }}
             type="primary"
             href="/create_contract"
           >
