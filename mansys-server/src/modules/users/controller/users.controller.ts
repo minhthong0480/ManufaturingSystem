@@ -19,6 +19,7 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { ApiBearerAuth, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 import { Roles } from '../../../common/role.decorator';
+import { FilterUserDto } from '../dto/filter-user.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -35,8 +36,8 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles('admin')
-  findWithFilder(@Query() query) {
-    return this.userService.findWithFilter(query);
+  findWithFilder(@Query() filterUserDto: FilterUserDto) {
+    return this.userService.findWithFilter(filterUserDto);
   }
 
   @Get(':id')

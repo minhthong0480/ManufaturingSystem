@@ -1,20 +1,25 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Contract } from "../entities/contract.entity";
+import { Contract } from '../entities/contract.entity';
 import { Repository } from "typeorm";
 import { CreateContractDto } from '../dtos/create-contract.dto';
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { ResultModel } from "src/common/result-model";
 import { ContractFilterDTO } from "../dtos/filter-contract.dto";
 import { ResultListModel } from "src/common/result-list-model";
+import { UpdateContactDto } from "../dtos/update-contract.dto";
+import { ContractItemService } from "./contract-item.service";
 
 @Injectable()
 export class ContractService {
   constructor(
     @InjectRepository(Contract)
     private readonly contractRepository: Repository<Contract>,
+
+    @Inject(ContractItemService)
+    private readonly contractItemService: ContractItemService,
   ) { }
 
-  async create(createContractDto: CreateContractDto) : Promise<ResultModel<Contract>>{
+  async create(createContractDto: CreateContractDto): Promise<ResultModel<Contract>> {
     const contractNumber = createContractDto.contractNumber;
     let contract = await this.contractRepository.findOneBy({ contractNumber })
 
@@ -27,11 +32,11 @@ export class ContractService {
   }
 
 
-  async filter(filterDto: ContractFilterDTO): Promise<ResultListModel<Contract>>{
+  async filter(filterDto: ContractFilterDTO): Promise<ResultListModel<Contract>> {
     var query = this.contractRepository.createQueryBuilder('contracts');
 
     if (filterDto.contractNumber) {
-     query.andWhere('contracts.contractNumber ILIKE :contractNumber', {
+      query.andWhere('contracts.contractNumber ILIKE :contractNumber', {
         contractNumber: `%${filterDto.contractNumber}%`
       });
     }
@@ -49,28 +54,27 @@ export class ContractService {
     }
 
     if (filterDto.startDate) {
-      query.andWhere('contracts.dateStart >=  :startDate', { "startDate" : filterDto.startDate});
+      query.andWhere('contracts.dateStart >=  :startDate', { "startDate": filterDto.startDate });
     }
 
     if (filterDto.endDate) {
-      query.andWhere('contracts.dateStart <= :endDate', { "endDate" : filterDto.endDate });
+      query.andWhere('contracts.dateStart <= :endDate', { "endDate": filterDto.endDate });
     }
 
-
     if (filterDto.startDeadline) {
-      query.andWhere('contracts.deadline >= :startDeadline', { "startDeadline" : filterDto.startDeadline });
+      query.andWhere('contracts.deadline >= :startDeadline', { "startDeadline": filterDto.startDeadline });
     }
 
     if (filterDto.endDeadline) {
-      query.andWhere('contracts.deadline <= :endDeadline', { "endDeadline" : filterDto.endDeadline });
+      query.andWhere('contracts.deadline <= :endDeadline', { "endDeadline": filterDto.endDeadline });
     }
 
     if (filterDto.minTotal) {
-      query.andWhere('contracts.total >= :minTotal', { "minTotal" : filterDto.minTotal});
+      query.andWhere('contracts.total >= :minTotal', { "minTotal": filterDto.minTotal });
     }
 
     if (filterDto.maxTotal) {
-      query.andWhere('contracts.total <=> :maxTotal', { "maxTotal" : filterDto.maxTotal });
+      query.andWhere('contracts.total <=> :maxTotal', { "maxTotal": filterDto.maxTotal });
     }
 
     const totalRows = await query.getCount();
@@ -79,16 +83,39 @@ export class ContractService {
     query.skip(skip).take(filterDto.pageSize);
 
     const contracts = await query.getMany();
-
     return ResultListModel.success(contracts, totalRows, "Filtered contracts!");
   }
 
-  async deactivate(id : number) : Promise<ResultModel<boolean>>{
-    var contract  = await this.contractRepository.findOne({where : {"id" : id, "isActive" : true}});
-    if(contract){
+  async deactivate(id: number): Promise<ResultModel<boolean>> {
+    var contract = await this.contractRepository.findOne({ where: { "id": id, "isActive": true } });
+    if (contract) {
       contract.isActive = false;
       await this.contractRepository.save(contract);
     }
     return ResultModel.success(true, null);
+  }
+
+  async update(id: number, updateContractDto: UpdateContactDto) {
+    const contract = await this.contractRepository.findOneBy({ id });
+    const contractNumber = updateContractDto.contractNumber;
+
+    if (!contract) {
+      return ResultModel.fail("Contract not found", "Contract not found");
+    }
+
+    if (contract.contractNumber == contractNumber) {
+      delete updateContractDto.contractNumber;
+    }
+    else if (await this.contractRepository.findOneBy({ contractNumber })) {
+      return ResultModel.fail("contractNumber existed", "contractNumber existed");
+    }
+
+    this.contractItemService.deleteByContractId(contract.id);
+    const updatedContract = await this.contractRepository.save({
+      ...contract,
+      ...updateContractDto,
+    });
+
+    return ResultModel.success(updatedContract, "Update contract successful!");
   }
 }

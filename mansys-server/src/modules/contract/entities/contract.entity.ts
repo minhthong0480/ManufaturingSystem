@@ -44,8 +44,9 @@ export class Contract {
   total: number;
 
   @OneToMany(() => ContractItem, contractItem => contractItem.contract, {
-    eager: false,
-    cascade: ['insert']
+    eager: true,
+    cascade: ['insert'],
+    onDelete: 'CASCADE',
   })
   contractItems: ContractItem[];
 
