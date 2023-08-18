@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsBoolean, IsDateString, IsNotEmpty, IsNumber } from "class-validator";
 import { ContractItem } from "../entities/contract-item.entity";
+import { Timeline } from "../../timeline/entities/timeline.entity";
 
 
 export class CreateContractDto {
@@ -28,6 +29,9 @@ export class CreateContractDto {
 
     @IsArray()
     contractItems: ContractItem[];
+
+    @IsArray()
+    timeline: Timeline[];
 
     @IsBoolean()
     isActive: boolean;
