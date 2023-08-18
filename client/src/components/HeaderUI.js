@@ -42,8 +42,10 @@ const HeaderUI = () => {
   return (
     <Header className="app-header" >
       <div className="company-container">
-        <Avatar src={logo} size="large" />
+        <a href="/">
+        <Avatar src={logo} size='large' />
         <span className="company-name">PHUONG HAI JSC</span>
+        </a>
       </div>
 
       <div className='user-container'>
