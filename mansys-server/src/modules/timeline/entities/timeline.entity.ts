@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { User } from "../../users/entities/user.entity";
 import { Contract } from '../../contract/entities/contract.entity';
 import { ContractStatus } from '../../contract_status/entities/contract_status.entity';
 
 @Entity('timeline')
 export class Timeline {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: number;
 
     @ManyToOne(() => ContractStatus, contractStatus => contractStatus.timeline)

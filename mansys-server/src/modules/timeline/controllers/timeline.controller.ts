@@ -30,8 +30,7 @@ export class TimelinesController {
     // Create a new timeline
     @Post()
     async create(@Body() timeline: CreateTimelineDto) {
-        return 
-        //await this.timelinesService.create(timeline);
+        return await this.timelinesService.create(timeline);
 
     }
 
