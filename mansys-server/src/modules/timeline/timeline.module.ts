@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ControllersController } from './controllers/controllers.controller';
-import { ServicesService } from './services/services.service';
+import { TimelinesController } from './controllers/timeline.controller';
+import { TimelinesService } from './services/timeline.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Timeline } from "./entities/timeline.entity";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Timeline])],
-  controllers: [ControllersController],
-  providers: [ServicesService]
+  controllers: [TimelinesController],
+  providers: [TimelinesService]
 })
 export class TimelineModule {}

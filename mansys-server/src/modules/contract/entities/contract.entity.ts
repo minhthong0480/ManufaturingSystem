@@ -50,7 +50,10 @@ export class Contract {
   })
   contractItems: ContractItem[];
 
-  @OneToMany(() => Timeline, timeline => timeline.contract)
+  @OneToMany(() => Timeline, timeline => timeline.contract, {
+    eager: false,
+    cascade: ['insert']
+  })
   timeline: Timeline[];
 
   @Column({

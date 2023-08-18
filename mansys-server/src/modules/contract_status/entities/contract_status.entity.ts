@@ -25,6 +25,9 @@ export class ContractStatus {
     })
     next_stage_ids: string;
 
-    @OneToMany(() => Timeline, timeline => timeline.contractStatus)
+    @OneToMany(() => Timeline, timeline => timeline.contractStatus, {
+        eager: false,
+        cascade: ['insert']
+        })
     timeline: Timeline[];
 }
