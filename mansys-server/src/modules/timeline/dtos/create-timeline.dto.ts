@@ -4,12 +4,12 @@ import { ContractStatus } from 'src/modules/contract_status/entities/contract_st
 import { User } from 'src/modules/users/entities/user.entity';
 
 export class CreateTimelineDto{
+    
+    contractStatusId: number;
 
-    contractStatus: ContractStatus;
+    contractId: number;
 
-    contract: Contract;
-
-    user: User;
+    userId: number;
 
     @IsNotEmpty()
     @IsString()
