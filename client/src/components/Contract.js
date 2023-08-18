@@ -31,19 +31,7 @@ const Contract = () => {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const filtered = contract.filter((item) =>
-  //     item.contract_number.toLowerCase().includes(searchText.toLowerCase())
-  //   );
-  //   setFilteredData(filtered);
-  //   // loadContract();
-  // }, [searchText, contract]);
 
-  // const loadContract = async () => {
-  //   let res = await getall();
-  //   // console.log(res)
-  //   setContract(res.data);
-  // };
   console.log(contract);
 
   const handleEdit = (record) => {
@@ -62,16 +50,17 @@ const Contract = () => {
   };
 
   const columns = [
-    { title: "Contract ID", dataIndex: "Contract ID", key: "id" },
+    { title: "Contract ID", dataIndex: "contract_id", key: "id" },
     {
       title: "Contract Number",
-      dataIndex: "Contract Number",
+      dataIndex: "contract_number",
       key: "contractnumber",
     },
-    { title: "Customer ID", dataIndex: "Customer ID", key: "customerid" },
-    { title: "Start Date", dataIndex: "Start Date", key: "startdate" },
-    { title: "Deadline", dataIndex: "Dealine", key: "deadline" },
-    { title: "Total", dataIndex: "Total", key: "quantity" },
+    { title: "Customer ID", dataIndex: "customer_id", key: "customerid" },
+    { title: "User ID", dataIndex: "user_id", key: "startdate" },
+    { title: "Start Date", dataIndex: "start_date", key: "startdate" },
+    { title: "Deadline", dataIndex: "deadline", key: "deadline" },
+    { title: "Total", dataIndex: "total", key: "total" },
 
     {
       title: "Actions",
