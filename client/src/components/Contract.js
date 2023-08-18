@@ -77,7 +77,7 @@ const Contract = () => {
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
-            style={{ marginRight: "10px" }}
+            style={{ marginRight: "10px", background: 'green' }}
           >
             Edit
           </Button>
@@ -103,7 +103,7 @@ const Contract = () => {
             style={{ marginBottom: 16, marginTop: 60 }}
           />
           <Button
-            style={{ marginTop: "10px", marginBottom: 10 }}
+            style={{ marginTop: "10px", marginBottom: 10, background: 'green' }}
             type="primary"
             href="/create_contract"
           >

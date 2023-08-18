@@ -61,6 +61,7 @@
     font-size: 300%;
     margin-left: auto;
     height: auto;
+    z-index: 5;
   }
 
   .ant-dropdown-menu-item a {
