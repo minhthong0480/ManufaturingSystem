@@ -57,7 +57,7 @@ const ContractCreate = () => {
   return (
     <Fragment>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Typography variant="h4" sx={{ margin: "20px" }}>
+        <Typography variant="h4" sx={{ marginTop: "60px" }}>
           Tao Moi Hop Dong
         </Typography>
       </div>

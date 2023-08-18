@@ -96,11 +96,11 @@ const Contract = () => {
     <Fragment>
       <Row justify="end">
         <Col>
-          <Input.Search st
+          <Input.Search 
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
-            style={{ marginBottom: 16, marginTop:20 }}
+            style={{ marginBottom: 16, marginTop: 60 }}
           />
           <Button
             style={{ marginTop: "10px", marginBottom: 10 }}

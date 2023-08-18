@@ -27,26 +27,27 @@ const HeaderUI = () => {
   
     const menu = (
       <Menu >
-        <Menu.Item key="1"><a href="#">Quản Lý Người Dùng</a></Menu.Item>
-        <Menu.Item key="2"><a href="#">Quản Lý Khách Hàng</a></Menu.Item>
-        <Menu.Item key="3"><a href="#">Quản Lý Hợp Đồng</a></Menu.Item>
-        <Menu.Item key="4"><a href="#">Quản Lý Nhân Sự Sản Xuất</a></Menu.Item>
-        <Menu.Item key="5"><a href="#">Quản Lý Vật Tư</a></Menu.Item>
-        <Menu.Item key="6"><a href="#">Quản Lý Cấu Hình</a></Menu.Item>
-        <Menu.Item key="7"><a href="#">Option 7</a></Menu.Item>
-        <Menu.Item key="8"><a href="#">Option 8</a></Menu.Item>
+        <Menu.Item key="1"><a href="/">Home</a></Menu.Item>
+        <Menu.Item key="2"><a href="#">Quản Lý Người Dùng</a></Menu.Item>
+        <Menu.Item key="3"><a href="#">Quản Lý Khách Hàng</a></Menu.Item>
+        <Menu.Item key="4"><a href="/contract">Quản Lý Hợp Đồng</a></Menu.Item>
+        <Menu.Item key="5"><a href="#">Quản Lý Nhân Sự Sản Xuất</a></Menu.Item>
+        <Menu.Item key="6"><a href="#">Quản Lý Vật Tư</a></Menu.Item>
+        <Menu.Item key="7"><a href="#">Quản Lý Cấu Hình</a></Menu.Item>
+        <Menu.Item key="8"><a href="#">Option 7</a></Menu.Item>
+        <Menu.Item key="9"><a href="#">Option 8</a></Menu.Item>
       </Menu>
     );
 
   return (
-    <Header className="app-header">
+    <Header className="app-header" >
       <div className="company-container">
         <Avatar src={logo} size="large" />
         <span className="company-name">PHUONG HAI JSC</span>
       </div>
 
       <div className='user-container'>
-        <div className="avatar-container">
+        <div className="avatar-container" >
             <Avatar src={userData.avatar} size="large" />
             <span className="user-name">username non-click click{userData.name}</span>
         </div>
