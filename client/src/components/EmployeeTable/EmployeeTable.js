@@ -146,7 +146,7 @@ const EmployeeTable = () => {
             <a
               onClick={() => {
                 setEditMode(true);
-                showModal;
+                showModal();
               }}
             >
               Edit

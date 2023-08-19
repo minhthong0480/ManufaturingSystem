@@ -1,6 +1,7 @@
 import Contact from "./components/Contract";
 import ContractCreate from "./components/ContractCreate";
-import LoginPage from "./components/LoginPage";
+import Login from "./components/Login/Login";
+import EmployeeTable from "./components/EmployeeTable/EmployeeTable.js";
 import Navbar from "./components/Navbar";
 import RegisterPage from "./components/RegisterPage";
 import Dashboard from "./components/Dashboard";
@@ -20,7 +21,8 @@ function App() {
         <Route exact path="/contract" element={<Contact />} />
         <Route exact path="/" element={<Homepage />} />
         <Route exact path="/create_contract" element={<ContractCreate />} />
-        <Route exact path="/login" element={<LoginPage />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/employee" element={<EmployeeTable />} />
         <Route exact path="/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
