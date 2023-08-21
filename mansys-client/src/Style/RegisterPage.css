@@ -1,0 +1,27 @@
+
+
+.Register {
+    text-align: center;
+  }
+  .Register-header {
+    /* background-color: #282c34; */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  .Register-form-container {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .Register-form{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  .Register-form-container h2 {
+    color: black;
+  }
