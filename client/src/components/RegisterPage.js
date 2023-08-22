@@ -136,7 +136,7 @@ const RegisterPage = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
-            <Button block type="primary" htmlType="submit" loading={loading}>
+            <Button backg block type="primary" htmlType="submit" loading={loading}>
               Create Account
             </Button>
           </Form.Item>
