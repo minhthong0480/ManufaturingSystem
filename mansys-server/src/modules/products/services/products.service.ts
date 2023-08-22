@@ -4,6 +4,7 @@ import { GetProductsFilterDto } from '../dto/get-products-filter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
+import { ResultModel } from 'src/common/result-model';
 
 
 
@@ -34,5 +35,13 @@ export class ProductsService {
             throw new InternalServerErrorException();
         }
 
+    }
+
+    async getProductById(id: number) {
+        const product = await this.productsRepository.findBy({id});
+        if (product) {
+            return ResultModel.success(product, "Get product successful");
+        }
+        return ResultModel.fail("","Product not exist!");
     }
 }
