@@ -14,6 +14,7 @@ import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.mo
 import { TimelineModule } from './modules/timeline/timeline.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module'
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports:
@@ -35,7 +36,8 @@ import { ContractStatusModule } from './modules/contract_status/contract_status.
       BillOfMaterialModule,
       TimelineModule,
       ContractModule,
-      ContractStatusModule
+      ContractStatusModule,
+      InventoryModule
     ],
   controllers: [AppController],
   providers: [AppService],
