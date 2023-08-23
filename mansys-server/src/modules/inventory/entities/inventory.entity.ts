@@ -12,6 +12,7 @@ export class Inventory {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @PrimaryColumn()
   productId: number;
 
   @ManyToOne(() => Product, (Product) => Product.inventories)
