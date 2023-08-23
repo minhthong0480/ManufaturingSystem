@@ -15,6 +15,7 @@ import { TimelineModule } from './modules/timeline/timeline.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module'
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { DeliveryModule } from './modules/delivery/delivery.module';
 
 @Module({
   imports:
@@ -37,7 +38,8 @@ import { InventoryModule } from './modules/inventory/inventory.module';
       TimelineModule,
       ContractModule,
       ContractStatusModule,
-      InventoryModule
+      InventoryModule,
+      DeliveryModule
     ],
   controllers: [AppController],
   providers: [AppService],

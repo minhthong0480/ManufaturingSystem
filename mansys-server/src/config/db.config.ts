@@ -10,6 +10,7 @@ import { ContractItem } from 'src/modules/contract/entities/contract-item.entity
 import { Timeline } from '../modules/timeline/entities/timeline.entity';
 import { ContractStatus } from 'src/modules/contract_status/entities/contract_status.entity';
 import { Inventory } from 'src/modules/inventory/entities/inventory.entity';
+import { Delivery } from 'src/modules/delivery/entities/delivery.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'postgres',
@@ -32,6 +33,7 @@ export default (): TypeOrmModuleOptions => ({
     Timeline,
     ContractStatus,
     Inventory,
+    Delivery
   ],
   // migrations: ['src/migrations/*.{ts,js}'],
   // migrationsRun: true,
