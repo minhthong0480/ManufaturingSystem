@@ -9,6 +9,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
+import { DeliveryItem } from 'src/modules/delivery/entities/delivery-item.entity';
 
 @Entity('product')
 export class Product {
@@ -57,6 +58,9 @@ export class Product {
 
   @OneToMany(() => Inventory, (inventory) => inventory.product)
   inventories: Inventory[];
+
+  @OneToMany(() => DeliveryItem, (deliveryItem) => deliveryItem.product)
+  deliveryItems: DeliveryItem[];
 
   @OneToMany(() => BillOfMaterial, (billOfMaterial) => billOfMaterial.product)
   billOfMaterials: BillOfMaterial[];
