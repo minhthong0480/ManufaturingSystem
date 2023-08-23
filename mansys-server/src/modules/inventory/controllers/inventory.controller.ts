@@ -17,6 +17,7 @@ export class InventoryController {
 
   @Get('/filter')
   findWithFilder(@Body() filter: FilterInventoryDto) {
+    filter.applyDefaultPaginationSetting();
     return this.inventoryService.filter(filter);
   }
 }

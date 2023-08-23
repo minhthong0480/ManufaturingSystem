@@ -29,8 +29,6 @@ export class InventoryService {
 
   async filter(filter: FilterInventoryDto) {
     const query = this.createQueryBuilder();
-    const page = parseInt(filter.page as any) || 1;
-    const limit = parseInt(filter.pageSize as any) || 10;
 
     if (filter.inventoryId) {
       query.where({ id: filter.inventoryId });
@@ -108,8 +106,8 @@ export class InventoryService {
 
     const totalRows = await query.getCount();
 
-    const skip = (page - 1) * limit;
-    query.offset(skip).limit(limit);
+    const skip = (filter.page - 1) * filter.pageSize;
+    query.offset(skip).limit(filter.pageSize);
 
     const inventories = await query.getMany();
     return ResultListModel.success(
