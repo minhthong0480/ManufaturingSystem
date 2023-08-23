@@ -12,6 +12,9 @@ import { ContractStatus } from 'src/modules/contract_status/entities/contract_st
 import { Inventory } from 'src/modules/inventory/entities/inventory.entity';
 import { Delivery } from 'src/modules/delivery/entities/delivery.entity';
 import { DeliveryItem } from 'src/modules/delivery/entities/delivery-item.entity';
+import { ReceivingNoteItem } from 'src/modules/receiving-note/entities/receiving-note-item.entity';
+import { ReceivingNote } from 'src/modules/receiving-note/entities/receiving-note.entity';
+import { Supplier } from 'src/modules/suppliers/entities/suppliers.entity';
 
 export default (): TypeOrmModuleOptions => ({
   type: 'postgres',
@@ -35,7 +38,10 @@ export default (): TypeOrmModuleOptions => ({
     ContractStatus,
     Inventory,
     Delivery,
-    DeliveryItem
+    DeliveryItem,
+    ReceivingNote,
+    ReceivingNoteItem,
+    Supplier
   ],
   // migrations: ['src/migrations/*.{ts,js}'],
   // migrationsRun: true,

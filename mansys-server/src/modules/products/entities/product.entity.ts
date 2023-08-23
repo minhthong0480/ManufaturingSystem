@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { DeliveryItem } from 'src/modules/delivery/entities/delivery-item.entity';
+import { ReceivingNoteItem } from '../../receiving-note/entities/receiving-note-item.entity';
 
 @Entity('product')
 export class Product {
@@ -61,6 +62,12 @@ export class Product {
 
   @OneToMany(() => DeliveryItem, (deliveryItem) => deliveryItem.product)
   deliveryItems: DeliveryItem[];
+
+  @OneToMany(
+    () => ReceivingNoteItem,
+    (receivingNoteItem) => receivingNoteItem.product,
+  )
+  receivingNoteItems: ReceivingNoteItem[];
 
   @OneToMany(() => BillOfMaterial, (billOfMaterial) => billOfMaterial.product)
   billOfMaterials: BillOfMaterial[];

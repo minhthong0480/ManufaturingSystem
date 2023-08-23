@@ -16,6 +16,8 @@ import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module'
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { DeliveryModule } from './modules/delivery/delivery.module';
+import { ReceivingNoteModule } from './modules/receiving-note/receiving-note.module';
+import { SupplierModule } from './modules/suppliers/suppliers.module';
 
 @Module({
   imports:
@@ -39,7 +41,9 @@ import { DeliveryModule } from './modules/delivery/delivery.module';
       ContractModule,
       ContractStatusModule,
       InventoryModule,
-      DeliveryModule
+      DeliveryModule,
+      ReceivingNoteModule,
+      SupplierModule
     ],
   controllers: [AppController],
   providers: [AppService],
