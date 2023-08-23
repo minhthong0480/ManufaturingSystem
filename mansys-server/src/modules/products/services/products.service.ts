@@ -47,6 +47,6 @@ export class ProductsService {
   }
 
   async getOneById(id: number) {
-    return await this.productsRepository.findBy({ id });
+    return await this.productsRepository.findOneBy({ id });
   }
 }
