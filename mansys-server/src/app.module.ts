@@ -15,7 +15,7 @@ import { TimelineModule } from './modules/timeline/timeline.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module'
 import { InventoryModule } from './modules/inventory/inventory.module';
-import { DeliveryModule } from './modules/delivery/delivery.module';
+import { DeliveryNoteModule } from './modules/delivery-note/delivery.module';
 import { ReceivingNoteModule } from './modules/receiving-note/receiving-note.module';
 import { SupplierModule } from './modules/suppliers/suppliers.module';
 
@@ -41,7 +41,7 @@ import { SupplierModule } from './modules/suppliers/suppliers.module';
       ContractModule,
       ContractStatusModule,
       InventoryModule,
-      DeliveryModule,
+      DeliveryNoteModule,
       ReceivingNoteModule,
       SupplierModule
     ],

@@ -1,22 +1,22 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Delivery } from './delivery.entity';
+import { DeliveryNote } from './delivery-note.entity';
 import { Product } from '../../products/entities/product.entity';
 
-@Entity('delivery-item')
-export class DeliveryItem {
+@Entity('delivery_note_items')
+export class DeliveryNoteItem {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   deliveryId: number;
 
-  @ManyToOne(() => Delivery, (delivery) => delivery.deliveryItems)
-  delivery: Delivery;
+  @ManyToOne(() => DeliveryNote, (delivery) => delivery.deliveryNoteItems)
+  deliveryNote: DeliveryNote;
 
   @Column()
   productId: number;
 
-  @ManyToOne(() => Product, (product) => product.deliveryItems)
+  @ManyToOne(() => Product, (product) => product.deliveryNoteItems)
   product: Product;
 
   @Column({

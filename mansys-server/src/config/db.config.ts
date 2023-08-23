@@ -10,8 +10,8 @@ import { ContractItem } from 'src/modules/contract/entities/contract-item.entity
 import { Timeline } from '../modules/timeline/entities/timeline.entity';
 import { ContractStatus } from 'src/modules/contract_status/entities/contract_status.entity';
 import { Inventory } from 'src/modules/inventory/entities/inventory.entity';
-import { Delivery } from 'src/modules/delivery/entities/delivery.entity';
-import { DeliveryItem } from 'src/modules/delivery/entities/delivery-item.entity';
+import { DeliveryNote } from 'src/modules/delivery-note/entities/delivery-note.entity';
+import { DeliveryNoteItem } from 'src/modules/delivery-note/entities/delivery-note-item.entity';
 import { ReceivingNoteItem } from 'src/modules/receiving-note/entities/receiving-note-item.entity';
 import { ReceivingNote } from 'src/modules/receiving-note/entities/receiving-note.entity';
 import { Supplier } from 'src/modules/suppliers/entities/suppliers.entity';
@@ -37,8 +37,8 @@ export default (): TypeOrmModuleOptions => ({
     Timeline,
     ContractStatus,
     Inventory,
-    Delivery,
-    DeliveryItem,
+    DeliveryNote,
+    DeliveryNoteItem,
     ReceivingNote,
     ReceivingNoteItem,
     Supplier

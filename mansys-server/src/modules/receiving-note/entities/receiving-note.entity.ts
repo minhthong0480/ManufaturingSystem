@@ -9,7 +9,7 @@ import {
 import { Supplier } from 'src/modules/suppliers/entities/suppliers.entity';
 import { ReceivingNoteItem } from './receiving-note-item.entity';
 
-@Entity('receiving-note')
+@Entity('receiving_notes')
 export class ReceivingNote {
   @PrimaryGeneratedColumn()
   id: number;

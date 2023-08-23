@@ -1,4 +1,4 @@
-import { Delivery } from 'src/modules/delivery/entities/delivery.entity';
+import { DeliveryNote } from 'src/modules/delivery-note/entities/delivery-note.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -18,8 +18,8 @@ export class Customer {
   @Column()
   taxNumber: string;
 
-  @OneToMany(() => Delivery, (delivery) => delivery.customer)
-  deliveries: Delivery[];
+  @OneToMany(() => DeliveryNote, (delivery) => delivery.customer)
+  deliverieNotes: DeliveryNote[];
 
   @Column({
     type: 'boolean',

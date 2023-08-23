@@ -6,21 +6,24 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { DeliveryItem } from './delivery-item.entity';
+import { DeliveryNoteItem } from './delivery-note-item.entity';
 
-@Entity('delivery')
-export class Delivery {
+@Entity('delivery_notes')
+export class DeliveryNote {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   customerId;
 
-  @ManyToOne(() => Customer, (customer) => customer.deliveries)
+  @ManyToOne(() => Customer, (customer) => customer.deliverieNotes)
   customer: Customer;
 
-  @OneToMany(() => DeliveryItem, (deliveryItem) => deliveryItem.delivery)
-  deliveryItems: DeliveryItem[];
+  @OneToMany(
+    () => DeliveryNoteItem,
+    (deliveryNoteItem) => deliveryNoteItem.deliveryNote,
+  )
+  deliveryNoteItems: DeliveryNoteItem[];
 
   @Column({
     nullable: false,

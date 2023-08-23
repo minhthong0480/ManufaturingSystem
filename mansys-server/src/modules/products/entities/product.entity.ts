@@ -9,7 +9,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { DeliveryItem } from 'src/modules/delivery/entities/delivery-item.entity';
+import { DeliveryNoteItem } from 'src/modules/delivery-note/entities/delivery-note-item.entity';
 import { ReceivingNoteItem } from '../../receiving-note/entities/receiving-note-item.entity';
 
 @Entity('product')
@@ -60,8 +60,8 @@ export class Product {
   @OneToMany(() => Inventory, (inventory) => inventory.product)
   inventories: Inventory[];
 
-  @OneToMany(() => DeliveryItem, (deliveryItem) => deliveryItem.product)
-  deliveryItems: DeliveryItem[];
+  @OneToMany(() => DeliveryNoteItem, (deliveryItem) => deliveryItem.product)
+  deliveryNoteItems: DeliveryNoteItem[];
 
   @OneToMany(
     () => ReceivingNoteItem,
