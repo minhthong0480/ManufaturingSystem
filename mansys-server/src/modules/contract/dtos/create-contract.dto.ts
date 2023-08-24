@@ -1,38 +1,39 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsDateString, IsNotEmpty, IsNumber } from "class-validator";
-import { ContractItem } from "../entities/contract-item.entity";
-import { Timeline } from "../../timeline/entities/timeline.entity";
-
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsBoolean,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+} from 'class-validator';
+import { ContractItem } from '../entities/contract-item.entity';
 
 export class CreateContractDto {
-    @IsNotEmpty()
-    @ApiProperty()
-    contractNumber: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  contractNumber: string;
 
-    @IsNotEmpty()
-    @IsNumber()
-    customerId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  customerId: number;
 
-    @IsNotEmpty()
-    @IsNumber()
-    userId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
 
-    @IsNotEmpty()
-    @IsDateString()
-    dateStart: Date;
+  @IsNotEmpty()
+  @IsDateString()
+  dateStart: Date;
 
-    @IsNotEmpty()
-    @IsDateString()
-    deadline: Date;
+  @IsNotEmpty()
+  @IsDateString()
+  deadline: Date;
 
-    total: number;
+  total: number;
 
-    @IsArray()
-    contractItems: ContractItem[];
+  @IsArray()
+  contractItems: ContractItem[];
 
-    @IsArray()
-    timeline: Timeline[];
-
-    @IsBoolean()
-    isActive: boolean;
+  @IsBoolean()
+  isActive: boolean;
 }
