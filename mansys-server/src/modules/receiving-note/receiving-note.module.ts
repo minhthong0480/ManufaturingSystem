@@ -8,6 +8,7 @@ import { ReceivingNoteItemService } from './services/receiving-note-item.service
 import { ReceivingNoteController } from './controllers/receiving-note.controller';
 import { ReceivingNoteItemController } from './controllers/receiving-note-item.controller';
 import { ProductsModule } from '../products/products.module';
+import { InventoryModule } from '../inventory/inventory.module';
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { ProductsModule } from '../products/products.module';
     TypeOrmModule.forFeature([ReceivingNote, ReceivingNoteItem]),
     SupplierModule,
     ProductsModule,
+    InventoryModule,
   ],
   controllers: [ReceivingNoteController, ReceivingNoteItemController],
   providers: [ReceivingNoteService, ReceivingNoteItemService],

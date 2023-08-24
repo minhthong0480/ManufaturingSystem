@@ -117,6 +117,14 @@ export class InventoryService {
     );
   }
 
+  async getOneByProductId(productId: number) {
+    return await this.inventoryRepository.findOneBy({ productId });
+  }
+
+  async save(inventory: Inventory) {
+    return await this.inventoryRepository.save(inventory);
+  }
+
   createQueryBuilder() {
     return this.inventoryRepository.createQueryBuilder('inventory');
   }

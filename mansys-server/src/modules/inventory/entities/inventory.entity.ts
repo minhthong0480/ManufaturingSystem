@@ -1,18 +1,15 @@
 import { Product } from 'src/modules/products/entities/product.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('inventory')
 export class Inventory {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn()
+  @Column({
+    unique: true,
+    nullable: false,
+  })
   productId: number;
 
   @ManyToOne(() => Product, (Product) => Product.inventories)

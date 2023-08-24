@@ -6,6 +6,8 @@ import { ProductsService } from 'src/modules/products/services/products.service'
 import { CreateReceivingNoteItemDto } from '../dto/create-receiving-note-item.dto';
 import { ResultModel } from 'src/common/result-model';
 import { ReceivingNoteService } from './receiving-note.service';
+import { InventoryService } from 'src/modules/inventory/services/inventory.service';
+import { Inventory } from '../../inventory/entities/inventory.entity';
 
 @Injectable()
 export class ReceivingNoteItemService {
@@ -18,6 +20,9 @@ export class ReceivingNoteItemService {
 
     @Inject(ProductsService)
     private readonly productService: ProductsService,
+
+    @Inject(InventoryService)
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async create(dto: CreateReceivingNoteItemDto) {
@@ -36,6 +41,14 @@ export class ReceivingNoteItemService {
     const receivingNoteItem = await this.receivingNoteItemRepository.save(dto);
     if (!receivingNoteItem) {
       return ResultModel.fail('', 'Create Receiving Note Item failed!');
+    }
+
+    const inventory = await this.inventoryService.getOneByProductId(
+      dto.productId,
+    );
+    if (inventory) {
+      inventory.stockIn += dto.quantity;
+      await this.inventoryService.save(inventory);
     }
 
     return ResultModel.fail(
