@@ -34,7 +34,7 @@ export class ReceivingNote {
   @Column({
     nullable: false,
   })
-  purchase_order: string;
+  purchaseOrder: string;
 
   @Column({
     nullable: false,

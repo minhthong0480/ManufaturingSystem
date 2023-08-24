@@ -11,7 +11,7 @@ export class CreateReceivingNoteDto {
 
   @IsNotEmpty()
   @IsString()
-  purchase_order: string;
+  purchaseOrder: string;
 
   @IsNotEmpty()
   @IsString()
