@@ -14,7 +14,7 @@ export class DeliveryNote {
   id: number;
 
   @Column()
-  customerId;
+  customerId: number;
 
   @ManyToOne(() => Customer, (customer) => customer.deliverieNotes)
   customer: Customer;
@@ -22,6 +22,9 @@ export class DeliveryNote {
   @OneToMany(
     () => DeliveryNoteItem,
     (deliveryNoteItem) => deliveryNoteItem.deliveryNote,
+    {
+      eager: true,
+    },
   )
   deliveryNoteItems: DeliveryNoteItem[];
 
@@ -33,7 +36,7 @@ export class DeliveryNote {
   @Column({
     nullable: false,
   })
-  sales_order: string;
+  salesOrder: string;
 
   @Column({
     nullable: false,

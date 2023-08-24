@@ -8,7 +8,7 @@ export class DeliveryNoteItem {
   id: number;
 
   @Column()
-  deliveryId: number;
+  deliveryNoteId: number;
 
   @ManyToOne(() => DeliveryNote, (delivery) => delivery.deliveryNoteItems)
   deliveryNote: DeliveryNote;
