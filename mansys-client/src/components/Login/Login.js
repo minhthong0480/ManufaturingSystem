@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { signIn } from "../../action/login";
-import { redirect, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
