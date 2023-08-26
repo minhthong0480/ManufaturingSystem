@@ -1,12 +1,22 @@
 import React, { useState } from "react";
 import "./Login.css";
+import { signIn } from "../../action/login";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [dataForm, setDataForm] = useState({
     username: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const handleOnSubmit = async (event) => {
+    const data = await signIn(dataForm);
+    if (data) {
+      navigate("/");
+    }
+  };
 
   const handleOnChange = (event) => {
     setDataForm({
@@ -42,7 +52,7 @@ const Login = () => {
                 onChange={handleOnChange}
               />
             </div>
-            <button className="button login__submit">
+            <button className="button login__submit" onClick={handleOnSubmit}>
               <span className="button__text">Log In</span>
               <i className="button__icon fas fa-chevron-right"></i>
             </button>
