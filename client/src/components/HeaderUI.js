@@ -24,14 +24,9 @@ const HeaderUI = () => {
     }, []);
   
     const menu = (
-      <Menu >
-<<<<<<< Updated upstream
-        <Menu.Item key="1"><a href="/">Home</a></Menu.Item>
-        <Menu.Item key="2"><a href="/employee">Quản Lý Người Dùng</a></Menu.Item>
-=======
+      <Menu>
         <Menu.Item key="1"><a href="/">Trang chủ</a></Menu.Item>
         <Menu.Item key="2"><a href="#">Quản Lý Người Dùng</a></Menu.Item>
->>>>>>> Stashed changes
         <Menu.Item key="3"><a href="#">Quản Lý Khách Hàng</a></Menu.Item>
         <Menu.Item key="4"><a href="/contract">Quản Lý Hợp Đồng</a></Menu.Item>
         <Menu.Item key="5"><a href="#">Quản Lý Nhân Sự Sản Xuất</a></Menu.Item>
@@ -52,15 +47,7 @@ const HeaderUI = () => {
       </div>
 
       <div className='user-container'>
-<<<<<<< Updated upstream
-        <Dropdown className='menu-dropdowm' overlay={menu} placement="bottomRight">
-=======
-        <div className="avatar-container" >
-            <Avatar src={userData.avatar} size={60} />
-            <span className="user-name">username non-click click{userData.name}</span>
-        </div>
         <Dropdown overlay={menu} placement="bottomRight">
->>>>>>> Stashed changes
             <button className="menu-button"><MenuOutlined /></button>
         </Dropdown>
         <div className="avatar-container" >
