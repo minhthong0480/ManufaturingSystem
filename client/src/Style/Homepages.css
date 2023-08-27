@@ -25,7 +25,8 @@
   
   .card img {
     width: 100%;
-    overflow: visible;
+    height: 200px; 
+    object-fit: cover; 
   }
   
   .card a {

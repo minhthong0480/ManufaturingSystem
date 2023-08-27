@@ -4,6 +4,10 @@ import { Card } from "antd";
 
 import userManagementImg from "../image/user-management.jpg";
 import clientManagementImg from "../image/client-management.jpg";
+import contractManagementImg from "../image/contract-manage.jpg";
+import employeeManagementImg from "../image/employee-manage.png";
+import productManagementImg from "../image/product-manage.jpg";
+import settingManagementImg from "../image/setting-manage.png";
 
 const cardData = [
   {
@@ -20,53 +24,57 @@ const cardData = [
   },
   {
     id: 3,
-    imageSrc: userManagementImg,
+    imageSrc: contractManagementImg,
     url: "/contract",
     name: "Quản Lý Hợp Đồng",
   },
   {
     id: 4,
-    imageSrc: userManagementImg,
+    imageSrc: employeeManagementImg,
     url: "#",
     name: "Quản Lý Nhân Sự Sản Xuất",
   },
   {
     id: 5,
-    imageSrc: userManagementImg,
+    imageSrc: productManagementImg,
     url: "#",
     name: "Quản Lý Vật Tư",
   },
   {
     id: 6,
-    imageSrc: userManagementImg,
+    imageSrc: settingManagementImg,
     url: "#",
     name: "Quản Lý Cấu Hình",
   },
-  {
-    id: 7,
-    imageSrc: userManagementImg,
-    url: "#",
-    name: "Option 7",
-  },
-  {
-    id: 8,
-    imageSrc: userManagementImg,
-    url: "#",
-    name: "Option 8",
-  },
 ];
+
+const cardsPerRow = 3; // Number of cards to display in each row
+
+function chunkArray(array, chunkSize) {
+  const result = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+}
+
+const cardChunks = chunkArray(cardData, cardsPerRow);
 
 function Homepage() {
   return (
     <div className="card-container">
-      <div className="card-row">
-        {cardData.map((card) => (
-          <Card hoverable key={card.id} className="card">
-            <img src={card.imageSrc} alt={`From ${card.id}`} />
-            <a href={card.url}>{card.name}</a>
-          </Card>
-        ))}
-      </div>
+      {cardChunks.map((chunk, chunkIndex) => (
+        <div className="card-row" key={chunkIndex}>
+          {chunk.map((card) => (
+            <Card hoverable key={card.id} className="card">
+              <a href={card.url} className="card-link">
+                <img src={card.imageSrc} alt={`From ${card.id}`} className="card-image" />
+                <div className="card-name">{card.name}</div>
+              </a>
+            </Card>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
