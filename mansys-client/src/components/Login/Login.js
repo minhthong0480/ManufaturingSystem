@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import "./Login.css";
+import "../../Style/Login.css";
 import { signIn } from "../../action/login";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [dataForm, setDataForm] = useState({
     username: "",
     password: "",
@@ -12,10 +14,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleOnSubmit = async (event) => {
-    const data = await signIn(dataForm);
-    if (data) {
-      navigate("/");
-    }
+    console.log("SEND DATA", { dataForm });
+    dispatch(signIn(dataForm, navigate))
+    // const data = await signIn(dataForm);
+    // if (data) {
+    //   navigate("/");
+    // }
   };
 
   const handleOnChange = (event) => {

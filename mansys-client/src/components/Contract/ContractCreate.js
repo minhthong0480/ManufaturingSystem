@@ -1,9 +1,9 @@
 import { Fragment, React, useState } from "react";
 import { toast } from "react-toastify";
-import ContractCreateForm from "../forms/ContractCreateForm";
+import ContractCreateForm from "./ContractCreateForm";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import { create } from "../action/contract-detail";
+import { createContract } from "../../action/contract-detail";
 
 const ContractCreate = () => {
   //   const { auth } = useSelector((state) => ({ ...state }));
@@ -29,7 +29,7 @@ const ContractCreate = () => {
     // e.preventDefault();
 
     try {
-      let res = await create({
+      let res = await createContract({
         ...values,
         quantity: parseInt(values.quantity),
       });

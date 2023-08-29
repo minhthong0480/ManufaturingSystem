@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import React from "react";
 import { Table } from "antd";
 
-import { deleteOne, getall } from "../action/contract-detail";
+import { deactivateContract, filterContract } from "../../action/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
@@ -19,7 +19,7 @@ const Contract = () => {
   };
   const fetchData = async () => {
     try {
-      let res = await getall();
+      let res = await filterContract();
       setContract(res.data);
       setFilteredData(res.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const Contract = () => {
   // };
   const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
-    deleteOne().then((res) => {
+    deactivateContract().then((res) => {
       toast.success("Contract Deleted");
       fetchData();
     });

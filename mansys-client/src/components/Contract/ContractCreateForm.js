@@ -1,12 +1,13 @@
 import { Fragment, React, useState } from "react";
 import { Form, Input, Button, Select, DatePicker } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector, Provider } from "react-redux";
 
 const ContractCreateForm = (props) => {
   const { values, setValues, handleChange, handleSubmit } = props;
   //destructing variable from state
   // const { customerid, customername, email, date } = values;
-  const { contract_id, usr_id, product_id, start_date, deadline, total } =
+  const { contract_id, user_id, product_id, start_date, deadline, total } =
     values;
   // const [selectedDateTime, setSelectedDateTime] = useState(null);
   const [value, setValue] = useState(null);
@@ -14,6 +15,8 @@ const ContractCreateForm = (props) => {
   const onFinish = (values) => {
     console.log("Form values:", values);
   };
+
+  
 
   // console.log(values);
 
@@ -40,8 +43,10 @@ const ContractCreateForm = (props) => {
           <Input
             name="user_id"
             value={values.user_id}
-            onChange={handleChange}
-            rules={[{ required: true, message: "Signed By" }]}
+            // value = {value.user_id}
+            // onChange={handleChange}
+            // rules={[{ required: true, message: "Signed By" }]}
+            disabled
           />
         </Form.Item>
 
