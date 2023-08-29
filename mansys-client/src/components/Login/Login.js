@@ -20,25 +20,20 @@ const Login = () => {
     
     // const data = await signIn(dataForm);
     // if (data) {
-    //   dispatch(signIn(dataForm))
+      dispatch(signIn(dataForm, navigate))
     //   navigate("/");
     // }
-    try {
-      const data = await signIn(dataForm);
+    // try {
+    //   const data = await signIn(dataForm);
   
-      // Dispatch an action to update authentication status
-      if (data) {
-        // dispatch({
-        //   type: "LOGGED_IN_USER",
-        //   payload: {user, token},
-        // });
-        dispatch(loggedInUser(data.username, data.accessToken));
-        navigate("/");
-      }
-    } catch (error) {
-      // Handle login error here
-      console.error("Login error:", error);
-    }
+    //   // Dispatch an action to update authentication status
+    //   if (data) {
+    //     navigate("/");
+    //   }
+    // } catch (error) {
+    //   // Handle login error here
+    //   console.error("Login error:", error);
+    // }
   };
 
   const handleOnChange = (event) => {

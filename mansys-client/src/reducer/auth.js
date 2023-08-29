@@ -13,15 +13,16 @@ export const authReducer = (
 ) => {
   switch (action.type) {
     case "LOGGED_IN_USER":
+      console.log(action.payload);
       return { 
         // loading: false,
         // error: "",
         // auth: action.payload
-        // ...state,
-        // ...action.payload
         ...state,
-        user: action.payload.user,
-        token: action.payload.token,
+        ...action.payload
+        // ...state,
+        // user: action.payload.user,
+        // token: action.payload.token,
       };
     case "LOGOUT":
       return action.payload;

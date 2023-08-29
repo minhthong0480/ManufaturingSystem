@@ -19,9 +19,10 @@ const ContractCreateForm = (props) => {
   // const username  = useSelector((state) => state.auth.username);
   // console.log("Stored username:", username);
 
-  const auth = useSelector((state) => state.auth);
-  console.log("Auth state:", auth);
+  // const auth = useSelector((state) => state.auth);
+  // console.log("Auth state:", auth);
 
+  const username = useSelector((state) => state.auth.username)
 
   // console.log(values);
 
@@ -47,8 +48,8 @@ const ContractCreateForm = (props) => {
         <Form.Item label="Signed By">
           <Input
             name="user_id"
-            // value={username}
-            value = {values.user_id}
+            value={username}
+            // value = {values.user_id}
             // onChange={handleChange}
             // rules={[{ required: true, message: "Signed By" }]}
             disabled
@@ -66,7 +67,7 @@ const ContractCreateForm = (props) => {
 
         <Form.Item label="Deadline">
           <DatePicker
-            name="dealine"
+            name="deadline"
             value={values.dealine}
             onChange={handleChange}
             rules={[{ required: true, message: "Deadline" }]}
