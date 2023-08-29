@@ -16,7 +16,12 @@ const ContractCreateForm = (props) => {
     console.log("Form values:", values);
   };
 
-  
+  // const username  = useSelector((state) => state.auth.username);
+  // console.log("Stored username:", username);
+
+  const auth = useSelector((state) => state.auth);
+  console.log("Auth state:", auth);
+
 
   // console.log(values);
 
@@ -42,8 +47,8 @@ const ContractCreateForm = (props) => {
         <Form.Item label="Signed By">
           <Input
             name="user_id"
-            value={values.user_id}
-            // value = {value.user_id}
+            // value={username}
+            value = {values.user_id}
             // onChange={handleChange}
             // rules={[{ required: true, message: "Signed By" }]}
             disabled
@@ -81,7 +86,7 @@ const ContractCreateForm = (props) => {
           {(fields, { add, remove }) => (
             <div>
               {fields.map((field) => (
-                <Form.Item key={field.key}>
+                <Form.Item label="Product" key={field.key}>
                   <Select {...field} placeholder="Click to add Products" />
                   {fields.length > 1 && (
                     <MinusCircleOutlined

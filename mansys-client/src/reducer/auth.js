@@ -17,8 +17,11 @@ export const authReducer = (
         // loading: false,
         // error: "",
         // auth: action.payload
+        // ...state,
+        // ...action.payload
         ...state,
-        ...action.payload
+        user: action.payload.user,
+        token: action.payload.token,
       };
     case "LOGOUT":
       return action.payload;

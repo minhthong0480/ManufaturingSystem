@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../Style/Login.css";
-import { signIn } from "../../action/login";
+import { signIn, loggedInUser } from "../../action/login";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -13,13 +13,32 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  
+
   const handleOnSubmit = async (event) => {
-    console.log("SEND DATA", { dataForm });
-    dispatch(signIn(dataForm, navigate))
+    // console.log("SEND DATA", { dataForm });
+    
     // const data = await signIn(dataForm);
     // if (data) {
+    //   dispatch(signIn(dataForm))
     //   navigate("/");
     // }
+    try {
+      const data = await signIn(dataForm);
+  
+      // Dispatch an action to update authentication status
+      if (data) {
+        // dispatch({
+        //   type: "LOGGED_IN_USER",
+        //   payload: {user, token},
+        // });
+        dispatch(loggedInUser(data.username, data.accessToken));
+        navigate("/");
+      }
+    } catch (error) {
+      // Handle login error here
+      console.error("Login error:", error);
+    }
   };
 
   const handleOnChange = (event) => {
