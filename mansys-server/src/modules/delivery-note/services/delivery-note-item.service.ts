@@ -47,6 +47,7 @@ export class DeliveryNoteItemSerive {
 
     const inventory = await this.inventoryService.getOneByProductId(product.id);
     inventory.stockOut += dto.quantity;
+    inventory.lastUpdate = new Date();
     await this.inventoryService.save(inventory);
 
     return ResultModel.success(
