@@ -6,6 +6,7 @@ import { DeliveryNoteItem } from '../entities/delivery-note-item.entity';
 import { CreateDeliveryNoteItemDto } from '../dto/create-delivery-note-item.dto';
 import { ProductsService } from 'src/modules/products/services/products.service';
 import { DeliveryNoteSerive } from './delivery-note.service';
+import { InventoryService } from 'src/modules/inventory/services/inventory.service';
 
 @Injectable()
 export class DeliveryNoteItemSerive {
@@ -18,6 +19,9 @@ export class DeliveryNoteItemSerive {
 
     @Inject(DeliveryNoteSerive)
     private readonly deliveryNoteSerive: DeliveryNoteSerive,
+
+    @Inject(InventoryService)
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async create(dto: CreateDeliveryNoteItemDto) {
@@ -40,6 +44,11 @@ export class DeliveryNoteItemSerive {
         'Create Delivery Note Item Failed',
       );
     }
+
+    const inventory = await this.inventoryService.getOneByProductId(product.id);
+    inventory.stockOut += dto.quantity;
+    inventory.lastUpdate = new Date();
+    await this.inventoryService.save(inventory);
 
     return ResultModel.success(
       deliveryNoteItem,
