@@ -8,13 +8,15 @@ import { CustomersModule } from '../customers/customers.module';
 import { DeliveryNoteItemController } from './controllers/delivery-note-item.controller';
 import { DeliveryNoteItemSerive } from './services/delivery-note-item.service';
 import { ProductsModule } from '../products/products.module';
+import { InventoryModule } from '../inventory/inventory.module';
 
 @Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([DeliveryNote, DeliveryNoteItem]),
     CustomersModule,
-    ProductsModule
+    ProductsModule,
+    InventoryModule,
   ],
   controllers: [DeliveryNoteController, DeliveryNoteItemController],
   providers: [DeliveryNoteSerive, DeliveryNoteItemSerive],
