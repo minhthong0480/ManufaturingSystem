@@ -22,12 +22,12 @@ export const signIn =  (dataForm, navigate)  => async (dispatch) => {
   console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE THEN REDIRECT ===> ");
 
   // Save user token to local storage
-  localStorage.setItem("token", response.data.accessToken);
+  localStorage.setItem("token", response.accessToken);
 
   // Dispatch an action to update the Redux store with user data
   dispatch({
     type: "LOGGED_IN_USER",
-    payload: response.data.data,
+    payload: response.data,
   });
   navigate("/");
 };
