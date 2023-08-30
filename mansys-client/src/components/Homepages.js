@@ -1,5 +1,5 @@
 import React from "react";
-import "../Style/Homepages.css";
+import "../Style/HomepagesNew.css";
 import { Card } from "antd";
 
 import userManagementImg from "../image/user-management.jpg";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import logo from '../image/PhuongHaiJSCAvata.jpg'
 import { Layout, Avatar, Menu, Dropdown  } from 'antd';
 import {MenuOutlined} from '@ant-design/icons';
-import '../Style/HeaderUI.css';
+import '../Style/HeaderUINew.css';
 
 const { Header } = Layout;
 
