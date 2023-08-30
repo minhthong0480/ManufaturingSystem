@@ -13,6 +13,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Employee from "./components/Employee";
 import Customer from "./components/Customer";
 import PrivateRoute from "./components/Login/PrivateRoute";
+import MaterialForm from "./Materials/MaterialTable";
 
 function App() {
   const AppComponent = () => (
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/create_contract" element={<ContractCreate />} />
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/customer" element={<Customer />} />
+          <Route exact path="/material" element={<MaterialForm />} />
         </Routes>
       </div>
     </>

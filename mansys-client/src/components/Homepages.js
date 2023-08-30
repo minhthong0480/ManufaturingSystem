@@ -33,7 +33,7 @@ const cardData = [
   {
     id: 5,
     imageSrc: userManagementImg,
-    url: "#",
+    url: "/material",
     name: "Quản Lý Vật Tư",
   },
   {

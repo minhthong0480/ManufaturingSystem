@@ -18,6 +18,7 @@ const Contract = () => {
     const { value } = e.target;
     setSearchText(value);
   };
+
   const fetchData = async () => {
     try {
       let res = await filterContract();
@@ -32,16 +33,10 @@ const Contract = () => {
     fetchData();
   }, []);
 
-
-  console.log(contract);
-
   const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
 
-  // const handleDelete = (record) => {
-  //   console.log("Button clicked for delete", record);
-  // };
   const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deactivateContract().then((res) => {
@@ -95,16 +90,15 @@ const Contract = () => {
   ];
   return (
     <Fragment>
+      <h1>Contract List</h1>
       <div className="contract-page-container">
           <Input.Search 
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
             enterButton
-            // style={{ marginBottom: 16, marginTop: 80 }}
           />
           <Button
-            // style={{ marginTop: "10px", marginBottom: 10, background: 'blue' }}
             className="create-button"
             type="primary"
             href="/create_contract"

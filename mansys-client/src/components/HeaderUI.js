@@ -3,11 +3,13 @@ import logo from '../image/PhuongHaiJSCAvata.jpg'
 import { Layout, Avatar, Menu, Dropdown  } from 'antd';
 import {MenuOutlined} from '@ant-design/icons';
 import '../Style/HeaderUINew.css';
+import { useDispatch, useSelector, Provider } from "react-redux";
 
 const { Header } = Layout;
 
 const HeaderUI = () => {
     const [userData, setUserData] = useState({});
+    const username = useSelector((state) => state.auth.username)
   
     useEffect(() => {
       // Simulate fetching user data from an API
@@ -51,7 +53,7 @@ const HeaderUI = () => {
       <div className='user-container'>
         <div className="avatar-container" >
             <Avatar src={userData.avatar} size="large" />
-            <span className="user-name">username non-click click{userData.name}</span>
+            <span className="user-name">{username}</span>
         </div>
         <Dropdown overlay={menu} placement="bottomRight">
             <button className="menu-button"><MenuOutlined /></button>
