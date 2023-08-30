@@ -105,7 +105,8 @@ const Contract = () => {
             style={{ marginBottom: 16, marginTop: 80 }}
           />
           <Button
-            style={{ marginTop: "10px", marginBottom: 10, background: 'green' }}
+            // style={{ marginTop: "10px", marginBottom: 10, background: 'blue' }}
+            className="create-button"
             type="primary"
             href="/create_contract"
           >

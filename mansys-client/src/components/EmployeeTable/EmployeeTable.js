@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Input, Modal, Popconfirm, Space, Table } from "antd";
-import "./EmployeeTable.css";
+import "../../Style/EmployeeTable.css";
 import Search from "antd/es/input/Search";
 import EmployeeModal from "../EmployeeModal/EmployeeModal";
 const EditableContext = React.createContext(null);
@@ -226,7 +226,7 @@ const EmployeeTable = () => {
           enterButton
           style={{ width: 304 }}
         />
-        <Button onClick={showModal} type="primary">
+        <Button classname = "create-button" onClick={showModal} type="primary">
           Add a row
         </Button>
       </div>

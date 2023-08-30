@@ -12,8 +12,8 @@
   .create-button {
     margin-top: 10px;
     margin-bottom: 10px;
-    background-color: green;
-    border-color: green;
+    background-color: blue;
+    border-color: blue;
   }
   
   /* Style for Eye Icon */
@@ -25,7 +25,7 @@
   /* Style for Edit Button */
   .ant-btn-primary {
     margin-right: 10px;
-    background-color: green;
+    background-color: blue;
   }
   
   /* Style for Delete Icon */

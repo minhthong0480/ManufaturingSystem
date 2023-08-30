@@ -12,3 +12,10 @@
   border: 1px solid #d9d9d9;
   border-radius: 2px;
 }
+
+.create-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: blue;
+  border-color: blue;
+}
