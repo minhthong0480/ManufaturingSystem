@@ -219,7 +219,7 @@ const EmployeeTable = () => {
           placeholder="input search text"
           onSearch={onSearch}
           enterButton
-          style={{ width: 304 }}
+          // style={{ width: 304 }}
         />
         <Button className="create-button" onClick={showModal} type="primary">
           Add a row

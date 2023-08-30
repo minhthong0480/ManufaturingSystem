@@ -100,6 +100,7 @@ const Contract = () => {
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
+            enterButton
             // style={{ marginBottom: 16, marginTop: 80 }}
           />
           <Button
