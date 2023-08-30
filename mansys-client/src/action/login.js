@@ -40,7 +40,7 @@ import { navigate } from "react-router-dom";
 export const signIn = (userdata, navigate) => async (dispatch) => {
   try {
     const res = await axios.post(
-      `${process.env.REACT_APP_API}auth/login`,
+      `${process.env.REACT_APP_API}/auth/login`,
       userdata
     );
 
