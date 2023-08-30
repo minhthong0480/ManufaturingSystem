@@ -4,10 +4,6 @@ import { Card } from "antd";
 
 import userManagementImg from "../image/user-management.jpg";
 import clientManagementImg from "../image/client-management.jpg";
-import contractManagementImg from "../image/contract-manage.jpg";
-import employeeManagementImg from "../image/employee-manage.png";
-import productManagementImg from "../image/product-manage.jpg";
-import settingManagementImg from "../image/setting-manage.png";
 
 const cardData = [
   {
@@ -24,27 +20,39 @@ const cardData = [
   },
   {
     id: 3,
-    imageSrc: contractManagementImg,
+    imageSrc: userManagementImg,
     url: "/contract",
     name: "Quản Lý Hợp Đồng",
   },
   {
     id: 4,
-    imageSrc: employeeManagementImg,
+    imageSrc: userManagementImg,
     url: "#",
     name: "Quản Lý Nhân Sự Sản Xuất",
   },
   {
     id: 5,
-    imageSrc: productManagementImg,
-    url: "#",
+    imageSrc: userManagementImg,
+    url: "/material",
     name: "Quản Lý Vật Tư",
   },
   {
     id: 6,
-    imageSrc: settingManagementImg,
+    imageSrc: userManagementImg,
     url: "#",
     name: "Quản Lý Cấu Hình",
+  },
+  {
+    id: 7,
+    imageSrc: userManagementImg,
+    url: "#",
+    name: "Option 7",
+  },
+  {
+    id: 8,
+    imageSrc: userManagementImg,
+    url: "#",
+    name: "Option 8",
   },
 ];
 
@@ -54,11 +62,9 @@ function Homepage() {
       <div className="card-row">
         {cardData.map((card) => (
           <Card hoverable key={card.id} className="card">
-            <a href={card.url} className="card-link">
-              <img src={card.imageSrc} alt={`From ${card.id}`} className="card-image" />
-              <div className="card-name">{card.name}</div>
-            </a>
-        </Card>
+            <img src={card.imageSrc} alt={`From ${card.id}`} />
+            <a href={card.url}>{card.name}</a>
+          </Card>
         ))}
       </div>
     </div>
