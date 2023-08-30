@@ -1,21 +1,66 @@
-.editable-cell {
-  position: relative;
-}
+/* EmployeeTable.css */
 
-.editable-cell-value-wrap {
+.editable-row .editable-cell-value-wrap {
   padding: 5px 12px;
   cursor: pointer;
 }
 
-.editable-row:hover .editable-cell-value-wrap {
-  padding: 4px 11px;
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
+.editable-row .editable-cell-value-wrap:hover {
+  background-color: #f0f2f5;
+}
+
+.editable-row .ant-form-item {
+  margin: 0;
+}
+
+.search-button {
+    margin-bottom: 16px;
+    margin-top: 80px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
 .create-button {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: blue;
-  border-color: blue;
+  background-color: #1890ff;
+  border-color: #1890ff;
+  padding: 4px 12px; /* Adjust padding to control button size */
+  font-size: 14px; /* Adjust font size */
+}
+
+.create-button:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.employee-modal {
+  width: 400px;
+}
+
+.employee-modal-header {
+  background-color: #1890ff;
+  color: #fff;
+}
+
+.employee-modal-footer {
+  text-align: right;
+  border-top: none;
+}
+
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  cursor: pointer;
+  color: #1890ff;
 }

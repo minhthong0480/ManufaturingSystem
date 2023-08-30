@@ -1,7 +1,11 @@
 /* Contract.css */
 
 .contract-page-container {
-    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 16px;
   }
   
   .search-input {
@@ -10,10 +14,9 @@
   }
   
   .create-button {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: blue;
-    border-color: blue;
+    background-color: #1890ff;
+    border-color: #1890ff;
+    margin-left: 16px;
   }
   
   /* Style for Eye Icon */

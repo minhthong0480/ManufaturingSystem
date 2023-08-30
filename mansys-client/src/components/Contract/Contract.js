@@ -96,13 +96,11 @@ const Contract = () => {
   return (
     <Fragment>
       <div className="contract-page-container">
-      <Row justify="end">
-        <Col>
           <Input.Search 
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
-            style={{ marginBottom: 16, marginTop: 80 }}
+            // style={{ marginBottom: 16, marginTop: 80 }}
           />
           <Button
             // style={{ marginTop: "10px", marginBottom: 10, background: 'blue' }}
@@ -112,10 +110,8 @@ const Contract = () => {
           >
             Create New Contract
           </Button>
-        </Col>
-      </Row>
-      <Table dataSource={filteredData} columns={columns} />
       </div>
+      <Table dataSource={filteredData} columns={columns} />
     </Fragment>
   );
 };
