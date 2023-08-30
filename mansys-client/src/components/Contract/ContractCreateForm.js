@@ -2,6 +2,7 @@ import { Fragment, React, useState } from "react";
 import { Form, Input, Button, Select, DatePicker } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector, Provider } from "react-redux";
+import "../../Style/ContractCreate.css"
 
 const ContractCreateForm = (props) => {
   const { values, setValues, handleChange, handleSubmit } = props;
@@ -16,18 +17,10 @@ const ContractCreateForm = (props) => {
     console.log("Form values:", values);
   };
 
-  // const username  = useSelector((state) => state.auth.username);
-  // console.log("Stored username:", username);
-
-  // const auth = useSelector((state) => state.auth);
-  // console.log("Auth state:", auth);
-
   const username = useSelector((state) => state.auth.username)
 
-  // console.log(values);
-
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className="contract-create-form-container">
       <Form onFinish={onFinish}>
         <Form.Item label="Contract ID">
           <Input

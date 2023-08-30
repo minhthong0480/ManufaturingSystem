@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Button, Row, Col, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import "../../Style/Contract.css"
 
 import React from "react";
 import { Table } from "antd";
@@ -94,6 +95,7 @@ const Contract = () => {
   ];
   return (
     <Fragment>
+      <div className="contract-page-container">
       <Row justify="end">
         <Col>
           <Input.Search 
@@ -112,6 +114,7 @@ const Contract = () => {
         </Col>
       </Row>
       <Table dataSource={filteredData} columns={columns} />
+      </div>
     </Fragment>
   );
 };
