@@ -46,5 +46,4 @@ export const updateContract = async (token, updateData, id) =>
         Authorization: `Bearer ${token}`,
       },
     }
-
   );
