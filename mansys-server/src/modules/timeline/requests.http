@@ -1,0 +1,9 @@
+POST http://localhost:3000/timelines
+content-type: application/json
+
+{
+    "contractStatusId": 1,
+    "contractId": 1,
+    "userId": 1,
+    "time": "damn"
+}

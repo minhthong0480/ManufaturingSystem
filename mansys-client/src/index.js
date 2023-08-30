@@ -5,6 +5,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { deDE } from '@mui/x-date-pickers/locales';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+//import redux
+import {Provider} from 'react-redux'
+import { store } from './store';
+
 <LocalizationProvider
   localeText={deDE.components.MuiLocalizationProvider.defaultProps.localeText}
 >
@@ -15,7 +19,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+     <App />
+    </Provider>
   </React.StrictMode>
 );
 

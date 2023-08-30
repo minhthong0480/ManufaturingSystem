@@ -1,12 +1,40 @@
 import React, { useState } from "react";
-import "./Login.css";
+import "../../Style/Login.css";
+import { signIn, loggedInUser } from "../../action/login";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [dataForm, setDataForm] = useState({
     username: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
+  
+
+  const handleOnSubmit = async (event) => {
+    // console.log("SEND DATA", { dataForm });
+    
+    // const data = await signIn(dataForm);
+    // if (data) {
+      dispatch(signIn(dataForm, navigate))
+    //   navigate("/");
+    // }
+    // try {
+    //   const data = await signIn(dataForm);
+  
+    //   // Dispatch an action to update authentication status
+    //   if (data) {
+    //     navigate("/");
+    //   }
+    // } catch (error) {
+    //   // Handle login error here
+    //   console.error("Login error:", error);
+    // }
+  };
 
   const handleOnChange = (event) => {
     setDataForm({
@@ -42,7 +70,7 @@ const Login = () => {
                 onChange={handleOnChange}
               />
             </div>
-            <button className="button login__submit">
+            <button className="button login__submit" onClick={handleOnSubmit}>
               <span className="button__text">Log In</span>
               <i className="button__icon fas fa-chevron-right"></i>
             </button>
