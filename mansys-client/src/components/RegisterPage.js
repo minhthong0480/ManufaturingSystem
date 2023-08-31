@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select } from 'antd';
-import '../Style/RegisterPage.css';
+import '../styles/RegisterPage.css';
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../image/PhuongHaiJSCAvata.jpg'
+import logo from '../images/PhuongHaiJSCAvata.jpg'
 import { Layout, Avatar, Menu, Dropdown  } from 'antd';
 import {MenuOutlined} from '@ant-design/icons';
-import '../Style/HeaderUINew.css';
-
+import '../styles/HeaderUINew.css';
 const { Header } = Layout;
 
 const HeaderUI = () => {

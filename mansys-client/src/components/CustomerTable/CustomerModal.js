@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Input, Popconfirm, Space, Table } from "antd";
-import "../../Style/CustomerTable.css";
+import "../../styles//CustomerTable.css";
 import Search from "antd/es/input/Search";
 import CustomerModal from "./CustomerModal";
 const EditableContext = React.createContext(null);

@@ -2,12 +2,12 @@ import { Fragment, useEffect, useState } from "react";
 import { Button, Row, Col, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
-import "../../Style/Contract.css"
+import "../../styles//Contract.css"
 
 import React from "react";
 import { Table } from "antd";
 
-import { deactivateContract, filterContract } from "../../action/contract-detail";
+import { deactivateContract, filterContract } from "../../actions/contract-detail";
 
 const Contract = () => {
   const [contract, setContract] = useState([]);

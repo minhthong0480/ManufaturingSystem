@@ -2,7 +2,7 @@ import { Fragment, React, useState } from "react";
 import { Form, Input, Button, Select, DatePicker } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector, Provider } from "react-redux";
-import "../../Style/ContractCreate.css"
+import "../../styles//ContractCreate.css"
 
 const ContractCreateForm = (props) => {
   const { values, setValues, handleChange, handleSubmit } = props;

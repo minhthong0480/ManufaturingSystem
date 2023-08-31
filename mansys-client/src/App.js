@@ -1,10 +1,7 @@
 import Contact from "./components/Contract/Contract";
 import ContractCreate from "./components/Contract/ContractCreate";
 import Login from "./components/Login/Login";
-import Navbar from "./components/Navbar";
 import RegisterPage from "./components/RegisterPage";
-import Dashboard from "./components/Dashboard";
-// import CreateContractForm from "./components/Contract/ContractCreateForm";
 import HeaderUI from "./components/HeaderUI";
 import Homepage from "./components/Homepages";
 

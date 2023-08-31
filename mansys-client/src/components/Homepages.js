@@ -1,9 +1,9 @@
 import React from "react";
-import "../Style/HomepagesNew.css";
+import "../styles/HomepagesNew.css";
 import { Card } from "antd";
 
-import userManagementImg from "../image/user-management.jpg";
-import clientManagementImg from "../image/client-management.jpg";
+import userManagementImg from "../images/user-management.jpg";
+import clientManagementImg from "../images/client-management.jpg";
 
 const cardData = [
   {

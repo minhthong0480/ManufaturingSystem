@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import ContractCreateForm from "./ContractCreateForm";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
-import { createContract } from "../../action/contract-detail";
+import { createContract } from "../../actions/contract-detail";
 
 const ContractCreate = () => {
   //   const { auth } = useSelector((state) => ({ ...state }));
