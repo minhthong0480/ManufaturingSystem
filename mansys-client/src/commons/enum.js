@@ -16,7 +16,6 @@ export const LOCAL_STORAGE_USER = 'AUTH_USER';
 export const ACTION_AUTH_LOGIN_SUCCESS = 'LOGGED_IN_USER';
 export const ACTION_AUTH_LOGOUT = 'LOGOUT';
 
-
 // use for http request
 
 export const SUCCESS_CODE = 200;

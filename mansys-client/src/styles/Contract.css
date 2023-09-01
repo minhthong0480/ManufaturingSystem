@@ -38,6 +38,24 @@
     color: red;
   }
   
+  .contract-list-filter-container--flex{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contract-list-filter-search {
+    width: 40%;
+  }
+
+.contract-list-create-new-button{
+  width: 10%;
+  margin-bottom: 1rem;
+}
+
+  .contract-list-actions--flex{
+    display: flex;
+    align-items: center;
+  }
   /* Additional Custom Styles */
   /* Add more styles as needed */
   

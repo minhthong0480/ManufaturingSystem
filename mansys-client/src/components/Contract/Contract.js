@@ -1,51 +1,53 @@
 import React from "react";
-import { Table } from "antd";
 import { Fragment, useEffect, useState } from "react";
-import { Button, Row, Col, Input } from "antd";
+import { Button, Row, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import "../../styles//Contract.css"
-import { deactivateContract, filterContracts } from "../../actions/contract";
+import "../../styles/Contract.css"
+import "../../styles/PaginatedTable.css"
+import { deactivateContract } from "../../actions/contract";
+import { ContractService } from "../../services/contract-service";
+import { PaginatedTable } from '../Commons/PaginatedTable'
 
 const Contract = () => {
   const dispatcher = useDispatch();
-  const [contract, setContract] = useState([]);
-  const [filteredData, setFilteredData] = useState([{
-    key: "0",
-    avatar: "Edward King 0",
-    employeeId: "32",
-    name: "London, Park Lane no. 0",
-    email: "123",
-    phone: "13214",
-    role: "1234123",
-  },
-  {
-    key: "1",
-    avatar: "Edward King 0",
-    employeeId: "32",
-    name: "London, Park Lane no. 0",
-    email: "123",
-    phone: "13214",
-    role: "1234123",
-  },]);
 
-  const [searchText, setSearchText] = useState("");
+  const [contract, setContract] = useState([]);
+
+  const [filter, setFilter] = useState({
+    searchText: '',
+    data : [],
+    totalRows : 0,
+    page: 1,
+    pageSize: 10
+  })
 
   const onTriggerFiltering = async (page, pageSize, term) => {
-      dispatcher(filterContracts(page, pageSize, term))
+      const filterResult = await ContractService.filter(page, pageSize, term);
+      if(filterResult.code != 200) return
+      setFilter({...filter, totalRows: filterResult.data.totalRows, data : [...filterResult.data.data]})
   };
 
   const handleTextChange = (e) => {
-    const { value } = e.target;
-    setSearchText(value);
+    setFilter({...filter, searchText: e.target.value})
   }
   const handleSearch = (e) => {
-    onTriggerFiltering(1, 10, searchText)
+    onTriggerFiltering(filter.page, filter.pageSize, filter.searchText)
+  }
+
+  const pageChange = (page) => {
+    setFilter({...filter, page})
+    onTriggerFiltering(page, filter.pageSize, filter.searchText)
+  }
+
+  const pageSizeChange = (pageSize) => {
+    setFilter({...filter, pageSize})
+    onTriggerFiltering(filter.page, pageSize, filter.searchText)
   }
 
   useEffect(() => {
-    onTriggerFiltering(1, 10, null);
+    onTriggerFiltering(filter.page, filter.pageSize, filter.searchText);
   }, []);
 
 const handleEdit = (record) => {
@@ -61,15 +63,15 @@ const handleDelete = async () => {
   };
 
   const columns = [
-    { title: "Contract ID", dataIndex: "contract_id", key: "id" },
+    { title: "Contract ID", dataIndex: "id", key: "id" },
     {
       title: "Contract Number",
-      dataIndex: "contract_number",
+      dataIndex: "contractNumber",
       key: "contractnumber",
     },
-    { title: "Customer ID", dataIndex: "customer_id", key: "customerid" },
-    { title: "User ID", dataIndex: "user_id", key: "startdate" },
-    { title: "Start Date", dataIndex: "start_date", key: "startdate" },
+    { title: "Customer ID", dataIndex: "customerId", key: "customerId" },
+    { title: "User ID", dataIndex: "userId", key: "userId" },
+    { title: "Start Date", dataIndex: "dateStart", key: "dateStart" },
     { title: "Deadline", dataIndex: "deadline", key: "deadline" },
     { title: "Total", dataIndex: "total", key: "total" },
 
@@ -77,7 +79,7 @@ const handleDelete = async () => {
       title: "Actions",
       dataIndex: "actions",
       render: (_, record) => (
-        <div>
+        <div className="contract-list-actions--flex">
           <EyeOutlined 
             onClick={() => handleDelete()}
             style={{ marginRight: "10px", fontSize: "20px" }}
@@ -107,28 +109,36 @@ const handleDelete = async () => {
   return (
     <Fragment>
       <h1>Contract List</h1>
-      <div className="contract-page-container">
-      <Row justify="end">
-        <Col> 
+      <div className="contract-list-filter-container--flex">
+        <Row justify="end">
           <Input.Search 
-            placeholder="Search name..."
-            value={searchText}
-            onPressEnter={handleSearch}
-            onSearch={handleSearch}
-            onChange={handleTextChange}
-            style={{ marginBottom: 16, marginTop: 80 }}
-          />
-          </Col>
-          <Button
-            className="create-button"
-            type="primary"
-            href="/create_contract"
-          >
-            Create New Contract
-          </Button>
-      </Row>
+                className="contract-list-filter-search"
+                placeholder="Search name..."
+                value={filter.searchText}
+                onPressEnter={handleSearch}
+                onSearch={handleSearch}
+                onChange={handleTextChange}
+                style={{ marginBottom: 16, marginTop: 80 }}
+              />
+        </Row>
+        <Row justify="end">
+            <Button
+                  className="contract-list-create-new-button"
+                  type="primary"
+                  href="/create_contract"
+                >
+                  Create
+            </Button>
+        </Row>
       </div>
-      <Table dataSource={filteredData} columns={columns} />
+      <PaginatedTable 
+        columns={columns}
+        pageSize={filter.pageSize}
+        totalRows={filter.totalRows} 
+        data={filter.data} 
+        pageChange={pageChange}
+        pageSizeChange={pageSizeChange}
+        />
     </Fragment>
   );
 };

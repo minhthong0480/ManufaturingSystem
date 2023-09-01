@@ -23,9 +23,7 @@ export const signOut = (navigate) => async (dispatch) => {
   else {
     dispatch({
       type: ACTION_AUTH_LOGOUT
-    }).then(() => {
-      console.log('123')
-    })
-   
+    });
+    navigate("/login");
   }
 };

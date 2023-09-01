@@ -1,15 +1,7 @@
 import axios from "axios";
-import {ContractService} from '../services/contract-service'
-
-export const filterContracts = (page, pageSize, term) => async () => {
-  const result = await ContractService.filter(page, pageSize, term)
-  if(result.code !== 200) return
-  return
-}
+import { ContractService } from '../services/contract-service'
 
 export const createContract = async (token, contractData) => {
-    // console.log(data);
-  
     await axios.post(`${process.env.REACT_APP_API}/contract`, contractData, {
       headers: {
         Authorization: `Bearer ${token}`,
