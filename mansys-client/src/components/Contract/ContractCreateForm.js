@@ -17,7 +17,7 @@ const ContractCreateForm = (props) => {
     console.log("Form values:", values);
   };
 
-  const username = useSelector((state) => state.auth.username)
+  const username = useSelector((state) => state.auth?.username)
 
   return (
     <div className="contract-create-form-container">

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import logo from '../image/PhuongHaiJSCAvata.jpg'
 import { Layout, Avatar, Menu, Dropdown  } from 'antd';
 import {MenuOutlined} from '@ant-design/icons';
-import '../Style/HeaderUINew.css';
+import '../style/HeaderUINew.css';
 import { useDispatch, useSelector, Provider } from "react-redux";
 
 const { Header } = Layout;
 
 const HeaderUI = () => {
     const [userData, setUserData] = useState({});
-    const username = useSelector((state) => state.auth.username)
+    const username = useSelector((state) => state.auth?.username)
   
     useEffect(() => {
       // Simulate fetching user data from an API

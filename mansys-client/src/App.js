@@ -11,13 +11,14 @@ import Employee from "./components/Employee";
 import Customer from "./components/Customer";
 import PrivateRoute from "./components/Login/PrivateRoute";
 import MaterialForm from "./Materials/MaterialTable";
+import { Layout } from "antd";
+const { Content, Footer } = Layout;
 
 function App() {
   const AppComponent = () => (
-    <>
+    <Layout style={{ minHeight: "100vh" }}>
       <HeaderUI />
-
-      <div style={{ marginTop: 80 }}>
+      <Content style={{ padding: "1rem" }}>
         <Routes>
           <Route exact path="/contract" element={<Contact />} />
           <Route exact path="/" element={<Homepage />} />
@@ -26,8 +27,15 @@ function App() {
           <Route exact path="/customer" element={<Customer />} />
           <Route exact path="/material" element={<MaterialForm />} />
         </Routes>
-      </div>
-    </>
+      </Content>
+      <Footer
+        style={{
+          textAlign: 'center',
+        }}
+      >
+        PHUONG HAI JSC ©2023 Created by NGUYEN HUNG DUNG
+      </Footer>
+    </Layout>
   );
   return (
     <BrowserRouter>

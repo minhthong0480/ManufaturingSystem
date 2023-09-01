@@ -24,7 +24,7 @@ const Login = () => {
     });
   };
 
-  const username = useSelector(state => state.auth.username)
+  const username = useSelector(state => state.auth?.username)
   if(username){
     return <Navigate to="/"/>
   }

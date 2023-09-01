@@ -1,0 +1,43 @@
+/* Contract.css */
+
+.contract-page-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 16px;
+  }
+  
+  .search-input {
+    margin-bottom: 16px;
+    margin-top: 80px;
+  }
+  
+  .create-button {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    margin-left: 16px;
+  }
+  
+  /* Style for Eye Icon */
+  .anticon-eye {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+  /* Style for Edit Button */
+  /* .ant-btn-primary {
+    margin-right: 10px;
+    background-color: blue;
+  } */
+  
+  /* Style for Delete Icon */
+  .anticon-delete {
+    margin-left: 10px;
+    font-size: 20px;
+    color: red;
+  }
+  
+  /* Additional Custom Styles */
+  /* Add more styles as needed */
+  
