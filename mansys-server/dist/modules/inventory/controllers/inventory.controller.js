@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const inventory_service_1 = require("../services/inventory.service");
 const create_inventory_dto_1 = require("../dto/create-inventory.dto");
 const filter_inventory_dto_1 = require("../dto/filter-inventory.dto");
+const pagination_request_model_1 = require("../../../common/pagination-request-model");
 let InventoryController = exports.InventoryController = class InventoryController {
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
@@ -25,7 +26,7 @@ let InventoryController = exports.InventoryController = class InventoryControlle
         return this.inventoryService.create(inventory);
     }
     findWithFilder(filter) {
-        filter.applyDefaultPaginationSetting();
+        pagination_request_model_1.PaginationRequestModel.applyDefaultPaginationSetting(filter);
         return this.inventoryService.filter(filter);
     }
 };

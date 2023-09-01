@@ -4,7 +4,7 @@ import { ContractService } from "../services/contract.service";
 import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 import { ContractFilterDTO } from "../dtos/filter-contract.dto";
 import { UpdateContactDto } from "../dtos/update-contract.dto";
-
+import { PaginationRequestModel } from "../../../common/pagination-request-model";
 @ApiTags('contract')
 @ApiBearerAuth()
 @Controller('contract')
@@ -19,9 +19,9 @@ export class ContractController {
         return this.contractService.create(createContractDto);
     }
 
-    @Get()
+    @Get('filterContracts')
     filterContracts(@Query() filterDto: ContractFilterDTO) {
-        filterDto.applyDefaultPaginationSetting();
+        PaginationRequestModel.applyDefaultPaginationSetting(filterDto);
         return this.contractService.filter(filterDto);
     }
 

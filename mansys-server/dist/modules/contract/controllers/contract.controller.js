@@ -19,6 +19,7 @@ const contract_service_1 = require("../services/contract.service");
 const swagger_1 = require("@nestjs/swagger");
 const filter_contract_dto_1 = require("../dtos/filter-contract.dto");
 const update_contract_dto_1 = require("../dtos/update-contract.dto");
+const pagination_request_model_1 = require("../../../common/pagination-request-model");
 let ContractController = exports.ContractController = class ContractController {
     constructor(contractService) {
         this.contractService = contractService;
@@ -27,7 +28,7 @@ let ContractController = exports.ContractController = class ContractController {
         return this.contractService.create(createContractDto);
     }
     filterContracts(filterDto) {
-        filterDto.applyDefaultPaginationSetting();
+        pagination_request_model_1.PaginationRequestModel.applyDefaultPaginationSetting(filterDto);
         return this.contractService.filter(filterDto);
     }
     updateContact(id, updateContactDto) {
@@ -45,7 +46,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ContractController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('filterContracts'),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [filter_contract_dto_1.ContractFilterDTO]),

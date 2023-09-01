@@ -13,9 +13,9 @@ exports.PaginationRequestModel = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class PaginationRequestModel {
-    applyDefaultPaginationSetting() {
-        this.page = this.page <= 0 ? 1 : this.page;
-        this.pageSize = this.pageSize <= 0 ? 10 : this.pageSize;
+    static applyDefaultPaginationSetting(request) {
+        request.page = request.page <= 0 ? 1 : request.page;
+        request.pageSize = request.pageSize <= 0 ? 10 : request.pageSize;
     }
 }
 exports.PaginationRequestModel = PaginationRequestModel;
