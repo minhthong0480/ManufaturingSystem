@@ -9,6 +9,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Employee from "./components/Employee";
 import Customer from "./components/Customer";
+import Products from "./components/Products";
 import PrivateRoute from "./components/Login/PrivateRoute";
 import MaterialForm from "./Materials/MaterialTable";
 import { Layout } from "antd";
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/customer" element={<Customer />} />
           <Route exact path="/material" element={<MaterialForm />} />
+          <Route exact path="/products" element={<Products />} />
         </Routes>
       </Content>
       <Footer

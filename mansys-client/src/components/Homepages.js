@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Layout, Row, Col } from "antd";
+import { useNavigate } from 'react-router-dom';
 import "../style/HomepagesNew.css";
 // import userManagementImg from "../image/user-management.jpg";
 // import clientManagementImg from "../image/client-management.jpg";
@@ -65,6 +66,7 @@ const cardData = [
 ];
 
 function Homepage() {
+  const navigate = useNavigate();
   return (
     // <div className="card-container">
     //   <div className="card-row">
@@ -91,7 +93,9 @@ function Homepage() {
             <Card title={card.name}
               hoverable
               bordered={true}
-              style={{ textAlign: "center" }}>
+              onClick={() => { navigate(card.url) }}
+              style={{ textAlign: "center" }}
+            >
               <div style={{ fontSize: "5rem" }}> {card.imageSrc}</div>
             </Card>
           </Col>
