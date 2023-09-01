@@ -9,23 +9,35 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Employee from "./components/Employee";
 import Customer from "./components/Customer";
+import Products from "./components/Products";
 import PrivateRoute from "./components/Login/PrivateRoute";
+import MaterialForm from "./Materials/MaterialTable";
+import { Layout } from "antd";
+const { Content, Footer } = Layout;
 
 function App() {
   const AppComponent = () => (
-    <>
+    <Layout style={{ minHeight: "100vh" }}>
       <HeaderUI />
-
-      <div style={{ marginTop: 80 }}>
+      <Content style={{ padding: "1rem" }}>
         <Routes>
           <Route exact path="/contracts" element={<Contact />} />
           <Route exact path="/" element={<Homepage />} />
           <Route exact path="/create_contract" element={<ContractCreate />} />
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/customer" element={<Customer />} />
+          <Route exact path="/material" element={<MaterialForm />} />
+          <Route exact path="/products" element={<Products />} />
         </Routes>
-      </div>
-    </>
+      </Content>
+      <Footer
+        style={{
+          textAlign: 'center',
+        }}
+      >
+        PHUONG HAI JSC ©2023 Created by NGUYEN HUNG DUNG
+      </Footer>
+    </Layout>
   );
   return (
     <BrowserRouter>

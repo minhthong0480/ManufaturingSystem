@@ -16,7 +16,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
-  ) {}
+  ) { }
 
   async getProducts(filterDto: GetProductsFilterDto): Promise<Product[]> {
     const { search } = filterDto;
@@ -48,5 +48,9 @@ export class ProductsService {
 
   async getOneById(id: number) {
     return await this.productsRepository.findOneBy({ id });
+  }
+
+  async getAll(): Promise<Product[]> {
+    return this.productsRepository.find();
   }
 }

@@ -20,9 +20,12 @@ export const signOut = (navigate) => async (dispatch) => {
 
   const logoutResult = await AuthService.logout()
   if(logoutResult.code !== 200) return;
-  
-  dispatch({
-    type: ACTION_AUTH_LOGOUT
-  });
-  navigate("/login");
+  else {
+    dispatch({
+      type: ACTION_AUTH_LOGOUT
+    }).then(() => {
+      console.log('123')
+    })
+   
+  }
 };

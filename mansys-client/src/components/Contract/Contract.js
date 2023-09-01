@@ -11,7 +11,25 @@ import { deactivateContract, filterContracts } from "../../actions/contract";
 const Contract = () => {
   const dispatcher = useDispatch();
   const [contract, setContract] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([{
+    key: "0",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },
+  {
+    key: "1",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },]);
+
   const [searchText, setSearchText] = useState("");
 
   const onTriggerFiltering = async (page, pageSize, term) => {
@@ -30,13 +48,11 @@ const Contract = () => {
     onTriggerFiltering(1, 10, null);
   }, []);
 
-
-  const handleEdit = (record) => {
+const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
 
-
-  const handleDelete = async () => {
+const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deactivateContract().then((res) => {
       toast.success("Contract Deleted");
@@ -72,7 +88,7 @@ const Contract = () => {
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
-            style={{ marginRight: "10px", background: 'green' }}
+            // style={{ marginRight: "10px", background: 'green' }}
           >
             Edit
           </Button>
@@ -90,6 +106,7 @@ const Contract = () => {
 
   return (
     <Fragment>
+      <h1>Contract List</h1>
       <div className="contract-page-container">
       <Row justify="end">
         <Col> 
@@ -101,18 +118,17 @@ const Contract = () => {
             onChange={handleTextChange}
             style={{ marginBottom: 16, marginTop: 80 }}
           />
+          </Col>
           <Button
-            // style={{ marginTop: "10px", marginBottom: 10, background: 'blue' }}
             className="create-button"
             type="primary"
             href="/create_contract"
           >
             Create New Contract
           </Button>
-        </Col>
       </Row>
-      <Table dataSource={filteredData} columns={columns} />
       </div>
+      <Table dataSource={filteredData} columns={columns} />
     </Fragment>
   );
 };
