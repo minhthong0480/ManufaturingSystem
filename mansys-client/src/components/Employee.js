@@ -1,5 +1,5 @@
 import React from "react";
-import EmployeeTable from "./EmployeeTable/EmployeeTable";
+import EmployeeTable from "./Employee/EmployeeTable";
 
 const Employee = () => {
   return (

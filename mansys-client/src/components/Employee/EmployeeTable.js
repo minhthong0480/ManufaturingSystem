@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Input, Modal, Popconfirm, Space, Table } from "antd";
 import "../../styles//EmployeeTable.css";
 import Search from "antd/es/input/Search";
-import EmployeeModal from "../EmployeeModal/EmployeeModal";
+import EmployeeModal from "./EmployeeModal";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -213,20 +213,15 @@ const EmployeeTable = () => {
   return (
     <div>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 16,
-        }}
+        className="button-container"
       >
         <Search
           placeholder="input search text"
           onSearch={onSearch}
           enterButton
-          style={{ width: 304 }}
+          // style={{ width: 304 }}
         />
-        <Button classname = "create-button" onClick={showModal} type="primary">
+        <Button className="create-button" onClick={showModal} type="primary">
           Add a row
         </Button>
       </div>

@@ -11,13 +11,31 @@ import { deactivateContract, filterContract } from "../../actions/contract-detai
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([{
+    key: "0",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },
+  {
+    key: "1",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },]);
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearchText(value);
   };
+
   const fetchData = async () => {
     try {
       let res = await filterContract();
@@ -32,16 +50,10 @@ const Contract = () => {
     fetchData();
   }, []);
 
-
-  console.log(contract);
-
   const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
 
-  // const handleDelete = (record) => {
-  //   console.log("Button clicked for delete", record);
-  // };
   const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deactivateContract().then((res) => {
@@ -78,7 +90,7 @@ const Contract = () => {
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
-            style={{ marginRight: "10px", background: 'green' }}
+            // style={{ marginRight: "10px", background: 'green' }}
           >
             Edit
           </Button>
@@ -95,27 +107,23 @@ const Contract = () => {
   ];
   return (
     <Fragment>
+      <h1>Contract List</h1>
       <div className="contract-page-container">
-      <Row justify="end">
-        <Col>
           <Input.Search 
             placeholder="Search name..."
             value={searchText}
             onChange={handleSearch}
-            style={{ marginBottom: 16, marginTop: 80 }}
+            enterButton
           />
           <Button
-            // style={{ marginTop: "10px", marginBottom: 10, background: 'blue' }}
             className="create-button"
             type="primary"
             href="/create_contract"
           >
             Create New Contract
           </Button>
-        </Col>
-      </Row>
-      <Table dataSource={filteredData} columns={columns} />
       </div>
+      <Table dataSource={filteredData} columns={columns} />
     </Fragment>
   );
 };
