@@ -1,48 +1,66 @@
 import Layout from "antd/es/layout/layout";
-import React from "react";
-import { Table, Form, Input, Select, Col } from "antd";
+import { Button, Form, Input, Select, Col, Modal } from "antd";
+import { getAllProducts } from "../actions/products";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import MyTable from "./MyTable/MyTable";
+import { PlusSquareOutlined } from '@ant-design/icons';
 const { Search } = Input;
-
-const dataSource = [
-    {
-        key: '1',
-        name: 'Mike',
-        age: 32,
-        address: '10 Downing Street',
-    },
-    {
-        key: '2',
-        name: 'John',
-        age: 42,
-        address: '10 Downing Street',
-    },
-];
 
 const columns = [
     {
-        title: 'Name',
+        title: 'Sản phẩm',
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
+        title: 'Giá',
+        dataIndex: 'price',
+        key: 'price',
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
+        title: 'Thông tin',
+        dataIndex: 'description',
+        key: 'description',
+    },
+
+    {
+        title: 'Nhà cung cấp',
+        dataIndex: 'supplier',
+        key: 'supplier',
+    },
+    {
+        title: 'Thời gian tạo',
+        dataIndex: 'createDate',
+        key: 'createDate',
     },
 ];
 
 const Products = () => {
+    const [dataTable, setDataTale] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [form] = Form.useForm();
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const dispatch = useDispatch();
+    const onSuccess = (dataTable) => {
+        setDataTale(dataTable?.data || [])
+    }
+    useEffect(() => {
+        dispatch(getAllProducts({ onSuccess: onSuccess }));
+    }, [])
     return (
         <Layout>
             <Col span={24}>
                 <Form layout="inline" >
-                    <Col span={16}>
+                    <Col span={12}>
                         <Form.Item >
                             <Search placeholder="Search" />
                         </Form.Item>
@@ -52,12 +70,49 @@ const Products = () => {
                             <Select />
                         </Form.Item>
                     </Col>
+                    <Col span={4}>
+                        <Button type="default" icon={<PlusSquareOutlined />} style={{ width: "100%" }} onClick={() => { showModal() }} >
+                            Add
+                        </Button>
+                    </Col>
                 </Form>
             </Col>
             <MyTable
-                dataSource={dataSource}
+                dataSource={dataTable}
                 columns={columns}
-            />;
+            />
+            <Modal title="Thêm sản phẩm"
+                // footer={false}
+                width="60vw"
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                closeIcon={false}
+            >
+                <Form
+                    layout="horizontal"
+                    form={form}
+                    labelCol={{
+                        span: 4,
+                    }}
+                    wrapperCol={{
+                        span: 14,
+                    }}
+                >
+                    <Form.Item label="Tên sản phẩm">
+                        <Input placeholder="input placeholder" />
+                    </Form.Item>
+                    <Form.Item label="Giá">
+                        <Input placeholder="input placeholder" />
+                    </Form.Item>
+                    <Form.Item label="Thông tin">
+                        <Input placeholder="input placeholder" />
+                    </Form.Item>
+                    <Form.Item label="Nhà cung cấp">
+                        <Input placeholder="input placeholder" />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Layout>
     );
 };
