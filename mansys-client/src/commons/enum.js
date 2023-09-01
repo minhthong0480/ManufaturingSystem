@@ -5,6 +5,8 @@ export const API_LOGIN_URL = `${BASE_API_URL}/auth/login`
 export const API_USER_INFOR_URL = `${BASE_API_URL}/user`
 
 
+export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/filterContracts`
+
 // use for accessing local storage variables
 export const LOCAL_STORAGE_TOKEN = 'AUTH_TOKEN';
 export const LOCAL_STORAGE_USER = 'AUTH_USER';

@@ -1,5 +1,5 @@
 import { AuthService } from '../services/auth-service';
-import {ACTION_AUTH_LOGIN_SUCCESS} from '../commons/enum'
+import {ACTION_AUTH_LOGIN_SUCCESS, ACTION_AUTH_LOGOUT} from '../commons/enum'
 
 export const signIn = (userdata, navigate) => async (dispatch) => {
 
@@ -14,4 +14,15 @@ export const signIn = (userdata, navigate) => async (dispatch) => {
       }
     });
     navigate("/");
+};
+
+export const signOut = (navigate) => async (dispatch) => {
+
+  const logoutResult = await AuthService.logout()
+  if(logoutResult.code !== 200) return;
+  
+  dispatch({
+    type: ACTION_AUTH_LOGOUT
+  });
+  navigate("/login");
 };

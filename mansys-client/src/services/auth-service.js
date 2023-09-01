@@ -15,5 +15,11 @@ export const AuthService = {
             username : loginResult.data.username,
             token : loginResult.data.accessToken
         })
+    },
+
+    logout: async function(){
+        localStorage.removeItem(LOCAL_STORAGE_USER);
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN);
+        return requestSucess();
     }
 }

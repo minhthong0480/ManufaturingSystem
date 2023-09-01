@@ -18,7 +18,7 @@ function App() {
 
       <div style={{ marginTop: 80 }}>
         <Routes>
-          <Route exact path="/contract" element={<Contact />} />
+          <Route exact path="/contracts" element={<Contact />} />
           <Route exact path="/" element={<Homepage />} />
           <Route exact path="/create_contract" element={<ContractCreate />} />
           <Route exact path="/employee" element={<Employee />} />

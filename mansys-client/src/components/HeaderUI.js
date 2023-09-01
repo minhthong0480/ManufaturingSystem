@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../images/PhuongHaiJSCAvata.jpg'
 import { Layout, Avatar, Menu, Dropdown  } from 'antd';
-import {MenuOutlined} from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
+import { useDispatch } from "react-redux";
+import { signOut } from "../actions/auth";
+import { useNavigate } from "react-router-dom";
 import '../styles/HeaderUINew.css';
+
 const { Header } = Layout;
+
 
 const HeaderUI = () => {
     const [userData, setUserData] = useState({});
-  
+    const dispatcher = useDispatch();
+    const navigator = useNavigate();
+
     useEffect(() => {
       // Simulate fetching user data from an API
       // Replace this with your actual API call
@@ -23,7 +30,12 @@ const HeaderUI = () => {
   
       fetchUserData();
     }, []);
-  
+    
+    const logoutAction = (e) => {
+      e.preventDefault()
+      dispatcher(signOut(navigator))
+    }
+
     const menu = (
       <Menu >
         <Menu.Item key="1"><a href="/">Home</a></Menu.Item>
@@ -34,7 +46,7 @@ const HeaderUI = () => {
         <Menu.Item key="6"><a href="#">Quản Lý Vật Tư</a></Menu.Item>
         <Menu.Item key="7"><a href="#">Quản Lý Cấu Hình</a></Menu.Item>
         <Menu.Item key="8"><a href="#">Option 7</a></Menu.Item>
-        <Menu.Item key="9"><a href="#">Option 8</a></Menu.Item>
+        <Menu.Item key="9"><a href="#" onClick={logoutAction}>Log out</a></Menu.Item>
       </Menu>
     );
 

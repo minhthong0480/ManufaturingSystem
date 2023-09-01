@@ -1,17 +1,15 @@
 import {LOCAL_STORAGE_USER, ACTION_AUTH_LOGIN_SUCCESS, ACTION_AUTH_LOGOUT} from '../commons/enum'
 
- let currentUserInformation = {
+ let initUserInformation = {
     username : null,
     token : null
  }
 
 if(window.localStorage.getItem(LOCAL_STORAGE_USER)){
-  currentUserInformation = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER));
-}else {
-  currentUserInformation = null;
-} 
+  initUserInformation = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER));
+}
 
-export const authReducer = (state = currentUserInformation, action) => {
+export const authReducer = (state = initUserInformation, action) => {
   switch (action.type) {
     case ACTION_AUTH_LOGIN_SUCCESS:
       return { 
@@ -19,7 +17,10 @@ export const authReducer = (state = currentUserInformation, action) => {
         ...action.payload
       };
     case ACTION_AUTH_LOGOUT:
-      return action.payload;
+      return {
+        ...state,
+        ...initUserInformation
+      };
     default:
       return state;
   }

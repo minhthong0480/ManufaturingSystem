@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/HomepagesNew.css";
 import { Card } from "antd";
-
+import { useNavigate } from "react-router-dom";
 import userManagementImg from "../images/user-management.jpg";
 import clientManagementImg from "../images/client-management.jpg";
 
@@ -21,7 +21,7 @@ const cardData = [
   {
     id: 3,
     imageSrc: userManagementImg,
-    url: "/contract",
+    url: "/contracts",
     name: "Quản Lý Hợp Đồng",
   },
   {
@@ -57,11 +57,17 @@ const cardData = [
 ];
 
 function Homepage() {
+  var navigator = useNavigate();
+
+  const changePage = (url) => {
+    navigator(url)
+  }
+
   return (
     <div className="card-container">
       <div className="card-row">
         {cardData.map((card) => (
-          <Card hoverable key={card.id} className="card">
+          <Card hoverable key={card.id} className="card" onClick={() => changePage(card.url)}>
             <img src={card.imageSrc} alt={`From ${card.id}`} />
             <a href={card.url}>{card.name}</a>
           </Card>

@@ -1,6 +1,6 @@
 import "../../styles//Login.css";
 import React, { useState } from "react";
-import { signIn } from "../../actions/login";
+import { signIn } from "../../actions/auth";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,7 +24,7 @@ const Login = () => {
     });
   };
 
-  const username = useSelector(state => state.auth.username)
+  const username = useSelector(state => state.auth != null? state.auth.username : null)
   if(username){
     return <Navigate to="/"/>
   }

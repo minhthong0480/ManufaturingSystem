@@ -1,13 +1,13 @@
 import axios from "axios";
+import {ContractService} from '../services/contract-service'
 
-// export const getall = async () =>
-// await axios.get(`${process.env.REACT_APP_API}`, {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-  
-  export const createContract = async (token, contractData) => {
+export const filterContracts = (page, pageSize, term) => async () => {
+  const result = await ContractService.filter(page, pageSize, term)
+  if(result.code !== 200) return
+  return
+}
+
+export const createContract = async (token, contractData) => {
     // console.log(data);
   
     await axios.post(`${process.env.REACT_APP_API}/contract`, contractData, {
@@ -20,16 +20,6 @@ import axios from "axios";
 export const deactivateContract = async (token,id) =>
   await axios.delete(
     `${process.env.REACT_APP_API}/contract/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-export const filterContract = async (token) =>
-  await axios.get(
-    `${process.env.REACT_APP_API}/contract`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
