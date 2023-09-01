@@ -11,7 +11,24 @@ import { deactivateContract, filterContract } from "../../action/contract-detail
 
 const Contract = () => {
   const [contract, setContract] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([{
+    key: "0",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },
+  {
+    key: "1",
+    avatar: "Edward King 0",
+    employeeId: "32",
+    name: "London, Park Lane no. 0",
+    email: "123",
+    phone: "13214",
+    role: "1234123",
+  },]);
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (e) => {
@@ -73,7 +90,7 @@ const Contract = () => {
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
-            style={{ marginRight: "10px", background: 'green' }}
+            // style={{ marginRight: "10px", background: 'green' }}
           >
             Edit
           </Button>
