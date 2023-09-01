@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post
 import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
 import { GetProductsFilterDto } from '../dto/get-products-filter.dto';
+import { CreateProductDto } from '../dto/create-product.dto';
 import { Int32 } from 'typeorm';
 
 @Controller('products')
@@ -17,7 +18,13 @@ export class ProductsController {
     findByProductsId(@Param('id') id: number) {
         return this.productService.getProductById(id);
     }
-   
+
+    @Post('/create')
+    createMaterial(@Body() CreateProductDto: CreateProductDto) {
+        console.log(CreateProductDto);
+        return this.productService.create(CreateProductDto);
+    }
+
     @Get()
     getTasks(
         @Query(ValidationPipe) filterDto: GetProductsFilterDto,

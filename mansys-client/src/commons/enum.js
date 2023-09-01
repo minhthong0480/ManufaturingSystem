@@ -7,8 +7,9 @@ export const API_USER_INFOR_URL = `${BASE_API_URL}/user`
 
 export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/filterContracts`
 export const API_PRODUCTS = `${BASE_API_URL}/products`
+export const API_PRODUCTS_CREATE = `${BASE_API_URL}/products/create`
 
-
+export const API_CATEGORY_GETALL = `${BASE_API_URL}/category`
 
 // use for accessing local storage variables
 export const LOCAL_STORAGE_TOKEN = 'AUTH_TOKEN';
