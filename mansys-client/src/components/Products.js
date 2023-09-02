@@ -1,6 +1,6 @@
 import Layout from "antd/es/layout/layout";
 import { Button, Form, Input, Select, Col, Modal, InputNumber, notification } from "antd";
-import { omitBy, isNil } from 'lodash';
+import { omitBy, isNil,isNumber } from 'lodash';
 import { getAllProducts, createProducts } from "../actions/products";
 import { getAllCategory } from "../actions/category";
 import { useEffect, useState, useContext } from "react";
@@ -9,8 +9,8 @@ import MyTable from "./MyTable/MyTable";
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { ThemeContext } from '../context/ThemeContext';
 import moment from "moment";
-
 import '../styles/Product.css';
+
 const { Search } = Input;
 const { Option } = Select;
 const currencyFormat = (num) => {
@@ -53,7 +53,7 @@ const columns = [
         title: 'Thời gian tạo',
         dataIndex: 'createDate',
         key: 'createDate',
-        render : (date)=>moment(date).format('DD/MM/YYYY')
+        render: (date) => moment(date).format('DD/MM/YYYY')
     },
 ];
 
@@ -124,10 +124,19 @@ const Products = () => {
         formSearch.validateFields()
             .then((values) => {
                 values = omitBy(values, isNil)
+                console.log(values);
                 const result = dataTable.filter(f => {
                     for (var key in values) {
-                        if (f[key].toLowerCase().trim().includes(values[key].toLowerCase().trim()) == false)
-                            return false
+                        switch (isNumber(f[key])) {
+                            case true:
+                                if (f[key] != values[key])
+                                    return false
+                                break;
+                            default:
+                                if (f[key].toLowerCase().trim().includes(values[key].toLowerCase().trim()) == false)
+                                    return false
+                                break;
+                        }
                     }
                     return true;
                 })
@@ -157,11 +166,11 @@ const Products = () => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item >
+                        <Form.Item name="category_id">
                             <Select
                                 placeholder="--- Vui lòng chọn thể loại sản phẩm ---"
-                                name="category_id"
                                 allowClear
+                                onChange={onSeach}
                             >
                                 {dataSelect.map((item) => itemSelect(item))}
                             </Select>
