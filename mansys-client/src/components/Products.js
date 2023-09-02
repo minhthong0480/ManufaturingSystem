@@ -8,10 +8,18 @@ import { useDispatch } from "react-redux";
 import MyTable from "./MyTable/MyTable";
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { ThemeContext } from '../context/ThemeContext';
+import moment from "moment";
 
 import '../styles/Product.css';
 const { Search } = Input;
 const { Option } = Select;
+const currencyFormat = (num) => {
+    return (
+        Math.round(num)
+            .toFixed(0)
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    );
+};
 const columns = [
     {
         title: 'Sản phẩm',
@@ -25,9 +33,10 @@ const columns = [
         }
     },
     {
-        title: 'Giá',
+        title: 'Giá (VND)',
         dataIndex: 'price',
         key: 'price',
+        render: (amount) => currencyFormat(amount),
     },
     {
         title: 'Thông tin',
@@ -44,6 +53,7 @@ const columns = [
         title: 'Thời gian tạo',
         dataIndex: 'createDate',
         key: 'createDate',
+        render : (date)=>moment(date).format('DD/MM/YYYY')
     },
 ];
 
@@ -62,6 +72,7 @@ const Products = () => {
     const validateMessages = {
         required: 'Vui lòng nhập ${label}!',
     };
+
     const onSuccessCreate = (value) => {
         setLoading(false);
         switch (value.code) {
@@ -147,7 +158,13 @@ const Products = () => {
                     </Col>
                     <Col span={8}>
                         <Form.Item >
-                            <Select />
+                            <Select
+                                placeholder="--- Vui lòng chọn thể loại sản phẩm ---"
+                                name="category_id"
+                                allowClear
+                            >
+                                {dataSelect.map((item) => itemSelect(item))}
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={4}>

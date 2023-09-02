@@ -21,7 +21,6 @@ export class ProductsController {
 
     @Post('/create')
     createMaterial(@Body() CreateProductDto: CreateProductDto) {
-        console.log(CreateProductDto);
         return this.productService.create(CreateProductDto);
     }
 
