@@ -1,4 +1,5 @@
 import axios from "axios";
+import '../styles/Contract.css';
 import { ContractService } from '../services/contract-service'
 
 export const createContract = async (token, contractData) => {

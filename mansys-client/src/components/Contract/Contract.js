@@ -23,12 +23,21 @@ const Contract = () => {
     pageSize: 10
   })
 
+  const keySearch = () => {
+    if(window.contractSearchTimer){
+      window.clearTimeout(window.contractSearchTimer)
+    }
+    window.contractSearchTimer = window.setTimeout(((cPage, cPageSize, cSearchText) => {
+       return () => {
+        onTriggerFiltering(cPage, cPageSize, cSearchText)
+       }
+    })(filter.page, filter.pageSize, filter.searchText), 500)
+  }
   const onTriggerFiltering = async (page, pageSize, term) => {
       const filterResult = await ContractService.filter(page, pageSize, term);
       if(filterResult.code != 200) return
       setFilter({...filter, totalRows: filterResult.data.totalRows, data : [...filterResult.data.data]})
-  };
-
+  }
   const handleTextChange = (e) => {
     setFilter({...filter, searchText: e.target.value})
   }
@@ -117,6 +126,7 @@ const handleDelete = async () => {
                 value={filter.searchText}
                 onPressEnter={handleSearch}
                 onSearch={handleSearch}
+                onKeyUpCapture={keySearch}
                 onChange={handleTextChange}
                 style={{ marginBottom: 16, marginTop: 80 }}
               />
