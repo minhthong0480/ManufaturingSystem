@@ -1,6 +1,6 @@
 import Layout from "antd/es/layout/layout";
 import { Button, Form, Input, Select, Col, Modal, InputNumber, notification } from "antd";
-import { omitBy, isNil,isNumber } from 'lodash';
+import { omitBy, isNil, isNumber } from 'lodash';
 import { getAllProducts, createProducts } from "../actions/products";
 import { getAllCategory } from "../actions/category";
 import { useEffect, useState, useContext } from "react";
@@ -85,14 +85,15 @@ const Products = () => {
         }
     }
     const handleOk = () => {
-        setLoading(true);
-        setIsModalOpen(false);
+
         form.validateFields().then((values) => {
             values.cost = values.price;
             dispatch(createProducts({
                 ...values,
                 onSuccess: onSuccessCreate,
             }));
+            setLoading(true);
+            setIsModalOpen(false);
         })
             .catch((err) => {
                 console.log(err);
@@ -218,6 +219,9 @@ const Products = () => {
                             {
                                 type: 'number',
                             },
+                            {
+                                required: true,
+                            }
                         ]}>
                         <InputNumber placeholder="nhập giá" style={{ width: "100%" }} />
                     </Form.Item>
