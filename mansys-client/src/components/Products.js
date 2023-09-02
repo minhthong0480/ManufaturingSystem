@@ -1,5 +1,5 @@
 import Layout from "antd/es/layout/layout";
-import { Button, Form, Input, Select, Col, Modal, InputNumber, notification } from "antd";
+import { Button, Form, Input, Select, Col, Modal, InputNumber, notification, Typography } from "antd";
 import { omitBy, isNil, isNumber } from 'lodash';
 import { getAllProducts, createProducts } from "../actions/products";
 import { getAllCategory } from "../actions/category";
@@ -13,6 +13,7 @@ import '../styles/Product.css';
 
 const { Search } = Input;
 const { Option } = Select;
+const { Paragraph, Text } = Typography;
 const currencyFormat = (num) => {
     return (
         Math.round(num)
@@ -29,7 +30,16 @@ const columns = [
         sortOrder: "descend",
         sorter: (a, b) => a.id - b.id,
         render: (item, record) => {
-            return (record.name)
+            return (
+                <Paragraph
+                    ellipsis={{
+                        rows: 2,
+                        expandable: true,
+                        symbol: 'more'
+                    }}>
+                    {record.name}
+                </Paragraph >
+            )
         }
     },
     {
@@ -42,6 +52,11 @@ const columns = [
         title: 'Thông tin',
         dataIndex: 'description',
         key: 'description',
+        render: (item) => {
+            return (
+                item
+            )
+        }
     },
 
     {
