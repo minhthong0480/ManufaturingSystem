@@ -10,32 +10,44 @@ class MaterialDto {
 }
 
 export class CreateProductDto {
+
   @IsNotEmpty()
   @IsString()
   name: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  quantity: number;
+  @IsString()
+  supplier: string;
 
   @IsNotEmpty()
-  @IsDecimal()
+  @IsString()
+  description: string;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // quantity: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   price: number;
 
-  @IsOptional()
-  @IsDecimal()
-  tax?: number;
+  // @IsOptional()
+  // @IsDecimal()
+  // tax?: number;
+
+  // @IsNotEmpty()
+  // @IsNumber()
+  // sold: number;
 
   @IsNotEmpty()
   @IsNumber()
-  sold: number;
+  cost: number;
 
   @IsNotEmpty()
   @IsNumber()
-  categoryId: number;
+  category_id: number;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MaterialDto)
-  requiredMaterials: MaterialDto[];
+  // @IsArray()
+  // @ValidateNested({ each: true })
+  // @Type(() => MaterialDto)
+  // requiredMaterials: MaterialDto[];
 }

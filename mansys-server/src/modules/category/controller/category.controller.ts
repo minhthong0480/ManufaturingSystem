@@ -9,7 +9,7 @@ export class CategoryController {
     constructor(private categoryService: CategoryService) {}
 
     @Get()
-    getAllMaterials(@Query('name') name: string) {
+    getAllCategory() {
     return this.categoryService.getAll();
     } 
 

@@ -8,3 +8,11 @@ export const getAllProducts = (payload) => async () => {
     }
     return onSuccess(result);
 }
+export const createProducts = (payload) => async () => {
+    const result = await ProductsService.createProducts(payload);
+    const { onSuccess = () => { } } = payload;
+    if (result.status !== 200) {
+        return onSuccess(result.data);
+    }
+    return onSuccess(result.data);
+}

@@ -14,6 +14,7 @@ import { ReceivingNoteItem } from '../../receiving-note/entities/receiving-note-
 
 @Entity('product')
 export class Product {
+  
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -53,9 +54,14 @@ export class Product {
   createDate: Date;
   category: any;
 
+  @Column({
+    nullable: false,
+  })
+  category_id: number;
+
   @ManyToOne(() => Category, (category) => category.products)
-  @JoinColumn({ name: 'category_id' })
-  productCategory: Category;
+  // @JoinColumn({ category_id: 'category_id' })
+  // productCategory: Category;
 
   @OneToMany(() => Inventory, (inventory) => inventory.product)
   inventories: Inventory[];
