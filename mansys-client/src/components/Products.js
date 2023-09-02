@@ -1,12 +1,15 @@
 import Layout from "antd/es/layout/layout";
 import { Button, Form, Input, Select, Col, Modal, InputNumber, notification } from "antd";
+import { omitBy, isNil } from 'lodash';
 import { getAllProducts, createProducts } from "../actions/products";
 import { getAllCategory } from "../actions/category";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import MyTable from "./MyTable/MyTable";
 import { PlusSquareOutlined } from '@ant-design/icons';
-import '../styles/Product.css'
+import { ThemeContext } from '../context/ThemeContext';
+
+import '../styles/Product.css';
 const { Search } = Input;
 const { Option } = Select;
 const columns = [
@@ -45,10 +48,14 @@ const columns = [
 ];
 
 const Products = () => {
+    const { setLoading } = useContext(ThemeContext);
     const [dataTable, setDataTale] = useState([]);
+    const [dataTableSearch, setDataTableSearch] = useState([]);
     const [dataSelect, setdataSelect] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoadingDataTable, setIsLoadingDataTable] = useState(true);
     const [form] = Form.useForm();
+    const [formSearch] = Form.useForm();
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -56,6 +63,7 @@ const Products = () => {
         required: 'Vui lòng nhập ${label}!',
     };
     const onSuccessCreate = (value) => {
+        setLoading(false);
         switch (value.code) {
             case 200:
                 notification.success(value)
@@ -66,6 +74,7 @@ const Products = () => {
         }
     }
     const handleOk = () => {
+        setLoading(true);
         setIsModalOpen(false);
         form.validateFields().then((values) => {
             values.cost = values.price;
@@ -99,13 +108,41 @@ const Products = () => {
         dispatch(getAllProducts({ onSuccess: onSuccessProducts }));
         dispatch(getAllCategory({ onSuccess: onSuccessCategory }));
     }, [])
+
+    const onSeach = () => {
+        formSearch.validateFields()
+            .then((values) => {
+                values = omitBy(values, isNil)
+                const result = dataTable.filter(f => {
+                    for (var key in values) {
+                        if (f[key].toLowerCase().trim().includes(values[key].toLowerCase().trim()) == false)
+                            return false
+                    }
+                    return true;
+                })
+                setDataTableSearch(result);
+                setIsLoadingDataTable(false)
+            })
+            .catch((err) => {
+                return;
+            });
+    }
+
+    useEffect(() => {
+        onSeach()
+    }, [dataTable])
+
     return (
         <Layout>
             <Col span={24}>
-                <Form layout="inline" >
+                <Form layout="inline" form={formSearch}>
                     <Col span={12}>
-                        <Form.Item >
-                            <Search placeholder="Search" />
+                        <Form.Item name="name">
+                            <Search
+                                placeholder="Tìm kiếm tên sản phẩm"
+                                allowClear
+                                onSearch={onSeach}
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -121,8 +158,9 @@ const Products = () => {
                 </Form>
             </Col>
             <MyTable
-                dataSource={dataTable}
+                dataSource={dataTableSearch}
                 columns={columns}
+                isLoading={isLoadingDataTable}
             />
             <Modal title="Thêm sản phẩm"
                 width="60vw"

@@ -29,7 +29,7 @@ const MyTable = (props) => {
             style={{ paddingTop: "1rem" }}
             dataSource={dataSource}
             columns={columns}
-            loading={dataSource.length == 0 ? { indicator: <Spin spinning={isLoading} indicator={<LoadingOutlined spin />} /> } : false}
+            loading={isLoading ? { indicator: <Spin spinning={isLoading} indicator={<LoadingOutlined spin />} /> } : false}
             pagination={pagination}
             locale={locale}
         />
