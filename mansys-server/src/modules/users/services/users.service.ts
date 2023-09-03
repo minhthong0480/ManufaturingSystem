@@ -182,6 +182,12 @@ export class UsersService {
       });
     }
 
+    if (filter.name) {
+      query.andWhere('users.name like :name', {
+        name: '%' + filter.name + '%',
+      });
+    }
+
     const totalRows = await query.getCount();
 
     const skip = (page - 1) * limit;
@@ -204,6 +210,7 @@ export class UsersService {
           email: faker.internet.email(),
           phone: faker.phone.phoneNumber(),
           userRole: UserRole.user,
+          name: faker.internet.email()
         });
         total--;
       } catch (error) {

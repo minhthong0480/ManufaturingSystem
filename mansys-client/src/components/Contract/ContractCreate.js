@@ -4,6 +4,8 @@ import ContractCreateForm from "./ContractCreateForm";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { createContract } from "../../actions/contract";
+import { Row, Col, Select, DatePicker } from 'antd';
+import '../../styles/Common.css'
 
 const ContractCreate = () => {
   //   const { auth } = useSelector((state) => ({ ...state }));
@@ -55,28 +57,45 @@ const ContractCreate = () => {
   };
 
   return (
-    <Fragment>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Typography variant="h4" sx={{ marginTop: "80px" }}>
-          Tao Moi Hop Dong
-        </Typography>
+    <div>
+      <div>
+      <Typography variant="h4" sx={{ marginTop: "80px" }}>
+           Tạo Mới Hợp Đồng
+         </Typography>
       </div>
-
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-10">
-            <br />
-            <ContractCreateForm
-              values={values}
-              setValues={setValues}
-              handleChange={handleChange}
-              // onChange={(date) => setSelectedDateTime(date)}
-              handleSubmit={handleSubmit}
-            />
-          </div>
-        </div>
+      <div className="main-content-container">
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <label>Customer</label>
+                <Select
+                className="w-100"
+                placeholder="Select an option"></Select>
+          </Col>
+          <Col span={12}>
+                <label>Created By</label>
+                <Select
+                  className="w-100"
+                  placeholder="Select an option"></Select>
+          </Col>
+        </Row>
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <label>Date Start</label>
+                <DatePicker
+                    className="w-100"
+                    placeholder="Select Date Start"
+                  />
+          </Col>
+          <Col span={12}>
+              <label>Deadline</label>
+              <DatePicker
+                    className="w-100"
+                    placeholder="Select Date Start"
+              />
+          </Col>
+        </Row>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
