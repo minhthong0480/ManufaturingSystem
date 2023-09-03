@@ -10,74 +10,20 @@ import { PlusSquareOutlined } from '@ant-design/icons';
 import { ThemeContext } from '../context/ThemeContext';
 import moment from "moment";
 import '../styles/Product.css';
-
+import ProductDetailModal from '../components/Products/ProductDetailModal';
 const { Search } = Input;
 const { Option } = Select;
 const { Paragraph, Text } = Typography;
-const currencyFormat = (num) => {
-    return (
-        Math.round(num)
-            .toFixed(0)
-            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-    );
-};
-const columns = [
-    {
-        title: 'Sản phẩm',
-        dataIndex: 'id',
-        key: 'id',
-        showSorterTooltip: false,
-        sortOrder: "descend",
-        sorter: (a, b) => a.id - b.id,
-        render: (item, record) => {
-            return (
-                <Paragraph
-                    ellipsis={{
-                        rows: 2,
-                        expandable: true,
-                        symbol: 'more'
-                    }}>
-                    {record.name}
-                </Paragraph >
-            )
-        }
-    },
-    {
-        title: 'Giá (VND)',
-        dataIndex: 'price',
-        key: 'price',
-        render: (amount) => currencyFormat(amount),
-    },
-    {
-        title: 'Thông tin',
-        dataIndex: 'description',
-        key: 'description',
-        render: (item) => {
-            return (
-                item
-            )
-        }
-    },
 
-    {
-        title: 'Nhà cung cấp',
-        dataIndex: 'supplier',
-        key: 'supplier',
-    },
-    {
-        title: 'Thời gian tạo',
-        dataIndex: 'createDate',
-        key: 'createDate',
-        render: (date) => moment(date).format('DD/MM/YYYY')
-    },
-];
 
 const Products = () => {
     const { setLoading } = useContext(ThemeContext);
     const [dataTable, setDataTale] = useState([]);
+    const [dataDetail, setDataDetail] = useState({});
     const [dataTableSearch, setDataTableSearch] = useState([]);
     const [dataSelect, setdataSelect] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
     const [isLoadingDataTable, setIsLoadingDataTable] = useState(true);
     const [form] = Form.useForm();
     const [formSearch] = Form.useForm();
@@ -86,6 +32,14 @@ const Products = () => {
     };
     const validateMessages = {
         required: 'Vui lòng nhập ${label}!',
+    };
+
+    const currencyFormat = (num) => {
+        return (
+            Math.round(num)
+                .toFixed(0)
+                .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        );
     };
 
     const onSuccessCreate = (value) => {
@@ -100,7 +54,6 @@ const Products = () => {
         }
     }
     const handleOk = () => {
-
         form.validateFields().then((values) => {
             values.cost = values.price;
             dispatch(createProducts({
@@ -168,6 +121,64 @@ const Products = () => {
         onSeach()
     }, [dataTable])
 
+    const columns = [
+        {
+            title: 'Sản phẩm',
+            dataIndex: 'id',
+            key: 'id',
+            showSorterTooltip: false,
+            sortOrder: "descend",
+            sorter: (a, b) => a.id - b.id,
+            render: (item, record) => {
+                return (
+                    <a onClick={() => {
+                        setIsModalDetailOpen(true)
+                        setDataDetail(record)
+                    }}>
+                        {record.name}
+                    </a>
+                )
+
+            }
+        },
+        {
+            title: 'Giá (VND)',
+            dataIndex: 'price',
+            key: 'price',
+            render: (amount) => currencyFormat(amount),
+        },
+        {
+            title: 'Thông tin',
+            dataIndex: 'description',
+            key: 'description',
+            width: '600px',
+            render: (item) => {
+                return (
+                    <Paragraph
+                        ellipsis={{
+                            rows: 2,
+                            expandable: true,
+                            symbol: 'more'
+                        }}>
+                        {item}
+                    </Paragraph >
+                )
+            }
+        },
+
+        {
+            title: 'Nhà cung cấp',
+            dataIndex: 'supplier',
+            key: 'supplier',
+        },
+        {
+            title: 'Thời gian tạo',
+            dataIndex: 'createDate',
+            key: 'createDate',
+            render: (date) => moment(date).format('DD/MM/YYYY')
+        },
+    ];
+
     return (
         <Layout>
             <Col span={24}>
@@ -203,6 +214,7 @@ const Products = () => {
                 dataSource={dataTableSearch}
                 columns={columns}
                 isLoading={isLoadingDataTable}
+
             />
             <Modal title="Thêm sản phẩm"
                 width="60vw"
@@ -265,6 +277,12 @@ const Products = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+            <ProductDetailModal
+                isModalOpen={isModalDetailOpen}
+                record={dataDetail}
+                setIsModalDetailOpen={setIsModalDetailOpen}
+                dataCategory={dataSelect}
+            />
         </Layout>
     );
 };
