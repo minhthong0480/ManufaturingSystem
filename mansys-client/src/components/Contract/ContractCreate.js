@@ -1,18 +1,36 @@
-import { Fragment, React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import ContractCreateForm from "./ContractCreateForm";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { createContract } from "../../actions/contract";
 import { Row, Col, Select, DatePicker } from 'antd';
-import '../../styles/Common.css'
+import  FilterableSelect  from '../Commons/FilterableSelection'
+import { CustomerService} from '../../services/customer-service'
+import { useSelector } from 'react-redux'
 
+import moment from 'moment';
+import '../../styles/Common.css';
+ 
 const ContractCreate = () => {
-  //   const { auth } = useSelector((state) => ({ ...state }));
-  //   const { token } = auth;
+  const currentDate = moment();
 
-  // const { Option } = Select;
-  // const [selectedDateTime, setSelectedDateTime] = useState(null);
+  const auth = useSelector(state => state.auth)
+  const [customerSelections, setCustomerSelections] = useState([])
+
+  useEffect(() => {
+    CustomerService.getAll().then((data) => {
+      if(data && data.code == 200 && data.data){
+
+        const mappedData = data.data.map(e => ({
+          key : e.name,
+          value: e.id
+        }))
+        
+        setCustomerSelections(mappedData)
+      }
+    })
+  } , [])
+
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
@@ -21,25 +39,18 @@ const ContractCreate = () => {
     quantity: "",
   });
 
-  // console.log(values);
-
-  //destructing variable from state
-  // const { customerid, customername, email } = values;
-  // const [selectedDateTime, setSelectedDateTime] = useState(null);
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
 
     try {
       let res = await createContract({
         ...values,
         quantity: parseInt(values.quantity),
       });
-      // console.log(values);
+ 
       console.log("CONTRACT CREATE RES");
       toast.success("New Contract added");
       setTimeout(() => {
-        //window.location.reload();
         navigate("/contract");
       }, 3000);
     } catch (err) {
@@ -48,7 +59,6 @@ const ContractCreate = () => {
     }
   };
 
-  // console.log(values);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,31 +76,47 @@ const ContractCreate = () => {
       <div className="main-content-container">
         <Row gutter={16} className="m-top--1rem">
           <Col span={12}>
-                <label>Customer</label>
-                <Select
-                className="w-100"
-                placeholder="Select an option"></Select>
+                <div>
+                  <label>Customer</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <FilterableSelect defaultOptions={customerSelections} className="w-100" placeholder="Select an option"/>
           </Col>
           <Col span={12}>
-                <label>Created By</label>
+                <div>
+                  <label>Created By</label>
+                  <span className="input--required">(*)</span>
+                </div>
                 <Select
                   className="w-100"
-                  placeholder="Select an option"></Select>
+                  placeholder="Select an option"
+                  value={auth.username}>
+                    <Select.Option key={auth.username} value={auth.username}/>
+                  </Select>
           </Col>
         </Row>
         <Row gutter={16} className="m-top--1rem">
           <Col span={12}>
-                <label>Date Start</label>
+                <div>
+                  <label>Date Start</label>
+                  <span className="input--required">(*)</span>
+                </div>
                 <DatePicker
                     className="w-100"
                     placeholder="Select Date Start"
+                    defaultValue={currentDate}
+                    format="DD-MM-YYYY"
                   />
           </Col>
           <Col span={12}>
-              <label>Deadline</label>
+                <div>
+                  <label>Deadline</label>
+                  <span className="input--required">(*)</span>
+                </div>
               <DatePicker
                     className="w-100"
                     placeholder="Select Date Start"
+                    format="DD-MM-YYYY"
               />
           </Col>
         </Row>

@@ -20,3 +20,8 @@
 .combination-input--input{
 
 }
+
+.input--required{
+  color: red;
+  font-weight: bold;
+}

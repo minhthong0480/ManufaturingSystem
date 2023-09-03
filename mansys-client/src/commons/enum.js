@@ -3,6 +3,7 @@
 export const BASE_API_URL = process.env.REACT_APP_API;
 export const API_LOGIN_URL = `${BASE_API_URL}/auth/login` 
 export const API_USER_INFOR_URL = `${BASE_API_URL}/user`
+export const API_CUSTOMER_GET_ALL = `${BASE_API_URL}/customers/getAll`
 
 
 export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/filterContracts`

@@ -10,8 +10,9 @@ import { ResultListModel } from '../../../common/result-list-model';
 export class CustomersService {
     constructor(@InjectRepository(Customer) private repo: Repository<Customer>) {}
 
-    async getAll(): Promise<Customer[]> {
-        return await this.repo.find();
+    async getAll(): Promise<ResultModel<Customer[]>> {
+        const result = await this.repo.find();
+        return ResultModel.success(result, null);
     }
 
     async findOne(id: number): Promise<Customer> {
