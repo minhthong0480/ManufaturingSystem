@@ -226,8 +226,13 @@ const EmployeeTable = () => {
           enterButton
           style={{ width: 304 }}
         />
-        <Button classname = "create-button" onClick={showModal} type="primary">
-          Add a row
+        <Button
+          classname="create-button"
+          onClick={showModal}
+          type="primary"
+          style={{ width: "200px" }}
+        >
+          Add a new employee
         </Button>
       </div>
 

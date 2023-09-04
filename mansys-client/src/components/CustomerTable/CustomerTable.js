@@ -1,8 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button, Form, Input, Popconfirm, Space, Table } from "antd";
-import "../../Style/CustomerTable.css";
+import { Button, Form, Input, Modal, Popconfirm, Space, Table } from "antd";
+import "../../Style/EmployeeTable.css";
 import Search from "antd/es/input/Search";
 import CustomerModal from "./CustomerModal";
+import {
+  createCustomer,
+  getAllCustomer,
+  saveCustomer,
+} from "../../action/customer";
+import { toast } from "react-toastify";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -31,6 +37,7 @@ const EditableCell = ({
       inputRef.current.focus();
     }
   }, [editing]);
+
   const toggleEdit = () => {
     setEditing(!editing);
     form.setFieldsValue({
@@ -82,40 +89,25 @@ const EditableCell = ({
 };
 const CustomerTable = () => {
   const [bottom, setBottom] = useState("bottomLeft");
-  const [dataSource, setDataSource] = useState([
-    {
-      key: "0",
-      avatar: "Edward King 0",
-      employeeId: "32",
-      name: "London, Park Lane no. 0",
-      email: "123",
-      phone: "13214",
-      role: "1234123",
-    },
-    {
-      key: "1",
-      avatar: "Edward King 0",
-      employeeId: "32",
-      name: "London, Park Lane no. 0",
-      email: "123",
-      phone: "13214",
-      role: "1234123",
-    },
-  ]);
+  const [dataSource, setDataSource] = useState([]);
+  useEffect(() => {
+    async function fetchAllCustomer() {
+      const { data } = await getAllCustomer();
+      setDataSource(data);
+    }
+    fetchAllCustomer();
+  }, []);
+
   const [count, setCount] = useState(2);
-  const [editMode, setEditMode] = useState(true);
+  const [editCustomer, setEditCustomer] = useState(null);
   const handleDelete = (key) => {
     const newData = dataSource.filter((item) => item.key !== key);
     setDataSource(newData);
   };
   const defaultColumns = [
     {
-      title: "Avatar",
-      dataIndex: "avatar",
-    },
-    {
       title: "Customer ID",
-      dataIndex: "customerId",
+      dataIndex: "id",
     },
     {
       title: "Name",
@@ -130,12 +122,12 @@ const CustomerTable = () => {
       dataIndex: "phone",
     },
     {
-      title: "Role",
-      dataIndex: "role",
+      title: "Tax Number",
+      dataIndex: "taxNumber",
     },
     {
       title: "Active",
-      dataIndex: "active",
+      dataIndex: "isActive",
     },
     {
       title: "Action",
@@ -145,7 +137,7 @@ const CustomerTable = () => {
           <Space size="middle">
             <a
               onClick={() => {
-                setEditMode(true);
+                setEditCustomer(record);
                 showModal();
               }}
             >
@@ -153,7 +145,7 @@ const CustomerTable = () => {
             </a>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
+              onConfirm={() => handleDelete(record)}
             >
               <a>Delete</a>
             </Popconfirm>
@@ -161,19 +153,28 @@ const CustomerTable = () => {
         ) : null,
     },
   ];
-  const handleAdd = (form) => {
-    setDataSource([...dataSource, { ...form }]);
-    setCount(count + 1);
+  const handleAdd = async (form) => {
+    try {
+      const { data } = await createCustomer(form);
+      toast.success("Customer added");
+      setDataSource([...dataSource, data]);
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
   };
-  const handleSave = (row) => {
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    setDataSource(newData);
+  const handleSave = async (form) => {
+    console.log(form);
+    try {
+      const { data } = await saveCustomer(editCustomer.id, form);
+      toast.success("Customer added");
+      setDataSource(
+        dataSource.map((customer) =>
+          customer.id === editCustomer.id ? data : customer
+        )
+      );
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
   };
   const components = {
     body: {
@@ -226,8 +227,16 @@ const CustomerTable = () => {
           enterButton
           style={{ width: 304 }}
         />
-        <Button onClick={showModal} type="primary">
-          Add a row
+        <Button
+          classname="create-button"
+          onClick={() => {
+            showModal();
+            setEditCustomer(null);
+          }}
+          type="primary"
+          style={{ width: "200px" }}
+        >
+          Add a new customer
         </Button>
       </div>
 
@@ -237,14 +246,15 @@ const CustomerTable = () => {
         bordered
         dataSource={dataSource}
         columns={columns}
-        pagination={{ position: [bottom] }}
+        pagination={{ position: [bottom], defaultPageSize: 5 }}
       />
       <CustomerModal
         isModalOpen={isModalOpen}
         handleOk={handleOk}
         handleCancel={handleCancel}
         handleAdd={handleAdd}
-        editMode={editMode}
+        handleSave={handleSave}
+        editCustomer={editCustomer}
       />
     </div>
   );

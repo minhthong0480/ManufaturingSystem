@@ -1,41 +1,25 @@
 import { Button, Form, Input, Modal, Space } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 
-const CustomerModal = ({
-  isModalOpen,
-  handleOk,
-  handleCancel,
-  handleAdd,
-  editCustomer,
-  handleSave,
-}) => {
+const EmployeeModal = ({ isModalOpen, handleOk, handleCancel, handleAdd }) => {
   const [form] = Form.useForm();
-  const addNewCustomer = (values) => {
+  const addNewEmployee = (values) => {
     handleAdd(values);
     form.resetFields();
   };
-  const saveCustomer = (values) => {
-    handleSave(values);
-  };
-  const setFormValue = () => {
-    editCustomer ? form.setFieldsValue(editCustomer) : form.resetFields();
-  };
-  useEffect(() => {
-    setFormValue();
-  }, [editCustomer]);
-
   return (
-    <Modal open={isModalOpen} footer={[]} onCancel={handleCancel}>
-      <h2 style={{ textAlign: "center" }}>Add new customer</h2>
+    <Modal open={isModalOpen} footer={[]}>
+      <h2 style={{ textAlign: "center" }}>Add new employee</h2>
 
       <Form
         layout={"vertical"}
         form={form}
+        initialValues={{}}
         style={{ maxWidth: 600 }}
-        onFinish={editCustomer ? saveCustomer : addNewCustomer}
+        onFinish={addNewEmployee}
       >
-        <Form.Item label="Customer name" name="name">
-          <Input placeholder="Customer name" />
+        <Form.Item label="Employee name" name="name">
+          <Input placeholder="Employee name" />
         </Form.Item>
         <Form.Item label="Email" name="email">
           <Input placeholder="Email" />
@@ -43,8 +27,11 @@ const CustomerModal = ({
         <Form.Item label="Phone number" name="phone">
           <Input placeholder="Phone number" />
         </Form.Item>
-        <Form.Item label="Tax Number" name="taxNumber">
-          <Input placeholder="Tax Number" />
+        <Form.Item label="Role" name="role">
+          <Input placeholder="Role" />
+        </Form.Item>
+        <Form.Item label="Note">
+          <Input placeholder="Note" />
         </Form.Item>
         <div style={{ textAlign: "right" }}>
           <Space size="middle">
@@ -61,4 +48,4 @@ const CustomerModal = ({
   );
 };
 
-export default CustomerModal;
+export default EmployeeModal;
