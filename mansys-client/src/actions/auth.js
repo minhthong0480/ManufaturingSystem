@@ -9,6 +9,7 @@ export const signIn = (userdata, navigate) => async (dispatch) => {
     dispatch({
       type: ACTION_AUTH_LOGIN_SUCCESS,
       payload: {
+        userId: loginResult.data.userId,
         username: loginResult.data.username,
         token : loginResult.data.token
       }

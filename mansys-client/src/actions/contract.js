@@ -2,12 +2,13 @@ import axios from "axios";
 import '../styles/Contract.css';
 import { ContractService } from '../services/contract-service'
 
-export const createContract = async (token, contractData) => {
-    await axios.post(`${process.env.REACT_APP_API}/contract`, contractData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+export const createContract = (navigate, contractData) => async (dispatch) => {
+   const result = await ContractService.create(contractData)
+   if(result.code > 400){
+      window.alert('Create Contract Error');
+      return
+    }
+    navigate('/contracts')
   };
 
 export const deactivateContract = async (token,id) =>

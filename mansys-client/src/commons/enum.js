@@ -7,6 +7,8 @@ export const API_CUSTOMER_GET_ALL = `${BASE_API_URL}/customers/getAll`
 
 
 export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/filterContracts`
+export const API_CONTRACT_CREATE = `${BASE_API_URL}/contract`
+
 export const API_PRODUCTS = `${BASE_API_URL}/products`
 export const API_PRODUCTS_CREATE = `${BASE_API_URL}/products/create`
 

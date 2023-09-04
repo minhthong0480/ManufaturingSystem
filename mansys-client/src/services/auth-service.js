@@ -5,15 +5,16 @@ import {requestSucess, requestFail} from '../commons/utilities'
 export const AuthService = {
     login : async function(username, password){
 
-        const loginResult = await AxiosClient.post(API_LOGIN_URL, {username, password})
-        if(!loginResult) return requestFail()
+        const result = await AxiosClient.post(API_LOGIN_URL, {username, password})
+        if(result.status >= 400 || !result.data.isSuccess) return requestFail()
         
-        localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify({username: loginResult.data.username}));
-        localStorage.setItem(LOCAL_STORAGE_TOKEN, loginResult.data.accessToken);
+        localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify({username: result.data.username, id: result.data.userId}));
+        localStorage.setItem(LOCAL_STORAGE_TOKEN, result.data.accessToken);
         
         return requestSucess({
-            username : loginResult.data.username,
-            token : loginResult.data.accessToken
+            userId : result.data.userId,
+            username : result.data.username,
+            token : result.data.accessToken
         })
     },
 

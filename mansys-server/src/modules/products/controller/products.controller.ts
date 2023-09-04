@@ -3,14 +3,16 @@ import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
 import { GetProductsFilterDto } from '../dto/get-products-filter.dto';
 import { CreateProductDto } from '../dto/create-product.dto';
-import { Int32 } from 'typeorm';
+import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 
+@ApiTags('customers')
+@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
     constructor(private productService: ProductsService) { }
 
     @Get('/')
-    findAllProducts(@Param('id') id: number) {
+    findAllProducts() {
         return this.productService.getAll();
     }
 
