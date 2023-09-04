@@ -1,7 +1,6 @@
 import { Empty, Table, Spin, Checkbox } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { isNil } from "lodash";
 const MyTable = (props) => {
     const { isLoading = true, dataSource, columns } = props
     const [page, setPage] = useState(1);
