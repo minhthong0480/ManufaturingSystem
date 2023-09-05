@@ -1,5 +1,5 @@
 import {AxiosClient} from '../commons/axios-client'
-import {API_CONTRACT_FILTER, API_CONTRACT_CREATE, API_CONTRACT_DELETE} from '../commons/enum'
+import {API_CONTRACT_FILTER, API_CONTRACT_CREATE, API_CONTRACT} from '../commons/enum'
 import {requestSucess, requestFail} from '../commons/utilities'
 
 export const ContractService = {
@@ -21,7 +21,7 @@ export const ContractService = {
     },
 
     delete: async function(data) {
-        const api = API_CONTRACT_DELETE + data.id;
+        const api = API_CONTRACT + data.id;
         const result = await AxiosClient.delete(api)
         if(result.status >= 400 || !result.data.isSuccess) return requestFail()
         return requestSucess({
