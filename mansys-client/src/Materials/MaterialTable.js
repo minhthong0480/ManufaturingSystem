@@ -1,51 +1,39 @@
-// MaterialTable.js
-
 import React, { useEffect, useState } from "react";
 import { Table, Button, Popconfirm, message, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
-import axios from "axios";
+import { MaterialService } from "../services/material-service"
+import '../styles/Common.css';
 
 const MaterialTable = () => {
+
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
 
-  const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearchText(value);
-  };
+  const triggerSearch = (name) => {
+      MaterialService.getAll(name)
+      .then(data => {
+        if(data && data.code < 400){
+          setMaterials(data.data)
+        }
+      })
 
+    }
   useEffect(() => {
-    fetchMaterials();
+    triggerSearch('')
   }, []);
 
-  const fetchMaterials = async () => {
-    try {
-      const response = await axios.get("/api/materials"); // Change the API endpoint
-      setMaterials(response.data);
-    } catch (error) {
-      console.error("Error fetching materials:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleSearch = (e) => {
+    triggerSearch(e.target.value)
+    setSearchText(e.target.value)
   };
 
   const handleEdit = (record) => {
-    console.log("Button clicked for record:", record);
   };
 
   const handleDelete = async (materialId) => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/materials/${materialId}`); // Change the API endpoint
-      message.success("Material deleted successfully");
-      fetchMaterials();
-    } catch (error) {
-      console.error("Error deleting material:", error);
-      message.error("Error deleting material");
-    } finally {
-      setLoading(false);
-    }
+    const result = await MaterialService.delete(materialId)
+    triggerSearch(searchText)
   };
 
   const columns = [
@@ -54,8 +42,8 @@ const MaterialTable = () => {
     { title: "Brand", dataIndex: "brand", key: "brand" },
     { title: "Cost", dataIndex: "cost", key: "cost" },
     { title: "Unit", dataIndex: "unit", key: "unit" },
-    { title: "Quantity", dataIndex: "quantity", key: "quanity" },
-    { title: "Create Date", dataIndex: "create_date", key: "create_date" },
+    { title: "Quantity", dataIndex: "quantity", key: "quantity" },
+    { title: "Create Date", dataIndex: "createDate", key: "createDate" },
     
     {
       title: "Actions",
@@ -71,7 +59,7 @@ const MaterialTable = () => {
           </Button>
 
           <DeleteOutlined
-            onClick={() => handleDelete()}
+            onClick={() => handleDelete(record.id)}
             style={{ marginLeft: "10px", fontSize: "20px" }}
           >
             Delete
@@ -82,27 +70,28 @@ const MaterialTable = () => {
   ];
 
   return (
-    <div>
+    <div className="main-content-container">
       <h1>Material List</h1>
       <div className="contract-page-container">
           <Input.Search 
             placeholder="Search name..."
-            value={searchText}
             onChange={handleSearch}
+            onPressEnter={handleSearch}
+            onSearch={() => {triggerSearch(searchText)}}
+            value={searchText}
             enterButton
           />
           <Button
             className="create-button"
-            type="primary"
-            href="/create_contract"
+            href="/material_contract"
           >
-            Create New Contract
+            Create Material
           </Button>
       </div>
       <Table
         dataSource={materials}
         columns={columns}
-        loading={loading}
+        // loading={loading}
         rowKey="id"
       />
     </div>

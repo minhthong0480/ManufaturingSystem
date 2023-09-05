@@ -1,7 +1,10 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, Query, ParseIntPipe } from '@nestjs/common';
 import { MaterialService } from '../services/material.service';
 import { CreateMaterialDto } from '../dtos/create-material.dto';
+import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 
+@ApiTags('contract')
+@ApiBearerAuth()
 @Controller('materials')
 export class MaterialController {
     constructor(private readonly materialService: MaterialService) {}
@@ -12,8 +15,8 @@ export class MaterialController {
     }
 
     @Get()
-        getAllMaterials(@Query('name') name: string) {
-        return this.materialService.getAll();
+    getAllMaterials(@Query('name') name : string) {
+        return this.materialService.getAll(name);
     }
 
     @Get('/:name')
@@ -27,8 +30,7 @@ export class MaterialController {
     }
 
     @Delete('/:id')
-        deleteMaterial(@Param('id') id: number) {
-            this.materialService.delete(id);
-        return { message: `Material with id ${id} has been deleted` };
+    async deleteMaterial(@Param('id') id: number) {
+        return await this.materialService.delete(id);
     }
 }
