@@ -20,7 +20,8 @@ const Contract = () => {
     data : [],
     totalRows : 0,
     page: 1,
-    pageSize: 10
+    pageSize: 10,
+    isActive: true
   })
 
   const keySearch = () => {
@@ -34,7 +35,7 @@ const Contract = () => {
     })(filter.page, filter.pageSize, filter.searchText), 500)
   }
   const onTriggerFiltering = async (page, pageSize, term) => {
-      const filterResult = await ContractService.filter(page, pageSize, term);
+      const filterResult = await ContractService.filter(page, pageSize, term, filter.isActive);
       if(filterResult.code != 200) return
       setFilter({...filter, totalRows: filterResult.data.totalRows, data : [...filterResult.data.data]})
   }
@@ -63,11 +64,11 @@ const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
 
-const handleDelete = async () => {
+const handleDelete = async (record) => {
     if (!window.confirm("Do you want to delete this contract?")) return;
-    deactivateContract().then((res) => {
+    deactivateContract(record).then((res) => {
       toast.success("Contract Deleted");
-      window.location.reload()
+      setFilter({...filter, data : filter.data.filter(e => e.id != record.id)})
     });
   };
 
@@ -105,7 +106,7 @@ const handleDelete = async () => {
           </Button>
 
           <DeleteOutlined
-            onClick={() => handleDelete()}
+            onClick={() => handleDelete(record)}
             style={{ marginLeft: "10px", fontSize: "20px" }}
           >
             Delete
