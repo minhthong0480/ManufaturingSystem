@@ -39,7 +39,7 @@ export class ContractService {
     var query = this.contractRepository.createQueryBuilder('contracts');
 
     if (filterDto.contractNumber) {
-      query.andWhere('contracts.contractNumber ILIKE :contractNumber', {
+      query.andWhere('contracts.contractNumber like :contractNumber', {
         contractNumber: `%${filterDto.contractNumber}%`,
       });
     }
