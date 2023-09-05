@@ -4,7 +4,6 @@ import Login from "./components/Login/Login";
 import RegisterPage from "./components/RegisterPage";
 import HeaderUI from "./components/HeaderUI";
 import Homepage from "./components/Homepages";
-// import { ThemeContext } from 'context/ThemeContext';
 import { ThemeContext } from './context/ThemeContext';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -14,7 +13,7 @@ import Employee from "./components/Employee";
 import Customer from "./components/Customer";
 import Products from "./components/Products";
 import PrivateRoute from "./components/Login/PrivateRoute";
-import MaterialForm from "./Materials/MaterialTable";
+import MaterialTable from "./Materials/MaterialTable";
 import { Layout, Spin } from "antd";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { LoadingOutlined } from '@ant-design/icons';
@@ -43,7 +42,7 @@ function App() {
           <Route exact path="/create_contract" element={<ContractCreate />} />
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/customer" element={<Customer />} />
-          <Route exact path="/material" element={<MaterialForm />} />
+          <Route exact path="/material" element={<MaterialTable />} />
           <Route exact path="/products" element={<Products />} />
         </Routes>
       </Content>

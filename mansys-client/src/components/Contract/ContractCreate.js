@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { createContract } from "../../actions/contract";
-import { Row, Col, Select, DatePicker } from 'antd';
+import { Row, Col, Select, DatePicker, Button } from 'antd';
 import  FilterableSelect  from '../Commons/FilterableSelection'
 import { CustomerService} from '../../services/customer-service'
 import { useSelector } from 'react-redux'
@@ -41,17 +41,18 @@ const ContractCreate = () => {
 
 
   const handleSubmit = async (e) => {
-
+  console.log("Submitting the form");
     try {
       let res = await createContract({
         ...values,
         quantity: parseInt(values.quantity),
       });
- 
-      console.log("CONTRACT CREATE RES");
+      console.log("CONTRACT CREATE RES", res);
       toast.success("New Contract added");
       setTimeout(() => {
-        navigate("/contract");
+        console.log("Navigating to contracts page");
+        navigate("/contracts");
+        console.log("Navigated to contracts page");
       }, 3000);
     } catch (err) {
       console.log(err);
@@ -119,6 +120,11 @@ const ContractCreate = () => {
                     format="DD-MM-YYYY"
               />
           </Col>
+        </Row>
+        <Row>
+        <Button type="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
         </Row>
       </div>
     </div>

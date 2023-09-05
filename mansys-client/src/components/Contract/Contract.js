@@ -4,11 +4,11 @@ import { Button, Row, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import "../../styles/Contract.css"
-import "../../styles/PaginatedTable.css"
+import "../../styles/Contract.css";
+import "../../styles/PaginatedTable.css";
 import { deactivateContract } from "../../actions/contract";
 import { ContractService } from "../../services/contract-service";
-import { PaginatedTable } from '../Commons/PaginatedTable'
+import { PaginatedTable } from "../Commons/PaginatedTable";
 
 const Contract = () => {
   const dispatcher = useDispatch();
@@ -16,58 +16,65 @@ const Contract = () => {
   const [contract, setContract] = useState([]);
 
   const [filter, setFilter] = useState({
-    searchText: '',
-    data : [],
-    totalRows : 0,
+    searchText: "",
+    data: [],
+    totalRows: 0,
     page: 1,
-    pageSize: 10
-  })
+    pageSize: 10,
+  });
 
   const keySearch = () => {
-    if(window.contractSearchTimer){
-      window.clearTimeout(window.contractSearchTimer)
+    if (window.contractSearchTimer) {
+      window.clearTimeout(window.contractSearchTimer);
     }
-    window.contractSearchTimer = window.setTimeout(((cPage, cPageSize, cSearchText) => {
-       return () => {
-        onTriggerFiltering(cPage, cPageSize, cSearchText)
-       }
-    })(filter.page, filter.pageSize, filter.searchText), 500)
-  }
+    window.contractSearchTimer = window.setTimeout(
+      ((cPage, cPageSize, cSearchText) => {
+        return () => {
+          onTriggerFiltering(cPage, cPageSize, cSearchText);
+        };
+      })(filter.page, filter.pageSize, filter.searchText),
+      500
+    );
+  };
   const onTriggerFiltering = async (page, pageSize, term) => {
-      const filterResult = await ContractService.filter(page, pageSize, term);
-      if(filterResult.code != 200) return
-      setFilter({...filter, totalRows: filterResult.data.totalRows, data : [...filterResult.data.data]})
-  }
+    const filterResult = await ContractService.getAll(page, pageSize, term);
+    if (filterResult.code != 200) return;
+    setFilter({
+      ...filter,
+      totalRows: filterResult.data.totalRows,
+      data: [...filterResult.data.data],
+    });
+  };
   const handleTextChange = (e) => {
-    setFilter({...filter, searchText: e.target.value})
-  }
+    setFilter({ ...filter, searchText: e.target.value });
+  };
   const handleSearch = (e) => {
-    onTriggerFiltering(filter.page, filter.pageSize, filter.searchText)
-  }
+    onTriggerFiltering(filter.page, filter.pageSize, filter.searchText);
+  };
 
   const pageChange = (page) => {
-    setFilter({...filter, page})
-    onTriggerFiltering(page, filter.pageSize, filter.searchText)
-  }
+    setFilter({ ...filter, page });
+    onTriggerFiltering(page, filter.pageSize, filter.searchText);
+  };
 
   const pageSizeChange = (pageSize) => {
-    setFilter({...filter, pageSize})
-    onTriggerFiltering(filter.page, pageSize, filter.searchText)
-  }
+    setFilter({ ...filter, pageSize });
+    onTriggerFiltering(filter.page, pageSize, filter.searchText);
+  };
 
   useEffect(() => {
     onTriggerFiltering(filter.page, filter.pageSize, filter.searchText);
   }, []);
 
-const handleEdit = (record) => {
+  const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
 
-const handleDelete = async () => {
+  const handleDelete = async () => {
     if (!window.confirm("Do you want to delete this contract?")) return;
     deactivateContract().then((res) => {
       toast.success("Contract Deleted");
-      window.location.reload()
+      window.location.reload();
     });
   };
 
@@ -89,13 +96,13 @@ const handleDelete = async () => {
       dataIndex: "actions",
       render: (_, record) => (
         <div className="contract-list-actions--flex">
-          <EyeOutlined 
+          <EyeOutlined
             onClick={() => handleDelete()}
             style={{ marginRight: "10px", fontSize: "20px" }}
           >
             View
           </EyeOutlined>
-          
+
           <Button
             type="primary"
             onClick={() => handleEdit(record)}
@@ -120,35 +127,35 @@ const handleDelete = async () => {
       <h1>Contract List</h1>
       <div className="contract-list-filter-container--flex">
         <Row justify="end">
-          <Input.Search 
-                className="contract-list-filter-search"
-                placeholder="Search name..."
-                value={filter.searchText}
-                onPressEnter={handleSearch}
-                onSearch={handleSearch}
-                onKeyUpCapture={keySearch}
-                onChange={handleTextChange}
-                style={{ marginBottom: 16, marginTop: 80 }}
-              />
+          <Input.Search
+            className="contract-list-filter-search"
+            placeholder="Search name..."
+            value={filter.searchText}
+            onPressEnter={handleSearch}
+            onSearch={handleSearch}
+            onKeyUpCapture={keySearch}
+            onChange={handleTextChange}
+            style={{ marginBottom: 16, marginTop: 80 }}
+          />
         </Row>
         <Row justify="end">
-            <Button
-                  className="contract-list-create-new-button"
-                  type="primary"
-                  href="/create_contract"
-                >
-                  Create
-            </Button>
+          <Button
+            className="contract-list-create-new-button"
+            type="primary"
+            href="/create_contract"
+          >
+            Create
+          </Button>
         </Row>
       </div>
-      <PaginatedTable 
+      <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}
-        totalRows={filter.totalRows} 
-        data={filter.data} 
+        totalRows={filter.totalRows}
+        data={filter.data}
         pageChange={pageChange}
         pageSizeChange={pageSizeChange}
-        />
+      />
     </Fragment>
   );
 };

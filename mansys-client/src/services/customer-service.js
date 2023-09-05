@@ -9,4 +9,5 @@ export const CustomerService = {
         if(callResult.status != 200 || callResult.data.code != 200) return requestFail()
         return requestSucess(callResult.data.data ? callResult.data.data : [])
     },
+    
 }
