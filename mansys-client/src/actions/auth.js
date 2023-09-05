@@ -4,8 +4,11 @@ import {ACTION_AUTH_LOGIN_SUCCESS, ACTION_AUTH_LOGOUT} from '../commons/enum'
 export const signIn = (userdata, navigate) => async (dispatch) => {
 
     const loginResult = await AuthService.login(userdata.username, userdata.password)
-    if(loginResult.code !== 200) return;
-    
+    if(loginResult.code >= 400) {
+      window.alert(loginResult.message)
+      return
+    }
+
     dispatch({
       type: ACTION_AUTH_LOGIN_SUCCESS,
       payload: {

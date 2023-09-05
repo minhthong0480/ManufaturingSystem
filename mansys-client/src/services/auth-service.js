@@ -6,7 +6,7 @@ export const AuthService = {
     login : async function(username, password){
 
         const result = await AxiosClient.post(API_LOGIN_URL, {username, password})
-        if(result.status >= 400 || !result.data.isSuccess) return requestFail()
+        if(result.status >= 400 || !result.data) return requestFail()
         
         localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify({username: result.data.username, id: result.data.userId}));
         localStorage.setItem(LOCAL_STORAGE_TOKEN, result.data.accessToken);
