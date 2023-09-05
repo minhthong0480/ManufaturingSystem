@@ -16,6 +16,7 @@ import Products from "./components/Products";
 import PrivateRoute from "./components/Login/PrivateRoute";
 import MaterialForm from "./Materials/MaterialTable";
 import { Layout, Spin } from "antd";
+import ViewOneContract from "./components/Contract/ViewOneContract";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { LoadingOutlined } from '@ant-design/icons';
 const { Content, Footer } = Layout;
@@ -39,6 +40,7 @@ function App() {
       <Content style={{ padding: "1rem" }}>
         <Routes>
           <Route exact path="/contracts" element={<Contact />} />
+          <Route path="/view-contract/:contractId" element={<ViewOneContract />} />
           <Route exact path="/" element={<Homepage />} />
           <Route exact path="/create_contract" element={<ContractCreate />} />
           <Route exact path="/employee" element={<Employee />} />

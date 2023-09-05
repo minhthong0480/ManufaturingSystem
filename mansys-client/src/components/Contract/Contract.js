@@ -9,6 +9,7 @@ import "../../styles/PaginatedTable.css"
 import { deactivateContract } from "../../actions/contract";
 import { ContractService } from "../../services/contract-service";
 import { PaginatedTable } from '../Commons/PaginatedTable'
+import { Link } from "react-router-dom";
 
 const Contract = () => {
   const dispatcher = useDispatch();
@@ -59,6 +60,15 @@ const Contract = () => {
     onTriggerFiltering(filter.page, filter.pageSize, filter.searchText);
   }, []);
 
+
+  const handleView = (contractId) => {
+    // Construct the URL for the ViewOneContract page with the contractId as a parameter
+    const viewOneContractUrl = `/view-contract/${contractId}`;
+  
+    // Update the window location to navigate to the ViewOneContract page
+    window.location.href = viewOneContractUrl;
+  };
+
 const handleEdit = (record) => {
     console.log("Button clicked for record:", record);
   };
@@ -90,11 +100,12 @@ const handleDelete = async () => {
       render: (_, record) => (
         <div className="contract-list-actions--flex">
           <EyeOutlined 
-            onClick={() => handleDelete()}
+            onClick={() => handleView(record.id)}
             style={{ marginRight: "10px", fontSize: "20px" }}
           >
             View
           </EyeOutlined>
+
           
           <Button
             type="primary"

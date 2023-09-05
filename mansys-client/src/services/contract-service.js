@@ -10,5 +10,19 @@ export const ContractService = {
             data: filterResult.data.data,
             totalRows : filterResult.data.totalRows
         })
-    }
+    },
+    getContractDetails: async function (contractId) {
+        try {
+          const response = await AxiosClient.get(`/api/contracts/${contractId}`);
+          console.log("Response from API:", response);
+
+          if (response.status === 200 && response.data.isSuccess) {
+            return requestSucess(response.data);
+          }
+          return requestFail(response.data.message);
+        } catch (error) {
+          return requestFail(error.message);
+        }
+      },
+      
 }
