@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { Button, Row, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
@@ -11,6 +12,7 @@ import { ContractService } from "../../services/contract-service";
 import { PaginatedTable } from '../Commons/PaginatedTable'
 
 const Contract = () => {
+  const navigate = useNavigate(); 
   const dispatcher = useDispatch();
 
   const [contract, setContract] = useState([]);
@@ -61,6 +63,8 @@ const Contract = () => {
   }, []);
 
 const handleEdit = (record) => {
+    let path = `/edit_contract/${record.id}`;
+    navigate(path);
     console.log("Button clicked for record:", record);
   };
 
@@ -91,7 +95,7 @@ const handleDelete = async (record) => {
       render: (_, record) => (
         <div className="contract-list-actions--flex">
           <EyeOutlined 
-            onClick={() => handleDelete()}
+            onClick={() => handleEdit(record)}
             style={{ marginRight: "10px", fontSize: "20px" }}
           >
             View
