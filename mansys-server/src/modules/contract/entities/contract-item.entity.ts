@@ -21,7 +21,7 @@ export class ContractItem {
   contract: Contract;
 
   @Column({
-    default: 0,
+    default: 1,
   })
   quanity: number;
 

@@ -14,7 +14,7 @@ export class MaterialService {
 
     async create(createMaterialDto: CreateMaterialDto) {
         const material = this.materialRepository.create(createMaterialDto);
-        return await this.materialRepository.save(material);
+        await this.materialRepository.save(material);
     }
 
     async findByName(name: string) {

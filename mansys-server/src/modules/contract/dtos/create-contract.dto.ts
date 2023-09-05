@@ -29,6 +29,7 @@ export class CreateContractDto {
   @IsDateString()
   deadline: Date;
 
+  @IsNotEmpty()
   total: number;
 
   @IsArray()
