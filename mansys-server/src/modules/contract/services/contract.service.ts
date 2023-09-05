@@ -92,6 +92,12 @@ export class ContractService {
       });
     }
 
+    if (filterDto.isActive) {
+      query.andWhere('contracts.isActive = :isActive', {
+        isActive: filterDto.isActive,
+      });
+    }
+
     const totalRows = await query.getCount();
 
     const skip = (filterDto.page - 1) * filterDto.pageSize;
