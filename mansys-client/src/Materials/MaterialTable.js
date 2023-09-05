@@ -6,11 +6,11 @@ import { Button, Row, Input } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import "../../styles/Contract.css"
-import "../../styles/PaginatedTable.css"
-import { deactivateContract } from "../../actions/contract";
-import { ContractService } from "../../services/contract-service";
-import { PaginatedTable } from '../Commons/PaginatedTable'
+
+import "../styles/PaginatedTable.css"
+import { deactivateContract } from "../actions/contract";
+import { ContractService } from "../services/contract-service";
+import { PaginatedTable } from '../components/Commons/PaginatedTable';
 
 const Material = () => {
   const dispatcher = useDispatch();
@@ -29,3 +29,5 @@ const keySearch = () => {
     window.clearTimeout(window.materialSearchTimer)
   }
 }
+
+export default Material;
