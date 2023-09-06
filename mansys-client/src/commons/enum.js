@@ -19,6 +19,7 @@ export const API_CATEGORY_GETALL = `${BASE_API_URL}/category`
 export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`
 export const API_MATERIAL_DELETE = `${BASE_API_URL}/materials/:id`
 export const API_MATERIAL_UPDATE = `${BASE_API_URL}/materials/:id`
+export const API_MATERIAL_CREATE = `${BASE_API_URL}/materials/create`
 
 // use for accessing local storage variables
 export const LOCAL_STORAGE_TOKEN = 'AUTH_TOKEN';
