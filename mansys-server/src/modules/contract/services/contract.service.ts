@@ -135,7 +135,7 @@ export class ContractService {
       );
     }
 
-    this.contractItemService.deleteByContractId(contract.id);
+    await this.contractItemService.deleteByContractId(contract.id);
     const updatedContract = await this.contractRepository.save({
       ...contract,
       ...updateContractDto,

@@ -45,5 +45,15 @@ export const ContractService = {
 		return requestSucess({
 			data: result.data.data
 		})
+	},
+
+	update: async function (data) {
+		const api = API_CONTRACT + data.id;
+		const result = await AxiosClient.patch(api, data)
+		if (result.status >= 400 || !result.data.isSuccess) return requestFail()
+		return requestSucess({
+			data: result.data.data
+		})
 	}
+
 }
