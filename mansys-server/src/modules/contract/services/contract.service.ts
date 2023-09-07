@@ -9,7 +9,7 @@ import { ResultListModel } from 'src/common/result-list-model';
 import { UpdateContactDto } from '../dtos/update-contract.dto';
 import { ContractItemService } from './contract-item.service';
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
-
+import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum'
 @Injectable()
 export class ContractService {
   constructor(
@@ -32,7 +32,7 @@ export class ContractService {
     if (contract) {
       return ResultModel.fail(null, 'Contract existed!');
     }
-
+    createContractDto.statusId = CONTRACT_STATUS_NEW_ID;
     contract = await this.contractRepository.save(createContractDto);
     return ResultModel.success(contract, 'Success');
   }

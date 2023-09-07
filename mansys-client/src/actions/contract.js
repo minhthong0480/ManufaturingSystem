@@ -1,28 +1,19 @@
-import axios from "axios";
-import "../styles/Contract.css";
 import { ContractService } from "../services/contract-service";
+import { showErrorMessage } from "../commons/utilities"
 
 export const createContract = (navigate, contractData) => async (dispatch) => {
     const result = await ContractService.create(contractData);
-    if (result.code > 400) {
-        window.alert("Create Contract Error");
+    if (result.code >= 400) {
+        showErrorMessage(result.message || 'An error is occurred while creating the contract!')
         return;
     }
     navigate("/contracts");
 };
 
-export const deactivateContract = async (record) => {
-    const result = await ContractService.delete(record);
-    if (result.code > 400) {
-        window.alert("Delete Contract Error");
-        return;
-    }
-};
-
 export const updateContract = (navigate, contractData) => async (dispatch) => {
     const result = await ContractService.update(contractData);
-    if (result.code > 400) {
-        window.alert("Create Contract Error");
+    if (result.code >= 400) {
+        showErrorMessage(result.message || 'An error is occurred while updating the contract!')
         return;
     }
     navigate(`/edit_contract/${contractData.id}`);

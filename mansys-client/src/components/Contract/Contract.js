@@ -9,13 +9,11 @@ import "../../styles/Contract.css";
 import "../../styles/PaginatedTable.css";
 import { deactivateContract } from "../../actions/contract";
 import { ContractService } from "../../services/contract-service";
-import { PaginatedTable } from "../Commons/PaginatedTable";
-
+import { PaginatedTable } from '../Commons/PaginatedTable'
+import { showErrorMessage } from '../../commons/utilities'
 const Contract = () => {
-  const navigate = useNavigate();
-  const dispatcher = useDispatch();
+  const navigate = useNavigate(); 
 
-  const [contract, setContract] = useState([]);
 
   const [filter, setFilter] = useState({
     searchText: "",
@@ -39,21 +37,16 @@ const Contract = () => {
       500
     );
   };
+
   const onTriggerFiltering = async (page, pageSize, term) => {
-    const filterResult = await ContractService.filter(
-      page,
-      pageSize,
-      term,
-      filter.isActive
-    );
-    if (filterResult.code != 200) return;
-    setFilter({
-      ...filter,
-      totalRows: filterResult.data.totalRows,
-      data: [...filterResult.data.data],
-    });
-    console.log(filter.data)
-  };
+      const filterResult = await ContractService.filter(page, pageSize, term, filter.isActive);
+      if(filterResult.code >= 400) {
+        showErrorMessage('An error is occurred while searching, please try again!')
+        return
+      }
+      setFilter({...filter, totalRows: filterResult.data.totalRows, data : [...filterResult.data.data]})
+  }
+
   const handleTextChange = (e) => {
     setFilter({ ...filter, searchText: e.target.value });
   };
@@ -82,13 +75,13 @@ const Contract = () => {
 
   const handleDelete = async (record) => {
     if (!window.confirm("Do you want to delete this contract?")) return;
-    deactivateContract(record).then((res) => {
+    const deleteResult = await ContractService.delete(record)
+    if(deleteResult.code >= 400){
+      showErrorMessage('An error is occured while deleting, please try again!')
+    }else {
       toast.success("Contract Deleted");
-      setFilter({
-        ...filter,
-        data: filter.data.filter((e) => e.id != record.id),
-      });
-    });
+      setFilter({...filter, data : [...filter.data.filter(e => e.id != record.id)]})
+    }
   };
 
   const columns = [
