@@ -12,6 +12,7 @@ import ContractProductList from './ContractProductList'
 import { PlusOutlined, SaveOutlined  } from "@ant-design/icons";
 import moment from 'moment';
 import '../../styles/Common.css';
+import { showErrorMessage } from "../../commons/utilities";
  
 const ContractCreate = () => {
   const dispatch = useDispatch()
@@ -31,12 +32,14 @@ const ContractCreate = () => {
 
   useEffect(() => {
     CustomerService.getAll().then((data) => {
-      if(data && data.code == 200 && data.data){
+      if(data && data.code < 400 && data.data){
         const mappedData = data.data.map(e => ({
           key : e.name,
           value: e.id
         }))
         setCustomerSelections(mappedData)
+      }else {
+        showErrorMessage('An error is occurred while loading customers!')
       }
     })
   } , [])
@@ -49,6 +52,8 @@ const ContractCreate = () => {
           value: e.id
         }))
         setProductSelections(mappedData)
+      }else {
+        showErrorMessage('An error is occurred while loading products!')
       }
     })
   } , [])

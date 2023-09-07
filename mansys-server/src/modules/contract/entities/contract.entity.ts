@@ -50,12 +50,17 @@ export class Contract {
   })
   contractItems: ContractItem[];
 
+  @Column({
+    nullable: false
+  })
+  statusId : number;
+
   @OneToMany(() => Timeline, timeline => timeline.contract, {
     eager: false,
     cascade: ['insert']
   })
   timeline: Timeline[];
-
+ 
   @Column({
     type: 'boolean',
     nullable: false,

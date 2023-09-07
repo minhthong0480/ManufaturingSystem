@@ -46,3 +46,26 @@
   color: red;
   margin-top: .3rem;
 }
+
+.timeline-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.timeline-previous-status {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+/* Style the right column */
+.timeline-next-status {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f9f9f9;
+  padding: 20px;
+}

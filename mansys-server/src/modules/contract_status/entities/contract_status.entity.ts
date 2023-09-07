@@ -6,6 +6,11 @@ export class ContractStatus {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({
+        nullable: false,
+    })
+    code:string;
+
     @Column()
     name: string;
 

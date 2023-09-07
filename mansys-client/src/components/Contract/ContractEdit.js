@@ -1,8 +1,8 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, Fragment } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
-import { createContract, updateContract } from "../../actions/contract";
+import { updateContract } from "../../actions/contract";
 import { Row, Col, Select, DatePicker, Button, Input } from "antd";
 import FilterableSelect from "../Commons/FilterableSelection";
 import { CustomerService } from "../../services/customer-service";
@@ -14,6 +14,7 @@ import ContractProductList from "./ContractProductList";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "../../styles/Common.css";
+import { showErrorMessage } from '../../commons/utilities'
 
 const ContractEdit = () => {
   const dispatch = useDispatch();
@@ -29,10 +30,12 @@ const ContractEdit = () => {
     products: [],
     number: null,
     total: null,
+    statusId : null
   });
   const [customerSelections, setCustomerSelections] = useState([]);
   const [productSelections, setProductSelections] = useState([]);
   const [categorySelections, setCategorySelections] = useState([]);
+  const [contractStatusList, setContractStatusList] = useState([])
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -57,6 +60,8 @@ const ContractEdit = () => {
         setProductSelections(mappedData);
         setProducts(getProductResult.data);
         products = getProductResult.data;
+      }else {
+        showErrorMessage('An error is occurred while loading products!')
       }
 
       if (
@@ -79,6 +84,8 @@ const ContractEdit = () => {
         });
 
         contract = getContractResult.data.data;
+      }else {
+        showErrorMessage('An error is occurred while loading contract!')
       }
 
       if (contract != null && products != null) {
@@ -116,6 +123,8 @@ const ContractEdit = () => {
             })),
           });
         }
+      }else {
+          showErrorMessage('An error is occurred while loading product list information!')
       }
     };
 
@@ -131,10 +140,21 @@ const ContractEdit = () => {
         }));
         setCustomerSelections(mappedData);
       }
+      else {
+        showErrorMessage('An error is occurred while loading customer information!')
+      }
     });
   }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    ContractService.getStatus().then((data) => {
+      if(data.code < 400 && data.data){
+        setContractStatusList(data.data.data)
+      }else {
+        showErrorMessage('An error is occurred while loading contract status!')
+      }
+    })
+  }, [])
 
   const getCategoryName = (categories, category_id) => {
     return categories.find((c) => c.id == category_id).name;
@@ -229,12 +249,44 @@ const ContractEdit = () => {
     setContract(contractData);
   };
 
+  const getContractStatus = () => {
+    console.log(contractStatusList.length > 0, contractStatusList, contract)
+    if(contractStatusList.length > 0 && contract.statusId != null){
+      const status = contractStatusList.find((e) => e.id == contract.statusId)
+      console.log(status)
+      return status.name
+    }
+    return ''
+  }
   return (
     <div>
       <div>
         <Typography variant="h4" className="m-top--1rem">
           Chỉnh sửa Hợp Đồng
         </Typography>
+      </div>
+      <div className="m-top--2rem timeline-container">
+        {
+          contract.statusId && contractStatusList.length > 0 && 
+          (
+            <Fragment>
+                 <div class="timeline-previous-status">
+                    <h2>Left Column</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div class="timeline-next-status">
+                    <div class="right-subcolumn">
+                        <h2>Right Subcolumn 1</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                    <div class="right-subcolumn">
+                        <h2>Right Subcolumn 2</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    </div>
+                </div>
+            </Fragment>
+          )
+        }
       </div>
       <div className="main-content-container">
         <Row gutter={16} className="m-top--1rem">
