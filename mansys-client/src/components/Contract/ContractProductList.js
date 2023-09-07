@@ -5,6 +5,7 @@ import "../../styles/Common.css";
 
 const ContractProductList = ({
   className,
+  disabled,
   productLists,
   productListSelections,
   onRemoveProduct,
@@ -20,6 +21,7 @@ const ContractProductList = ({
           <Select
             className="w-100"
             placeholder="Select a product"
+            disabled={disabled}
             onChange={(e) => {
               if (onSelectProduct) onSelectProduct(record, e);
             }}
@@ -50,6 +52,7 @@ const ContractProductList = ({
         return (
           <Input
             placeholder="Quantity"
+            disabled={disabled}
             type="number"
             onChange={(e) => {
               if (onQuantityChange) onQuantityChange(record, e);
@@ -59,20 +62,38 @@ const ContractProductList = ({
         );
       },
     },
-    { title: "Unit(s)", dataIndex: "uom", key: "uom" },
+    {
+      title: "Unit(s)",
+      dataIndex: "uom",
+      key: "uom",
+      render: (_, record) => {
+        return <span>1</span>;
+      },
+    },
     { title: "Cost", dataIndex: "cost", key: "cost" },
     { title: "Price", dataIndex: "price", key: "price" },
     {
       title: "Action(s)",
       render: (_, record) => {
         return (
-          <DeleteOutlined
+          <Button
+            disabled={disabled}
+            type="text"
+            style={
+              disabled
+                ? {
+                    color: "grey",
+                  }
+                : {
+                    color: "red",
+                  }
+            }
             onClick={() => {
               if (onRemoveProduct) onRemoveProduct(record);
             }}
           >
             Delete
-          </DeleteOutlined>
+          </Button>
         );
       },
     },

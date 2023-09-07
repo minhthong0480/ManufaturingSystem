@@ -38,6 +38,8 @@ const ContractEdit = () => {
   const [contractStatusList, setContractStatusList] = useState([])
   const [products, setProducts] = useState([]);
 
+  const [disabled, setDisabled] = useState(true);
+
   useEffect(() => {
     const asyncLoad = async () => {
       const getProductResult = await ProductsService.getAll();
@@ -258,11 +260,23 @@ const ContractEdit = () => {
     }
     return ''
   }
+
+  function handleEditClick() {
+    if (!disabled) {
+      window.location.reload();
+    } else setDisabled(!disabled);
+  }
+
   return (
     <div>
       <div>
+        <div className="text-align-right">
+          <Button type="primary" onClick={handleEditClick}>
+            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
+          </Button>
+        </div>
         <Typography variant="h4" className="m-top--1rem">
-          Chỉnh sửa Hợp Đồng
+          {disabled ? "Chi tiết Hợp Đồng" : "Chỉnh sửa Hợp Đồng"}
         </Typography>
       </div>
       <div className="m-top--2rem timeline-container">
@@ -299,6 +313,7 @@ const ContractEdit = () => {
               onChange={(e) => {
                 handleInforChange("customerId", e);
               }}
+              disabled={disabled}
               defaultOptions={customerSelections}
               value={contract.customerId}
               className="w-100"
@@ -311,6 +326,7 @@ const ContractEdit = () => {
               <span className="input--required">(*)</span>
             </div>
             <Select
+              disabled={true}
               className="w-100"
               placeholder="Select an option"
               value={auth.username}
@@ -329,6 +345,7 @@ const ContractEdit = () => {
               onSelect={(e) => {
                 handleInforChange("dateStart", e);
               }}
+              disabled={disabled}
               className="w-100"
               placeholder="Select Date Start"
               defaultValue={contract.dateStart}
@@ -344,6 +361,7 @@ const ContractEdit = () => {
               onSelect={(e) => {
                 handleInforChange("deadline", e);
               }}
+              disabled={disabled}
               className="w-100"
               placeholder="Select Deadline"
               defaultValue={contract.deadline}
@@ -358,6 +376,7 @@ const ContractEdit = () => {
               <span className="input--required">(*)</span>
             </div>
             <Input
+              disabled={disabled}
               value={contract.number}
               onChange={(e) => handleInforChange("number", e.target.value)}
               type="string"
@@ -369,6 +388,7 @@ const ContractEdit = () => {
               <label>Total</label>
             </div>
             <Input
+              disabled={disabled}
               value={contract.total}
               onChange={(e) => handleInforChange("total", e.target.value)}
               type="number"
@@ -384,13 +404,14 @@ const ContractEdit = () => {
       </div>
       <div className="main-content-container">
         <div className="text-align-right">
-          <Button type="primary" onClick={handleAddProduct}>
+          <Button type="primary" onClick={handleAddProduct} disabled={disabled}>
             <PlusOutlined />
             Add Product
           </Button>
         </div>
         <ContractProductList
           className="m-top--1rem"
+          disabled={disabled}
           productLists={contract.products}
           productListSelections={productSelections}
           onRemoveProduct={onRemoveProduct}
@@ -400,7 +421,7 @@ const ContractEdit = () => {
       </div>
       <div className="m-top--2rem">
         <div className="main-content-container text-align-right">
-          <Button id="saveBtn" type="primary" onClick={handleSaveContract}>
+          <Button id="saveBtn" type="primary" onClick={handleSaveContract} disabled={disabled}>
             <SaveOutlined />
             Save
           </Button>

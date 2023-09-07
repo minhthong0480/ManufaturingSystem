@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Select } from 'antd';
 
-const FilterableSelect = ({ defaultOptions, className, placeHolder, onChange, value}) => {
+const FilterableSelect = ({ defaultOptions, className, placeHolder, onChange, value, disabled}) => {
     const [filteredOptions, setFilteredOptions] = useState(defaultOptions ? defaultOptions : []);
 
     useEffect(() => {
@@ -19,6 +19,7 @@ const FilterableSelect = ({ defaultOptions, className, placeHolder, onChange, va
   
     return (
         <Select
+          disabled={disabled}
           className={className ? className : ''}
           showSearch
           placeholder={placeHolder ? placeHolder : "Select an option"}
