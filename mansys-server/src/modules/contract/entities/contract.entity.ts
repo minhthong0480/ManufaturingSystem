@@ -19,6 +19,8 @@ export class Contract {
   })
   customerId: number;
 
+  customerName: string;
+
   @Column({
     nullable: false,
   })

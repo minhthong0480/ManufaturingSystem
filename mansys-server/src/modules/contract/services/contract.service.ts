@@ -8,6 +8,7 @@ import { ContractFilterDTO } from '../dtos/filter-contract.dto';
 import { ResultListModel } from 'src/common/result-list-model';
 import { UpdateContactDto } from '../dtos/update-contract.dto';
 import { ContractItemService } from './contract-item.service';
+import { CustomersService } from 'src/modules/customers/sevices/customers.service';
 
 @Injectable()
 export class ContractService {
@@ -17,6 +18,9 @@ export class ContractService {
 
     @Inject(forwardRef(() => ContractItemService))
     private readonly contractItemService: ContractItemService,
+
+    @Inject(CustomersService)
+    private readonly customerService: CustomersService,
   ) {}
 
   async create(
@@ -104,6 +108,10 @@ export class ContractService {
     query.skip(skip).take(filterDto.pageSize);
 
     const contracts = await query.getMany();
+    for (const c of contracts) {
+      const customer = await this.customerService.findOne(c.customerId);
+      c.customerName = customer.name;
+    }
     return ResultListModel.success(contracts, totalRows, 'Filtered contracts!');
   }
 
