@@ -14,11 +14,6 @@ export const API_CONTRACT_DELETE = ``
 export const API_PRODUCTS = `${BASE_API_URL}/products`
 export const API_PRODUCTS_CREATE = `${BASE_API_URL}/products/create`
 
-//define api for contract
-export const API_CONTRACT_CREATE = `${BASE_API_URL}/contract/create`
-export const API_CONTRACT_UPDATE = `${BASE_API_URL}/contract/`
-export const API_CONTRACT_DELETE = `${BASE_API_URL}/contract/`
-
 export const API_CATEGORY_GETALL = `${BASE_API_URL}/category`
 
 export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`
