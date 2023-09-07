@@ -3,15 +3,18 @@ import { Table, Button, Popconfirm, Modal, Input, Row, Col } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { MaterialService } from "../services/material-service"
 import '../styles/Common.css';
-
+import { showErrorMessage } from '../commons/utilities'
 const MaterialTable = () => {
 
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [selectedEditMaterial, setSelectedEditMaterial] = useState(null);
+  const [editMaterialErrors, setEditMaterialErrors] = useState({})
   const [openEditModal, setOpenEditModal] = useState(false);
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [createMaterialErrors, setCreateMaterialErrors] = useState({})
   const [createMaterial, setCreateMaterial] = useState(null);
 
   const triggerSearch = (name) => {
@@ -19,6 +22,8 @@ const MaterialTable = () => {
       .then(data => {
         if(data && data.code < 400){
           setMaterials(data.data)
+        }else{
+          showErrorMessage(data.message)
         }
       })
 
@@ -36,6 +41,7 @@ const MaterialTable = () => {
   const handleClickedEdit = (record) => {
     setSelectedEditMaterial(record)
     setOpenEditModal(true)
+    setEditMaterialErrors({})
   };
 
   const handleCloseEdit = () => {
@@ -43,6 +49,35 @@ const MaterialTable = () => {
     setOpenEditModal(false)
   };
 
+  const handleEditValidation = (submitData) => {
+    const errors = {}
+    if(!submitData.name || submitData.name.length == 0)
+      errors.name = 'Please fill out Name'
+    if(!submitData.brand || submitData.brand.length == 0)
+      errors.brand = 'Please fill out Brand'
+    
+    try {
+        const floatCost = Number.parseFloat(submitData.cost)
+        if(floatCost < 0 || !floatCost)
+          errors.cost = 'Please Cost can not be negative or empty'
+    } catch (error) {
+          errors.cost = 'Please Cost can be positive and a float number only'
+    }
+    
+    if(!submitData.unit || submitData.unit.length == 0){
+      errors.unit = 'Please fill out Unit'
+    }
+
+    try {
+      const floatQuantity = Number.parseFloat(submitData.quantity)
+      if(floatQuantity < 0 || !floatQuantity)
+        errors.quantity = 'Please Quantity can not be negative or empty'
+    } catch (error) {
+        errors.quantity = 'Please Quantity can be positive and a float number only'
+    }
+    setEditMaterialErrors(errors)
+    return errors
+  }
   const handleEditFormChange = (name, value) => {
     const newValue = {...selectedEditMaterial}
     newValue[name] = value
@@ -62,17 +97,27 @@ const MaterialTable = () => {
     submitData.cost = Number.parseFloat(selectedEditMaterial.cost);
     submitData.unit = selectedEditMaterial.unit;
     submitData.quantity = Number.parseFloat(selectedEditMaterial.quantity)
+
+
+    const errors = handleEditValidation(submitData)
+    if(Object.keys(errors).length > 0){
+      return
+    }
+
     MaterialService.update(selectedEditMaterial.id, submitData)
                    .then(data => {
                       if(data && data.code < 400){
                         handleCloseEdit()
                         triggerSearch(searchText)
+                      }else{
+                        showErrorMessage(data.message)
                       }
                    })
   }
 
   const handleClickedCreate = () => {
     setCreateMaterial({})
+    setCreateMaterialErrors({})
     setOpenCreateModal(true)
   };
 
@@ -87,6 +132,37 @@ const MaterialTable = () => {
     setCreateMaterial(newValue)
   }
 
+  const handleCreateValidation = (submitData) => {
+    const errors = {}
+    if(!submitData.name || submitData.name.length == 0)
+      errors.name = 'Please fill out Name'
+    if(!submitData.brand || submitData.brand.length == 0)
+      errors.brand = 'Please fill out Brand'
+    
+    try {
+        const floatCost = Number.parseFloat(submitData.cost)
+        if(floatCost < 0 || !floatCost)
+          errors.cost = 'Please Cost can not be negative or empty'
+    } catch (error) {
+          errors.cost = 'Please Cost can be positive and a float number only'
+    }
+    
+    if(!submitData.unit || submitData.unit.length == 0){
+      errors.unit = 'Please fill out Unit'
+    }
+
+    try {
+      const floatQuantity = Number.parseFloat(submitData.quantity)
+      if(floatQuantity < 0 || !floatQuantity)
+        errors.quantity = 'Please Quantity can not be negative or empty'
+    } catch (error) {
+        errors.quantity = 'Please Quantity can be positive and a float number only'
+    }
+    setCreateMaterialErrors(errors)
+    return errors
+  }
+
+
   const handleSubmitCreateData = () => {
     const submitData = {
       name : null,
@@ -100,11 +176,18 @@ const MaterialTable = () => {
     submitData.cost = Number.parseFloat(createMaterial.cost);
     submitData.unit = createMaterial.unit;
     submitData.quantity = Number.parseFloat(createMaterial.quantity)
+
+    const errors = handleCreateValidation(submitData)
+    if(Object.keys(errors).length > 0)
+      return
+
     MaterialService.create(submitData)
                    .then(data => {
                       if(data && data.code < 400){
                         handleCloseCreate()
                         triggerSearch(searchText)
+                      }else{
+                        showErrorMessage(data.message)
                       }
                    })
   }
@@ -148,7 +231,7 @@ const MaterialTable = () => {
 
   return (
     <div className="main-content-container">
-      <h1>Material List</h1>
+      <h1>Danh sách vật tư</h1>
       <div className="contract-page-container">
           <Input.Search 
             placeholder="Search name..."
@@ -188,6 +271,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleEditFormChange('name', e.target.value)}}
                 type="string"  
                 placeholder="Contract Number"/>
+                {editMaterialErrors.name && 
+                (
+                  <span className="error">{editMaterialErrors.name}</span>
+                )}
           </Col>
           <Col span={12}>
                 <div>
@@ -199,6 +286,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleEditFormChange('brand', e.target.value)}}
                 type="string"  
                 placeholder="Contract Number"/>
+                {editMaterialErrors.brand && 
+                (
+                  <span className="error">{editMaterialErrors.brand}</span>
+                )}
           </Col>
         </Row>
         <Row gutter={16} className="m-top--1rem">
@@ -212,6 +303,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleEditFormChange('cost', e.target.value)}}
                 type="number"  
                 placeholder="Contract Number"/>
+                {editMaterialErrors.cost && 
+                (
+                  <span className="error">{editMaterialErrors.cost}</span>
+                )}
           </Col>
           <Col span={12}>
                 <div>
@@ -223,6 +318,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleEditFormChange('unit', e.target.value)}}
                 type="string"  
                 placeholder="Contract Number"/>
+                {editMaterialErrors.unit && 
+                (
+                  <span className="error">{editMaterialErrors.unit}</span>
+                )}
           </Col>
         </Row>
         <Row gutter={16} className="m-top--1rem">
@@ -236,6 +335,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleEditFormChange('quantity', e.target.value)}}
                 type="number"  
                 placeholder="Contract Number"/>
+                {editMaterialErrors.quantity && 
+                (
+                  <span className="error">{editMaterialErrors.quantity}</span>
+                )}
           </Col>
           <Col span={12}>
                 <div>
@@ -266,6 +369,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleCreateFormChange('name', e.target.value)}}
                 type="string"  
                 placeholder="Material Name"/>
+                {createMaterialErrors.name && 
+                (
+                  <span className="error">{createMaterialErrors.name}</span>
+                )}
           </Col>
           <Col span={12}>
                 <div>
@@ -276,6 +383,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleCreateFormChange('brand', e.target.value)}}
                 type="string"  
                 placeholder="Material Brand"/>
+                {createMaterialErrors.brand && 
+                (
+                  <span className="error">{createMaterialErrors.brand}</span>
+                )}
           </Col>
         </Row>
         <Row gutter={16} className="m-top--1rem">
@@ -288,6 +399,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleCreateFormChange('cost', e.target.value)}}
                 type="number"  
                 placeholder="Material Cost"/>
+                {createMaterialErrors.cost && 
+                (
+                  <span className="error">{createMaterialErrors.cost}</span>
+                )}
           </Col>
           <Col span={12}>
                 <div>
@@ -298,6 +413,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleCreateFormChange('unit', e.target.value)}}
                 type="string"  
                 placeholder="Material Unit"/>
+                {createMaterialErrors.unit && 
+                (
+                  <span className="error">{createMaterialErrors.unit}</span>
+                )}
           </Col>
         </Row>
         <Row gutter={16} className="m-top--1rem">
@@ -310,6 +429,10 @@ const MaterialTable = () => {
                 onChange={(e) => {handleCreateFormChange('quantity', e.target.value)}}
                 type="number"  
                 placeholder="Material Quantity"/>
+                {createMaterialErrors.quantity && 
+                (
+                  <span className="error">{createMaterialErrors.quantity}</span>
+                )}
           </Col>
         </Row>
       </Modal>
