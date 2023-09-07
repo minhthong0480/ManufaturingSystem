@@ -2,7 +2,7 @@ import { React, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useParams} from "react-router-dom";
 import { Typography } from "@mui/material";
-import { createContract } from "../../actions/contract";
+import { createContract, updateContract } from "../../actions/contract";
 import { Row, Col, Select, DatePicker, Button, Input } from 'antd';
 import  FilterableSelect  from '../Commons/FilterableSelection'
 import { CustomerService } from '../../services/customer-service'
@@ -23,12 +23,13 @@ const ContractEdit = () => {
 
   const auth = useSelector(state => state.auth)
   const [contract, setContract] = useState({
+    id: null,
     customerId : null,
     dateStart: moment(),
     deadline: moment(),
     products : [],
     number : null,
-    total : null
+    total : null,
   })
   const [customerSelections, setCustomerSelections] = useState([])
   const [productSelections, setProductSelections] = useState([])
@@ -37,13 +38,27 @@ const ContractEdit = () => {
     ContractService.get(params.id).then((data) => {
       if(data && data.code == 200 && data.data){
         const c = data.data.data;
-        console.log(c);
+
         setContract({
             ...contract,
             total: c.total,
-            number: c.contractNumber
+            number: c.contractNumber,
+            id: c.id,
+            customerId: c.customerId,
+            products: c.contractItems.map(e => ({id: e.productId, quantity: e.quantity, ...e}))
         });
-        // setCustomerSelections(mappedData)
+      }
+    })
+  } , [])
+
+  useEffect(() => { 
+    CustomerService.getAll().then((data) => {
+      if(data && data.code == 200 && data.data){
+        const mappedData = data.data.map(e => ({
+          key : e.name,
+          value: e.id
+        }))
+        setCustomerSelections(mappedData)
       }
     })
   } , [])
@@ -96,6 +111,7 @@ const ContractEdit = () => {
 
   const handleSaveContract = () => {
     const data = {
+      id: null,
       contractNumber : null,
       customerId : null,
       userId :  auth.id,
@@ -106,6 +122,7 @@ const ContractEdit = () => {
       isActive : true
     }
 
+    data.id = contract.id
     data.contractNumber = contract.number
     data.customerId = contract.customerId
     data.dateStart = contract.dateStart ? contract.dateStart : null
@@ -114,11 +131,12 @@ const ContractEdit = () => {
     data.contractItems = contract.products.map(e => {
       return {
         productId : e.id,
-        quantity : e.quantity
+        quantity : e.quantity,
+        contractId: contract.id
       }
     })
 
-    dispatch(createContract(navigate, data))
+    dispatch(updateContract(navigate, data))
   }
 
   const handleInforChange = (name, e) => {
@@ -141,9 +159,10 @@ const ContractEdit = () => {
                   <label>Customer</label>
                   <span className="input--required">(*)</span>
                 </div>
-                <FilterableSelect 
+                <FilterableSelect  
                 onChange={(e) => {handleInforChange("customerId", e)}}
-                defaultOptions={customerSelections} 
+                defaultOptions={customerSelections}
+                value={contract.customerId} 
                 className="w-100" 
                 placeholder="Select an option"/>
           </Col>
