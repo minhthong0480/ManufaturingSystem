@@ -149,7 +149,7 @@ const ContractEdit = () => {
     <div>
       <div>
         <Typography variant="h4" className="m-top--1rem">
-            Tạo Mới Hợp Đồng
+            Chỉnh sửa Hợp Đồng
         </Typography>
       </div>
       <div className="main-content-container">
