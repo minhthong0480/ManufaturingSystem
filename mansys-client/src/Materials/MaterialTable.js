@@ -1,147 +1,320 @@
-//create a material table similar to contract table
-
-import React from "react";
-import { Fragment, useEffect, useState } from "react";
-import { Button, Row, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Button, Popconfirm, Modal, Input, Row, Col } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import moment from "moment";
+import { MaterialService } from "../services/material-service"
+import '../styles/Common.css';
 
-import "../styles/PaginatedTable.css";
-import { deactivateContract } from "../actions/contract";
-import { ContractService } from "../services/contract-service";
-import { PaginatedTable } from "../components/Commons/PaginatedTable";
+const MaterialTable = () => {
 
-const Material = () => {
-  const dispatcher = useDispatch();
-  const [material, setMaterial] = useState([]);
-  const [filter, setFilter] = useState({
-    searchText: "",
-    data: [],
-    totalRows: 0,
-    page: 1,
-    pageSize: 10,
-  });
+  const [materials, setMaterials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [selectedEditMaterial, setSelectedEditMaterial] = useState(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [createMaterial, setCreateMaterial] = useState(null);
 
-  const keySearch = () => {
-    if (window.materialSearchTimer) {
-      window.clearTimeout(window.materialSearchTimer);
-    }
-  };
+  const triggerSearch = (name) => {
+      MaterialService.getAll(name)
+      .then(data => {
+        if(data && data.code < 400){
+          setMaterials(data.data)
+        }
+      })
 
-  const onTriggerFiltering = async (page, pageSize, term) => {
-    const filterResult = await ContractService.getAll(page, pageSize, term);
-    if (filterResult.code != 200) return;
-    setFilter({
-      ...filter,
-      totalRows: filterResult.data.totalRows,
-      data: [...filterResult.data.data],
-    });
-  };
+  }
 
-  const pageChange = (page) => {
-    setFilter({ ...filter, page });
-    onTriggerFiltering(page, filter.pageSize, filter.searchText);
-  };
-
-  const pageSizeChange = (pageSize) => {
-    setFilter({ ...filter, pageSize });
-    onTriggerFiltering(filter.page, pageSize, filter.searchText);
-  };
+  useEffect(() => {
+    triggerSearch('')
+  }, []);
 
   const handleSearch = (e) => {
-    onTriggerFiltering(filter.page, filter.pageSize, filter.searchText);
+    triggerSearch(e.target.value)
+    setSearchText(e.target.value)
   };
 
-  const handleTextChange = (e) => {
-    setFilter({ ...filter, searchText: e.target.value });
+  const handleClickedEdit = (record) => {
+    setSelectedEditMaterial(record)
+    setOpenEditModal(true)
+  };
+
+  const handleCloseEdit = () => {
+    setSelectedEditMaterial(null)
+    setOpenEditModal(false)
+  };
+
+  const handleEditFormChange = (name, value) => {
+    const newValue = {...selectedEditMaterial}
+    newValue[name] = value
+    setSelectedEditMaterial(newValue)
+  }
+
+  const handleSubmitEditedData = () => {
+    const submitData = {
+      name : null,
+      brand : null,
+      cost : null,
+      unit : null,
+      quantity : null 
+    }
+    submitData.name = selectedEditMaterial.name;
+    submitData.brand = selectedEditMaterial.brand;
+    submitData.cost = Number.parseFloat(selectedEditMaterial.cost);
+    submitData.unit = selectedEditMaterial.unit;
+    submitData.quantity = Number.parseFloat(selectedEditMaterial.quantity)
+    MaterialService.update(selectedEditMaterial.id, submitData)
+                   .then(data => {
+                      if(data && data.code < 400){
+                        handleCloseEdit()
+                        triggerSearch(searchText)
+                      }
+                   })
+  }
+
+  const handleClickedCreate = () => {
+    setCreateMaterial({})
+    setOpenCreateModal(true)
+  };
+
+  const handleCloseCreate = () => {
+    setCreateMaterial(null)
+    setOpenCreateModal(false)
+  };
+
+  const handleCreateFormChange = (name, value) => {
+    const newValue = {...createMaterial}
+    newValue[name] = value
+    setCreateMaterial(newValue)
+  }
+
+  const handleSubmitCreateData = () => {
+    const submitData = {
+      name : null,
+      brand : null,
+      cost : null,
+      unit : null,
+      quantity : null 
+    }
+    submitData.name = createMaterial.name;
+    submitData.brand = createMaterial.brand;
+    submitData.cost = Number.parseFloat(createMaterial.cost);
+    submitData.unit = createMaterial.unit;
+    submitData.quantity = Number.parseFloat(createMaterial.quantity)
+    MaterialService.create(submitData)
+                   .then(data => {
+                      if(data && data.code < 400){
+                        handleCloseCreate()
+                        triggerSearch(searchText)
+                      }
+                   })
+  }
+  const handleDelete = async (materialId) => {
+    const result = await MaterialService.delete(materialId)
+    triggerSearch(searchText)
   };
 
   const columns = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Brand", dataIndex: "brand", key: "brand" },
+    { title: "Cost", dataIndex: "cost", key: "cost" },
+    { title: "Unit", dataIndex: "unit", key: "unit" },
+    { title: "Quantity", dataIndex: "quantity", key: "quantity" },
+    { title: "Create Date", dataIndex: "createDate", key: "createDate" },
+    
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      sorter: true,
-      width: "20%",
-    },
+      title: "Actions",
+      dataIndex: "actions",
+      render: (_, record) => (
+        <div>
+          <Button
+            type="primary"
+            onClick={() => handleClickedEdit(record)}
+            style={{ marginRight: "10px", background: 'green' }}
+          >
+            Edit
+          </Button>
 
-    {
-      title: "Brand",
-      dataIndex: "brand",
-      key: "brand",
-      sorter: true,
-      width: "20%",
-    },
-    {
-      title: "Cost",
-      dataIndex: "cost",
-      key: "cost",
-      sorter: true,
-      width: "20%",
-    },
-
-    {
-      title: "Unit",
-      dataIndex: "unit",
-      key: "unit",
-      sorter: true,
-      width: "20%",
-    },
-
-    {
-      title: "Số Lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-      sorter: true,
-      width: "20%",
-    },
-
-    {
-      title: "Thời gian tạo",
-      dataIndex: "createDate",
-      key: "createDate",
-      render: (date) => moment(date).format("DD/MM/YYYY"),
+          <DeleteOutlined
+            onClick={() => handleDelete(record.id)}
+            style={{ marginLeft: "10px", fontSize: "20px" }}
+          >
+            Delete
+          </DeleteOutlined>
+        </div>
+      ),
     },
   ];
 
   return (
-    <Fragment>
+    <div className="main-content-container">
       <h1>Material List</h1>
-      <div className="contract-list-filter-container--flex">
-        <Row justify="end">
-          <Input.Search
-            className="contract-list-filter-search"
+      <div className="contract-page-container">
+          <Input.Search 
             placeholder="Search name..."
-            value={filter.searchText}
+            onChange={handleSearch}
             onPressEnter={handleSearch}
-            onSearch={handleSearch}
-            onKeyUpCapture={keySearch}
-            onChange={handleTextChange}
-            style={{ marginBottom: 16, marginTop: 80 }}
+            onSearch={() => {triggerSearch(searchText)}}
+            value={searchText}
+            enterButton
           />
-        </Row>
-        <Row justify="end">
           <Button
-            className="contract-list-create-new-button"
-            type="primary"
-            href="/create_contract"
+            className="create-button"
+            onClick={handleClickedCreate}
           >
-            Create
+            Create Material
           </Button>
-        </Row>
       </div>
-      <PaginatedTable
+      <Table
+        dataSource={materials}
         columns={columns}
-        pageSize={filter.pageSize}
-        totalRows={filter.totalRows}
-        data={filter.data}
-        pageChange={pageChange}
-        pageSizeChange={pageSizeChange}
+        // loading={loading}
+        rowKey="id"
       />
-    </Fragment>
+      <Modal
+        open={openEditModal}
+        onCancel={handleCloseEdit}
+        destroyOnClose={handleCloseEdit}
+        onOk={handleSubmitEditedData}
+      >
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Name</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.name : null}
+                onChange={(e) => {handleEditFormChange('name', e.target.value)}}
+                type="string"  
+                placeholder="Contract Number"/>
+          </Col>
+          <Col span={12}>
+                <div>
+                  <label>Brand</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.brand : null}
+                onChange={(e) => {handleEditFormChange('brand', e.target.value)}}
+                type="string"  
+                placeholder="Contract Number"/>
+          </Col>
+        </Row>
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Cost</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.cost : null}
+                onChange={(e) => {handleEditFormChange('cost', e.target.value)}}
+                type="number"  
+                placeholder="Contract Number"/>
+          </Col>
+          <Col span={12}>
+                <div>
+                  <label>Unit</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.unit : null}
+                onChange={(e) => {handleEditFormChange('unit', e.target.value)}}
+                type="string"  
+                placeholder="Contract Number"/>
+          </Col>
+        </Row>
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Quantity</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.quantity : null}
+                onChange={(e) => {handleEditFormChange('quantity', e.target.value)}}
+                type="number"  
+                placeholder="Contract Number"/>
+          </Col>
+          <Col span={12}>
+                <div>
+                  <label>Created Date</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                defaultValue={selectedEditMaterial ? selectedEditMaterial.createDate : null}
+                disabled={true}
+                type="string"  
+                placeholder="Contract Number"/>
+          </Col>
+        </Row>
+      </Modal>
+      <Modal
+        open={openCreateModal}
+        onCancel={handleCloseCreate}
+        destroyOnClose={handleCloseCreate}
+        onOk={handleSubmitCreateData}
+      >
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Name</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                onChange={(e) => {handleCreateFormChange('name', e.target.value)}}
+                type="string"  
+                placeholder="Material Name"/>
+          </Col>
+          <Col span={12}>
+                <div>
+                  <label>Brand</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                onChange={(e) => {handleCreateFormChange('brand', e.target.value)}}
+                type="string"  
+                placeholder="Material Brand"/>
+          </Col>
+        </Row>
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Cost</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                onChange={(e) => {handleCreateFormChange('cost', e.target.value)}}
+                type="number"  
+                placeholder="Material Cost"/>
+          </Col>
+          <Col span={12}>
+                <div>
+                  <label>Unit</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                onChange={(e) => {handleCreateFormChange('unit', e.target.value)}}
+                type="string"  
+                placeholder="Material Unit"/>
+          </Col>
+        </Row>
+        <Row gutter={16} className="m-top--1rem">
+          <Col span={12}>
+                <div>
+                  <label>Quantity</label>
+                  <span className="input--required">(*)</span>
+                </div>
+                <Input 
+                onChange={(e) => {handleCreateFormChange('quantity', e.target.value)}}
+                type="number"  
+                placeholder="Material Quantity"/>
+          </Col>
+        </Row>
+      </Modal>
+    </div>
   );
 };
 
-export default Material;
+export default MaterialTable;

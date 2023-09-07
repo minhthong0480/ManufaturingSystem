@@ -9,7 +9,8 @@
 
 .m-top--1rem{
     margin-top: 1rem;  
-  }
+}
+
 .w-100{
     width: 100%;
 }
@@ -24,4 +25,20 @@
 .input--required{
   color: red;
   font-weight: bold;
+}
+
+.text-align-right{
+  text-align: right;
+}
+.pad-right--d5rem{
+  padding-right: .5rem;
+}
+
+.primary-cta{
+  background: green;
+  border-color: white;
+  color: 'white';
+  padding: .4rem;
+  border-radius: .4rem;
+
 }

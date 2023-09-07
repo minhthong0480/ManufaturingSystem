@@ -1,35 +1,31 @@
 import axios from "axios";
-import { ContractService } from '../services/contract-service'
+import "../styles/Contract.css";
+import { ContractService } from "../services/contract-service";
 
-//create a createContract function
-export const createContract = (payload) => async () => {
-  const result = await ContractService.create(payload);
-  const { onSuccess = () => { } } = payload;
-  if (result.status !== 200) {
-    console.log('Failed to create contract');
-    console.log(result.data);
-    return onSuccess(result.data);
-  }
-  console.log('Successfully created contract');
-  console.log(result.data);
-  return onSuccess(result.data);
-}
+export const createContract = (navigate, contractData) => async (dispatch) => {
+    const result = await ContractService.create(contractData);
+    if (result.code > 400) {
+        window.alert("Create Contract Error");
+        return;
+    }
+    navigate("/contracts");
+};
 
-// export const deactivateContract = async (token,id) =>
-//   await axios.delete(
-//     `${process.env.REACT_APP_API}/contract/${id}`,
-//     {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   );
+export const deactivateContract = async (record) => {
+    const result = await ContractService.delete(record);
+    if (result.code > 400) {
+        window.alert("Delete Contract Error");
+        return;
+    }
+};
 
-//create deactivateContract function
-export const deactivateContract = async (id) => {
-  const deleteResult = await ContractService.delete(id)
-  console.log("deleteResult: ", deleteResult)
-  if(deleteResult.code != 200) return
-  return deleteResult
-}
-
+export const updateContract = async (token, updateData, id) =>
+    await axios.patch(
+        `${process.env.REACT_APP_API}/contract/${id}`,
+        updateData,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );

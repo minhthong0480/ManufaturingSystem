@@ -23,7 +23,7 @@ export class ContractItem {
   @Column({
     default: 1,
   })
-  quanity: number;
+  quantity: number;
 
   @Column({
     type: 'boolean',

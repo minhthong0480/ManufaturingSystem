@@ -17,6 +17,7 @@ import MaterialTable from "./Materials/MaterialTable";
 import { Layout, Spin } from "antd";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { LoadingOutlined } from '@ant-design/icons';
+import ContractEdit from "./components/Contract/ContractEdit";
 const { Content, Footer } = Layout;
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route exact path="/contracts" element={<Contact />} />
           <Route exact path="/" element={<Homepage />} />
           <Route exact path="/create_contract" element={<ContractCreate />} />
+          <Route exact path="/edit_contract/:id" element={<ContractEdit />} />
           <Route exact path="/employee" element={<Employee />} />
           <Route exact path="/customer" element={<Customer />} />
           <Route exact path="/material" element={<MaterialTable />} />

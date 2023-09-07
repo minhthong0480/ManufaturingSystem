@@ -1,6 +1,7 @@
-import { IsOptional, IsString, IsDate, IsDecimal } from 'class-validator';
+import { IsOptional, IsString, IsDate, IsDecimal, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationRequestModel } from 'src/common/pagination-request-model';
+import { Transform } from 'class-transformer';
 
 export class ContractFilterDTO extends PaginationRequestModel{
   @ApiProperty({
@@ -65,5 +66,13 @@ export class ContractFilterDTO extends PaginationRequestModel{
   @IsOptional()
   @IsDecimal()
   maxTotal?: number;
+
+  @ApiProperty({
+    required : false
+  })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value} ) => value === 'true')
+  isActive?: boolean;
 }
 

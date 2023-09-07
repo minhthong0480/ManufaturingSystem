@@ -1,11 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { Typography } from "@mui/material";
 import { createContract } from "../../actions/contract";
 import { Row, Col, Select, DatePicker, Button, Input } from 'antd';
 import  FilterableSelect  from '../Commons/FilterableSelection'
 import { CustomerService } from '../../services/customer-service'
+import { ContractService } from "../../services/contract-service";
 import { ProductsService } from '../../services/products-service'
 import { useDispatch, useSelector } from 'react-redux'
 import ContractProductList from './ContractProductList'
@@ -13,9 +14,12 @@ import { PlusOutlined, SaveOutlined  } from "@ant-design/icons";
 import moment from 'moment';
 import '../../styles/Common.css';
  
-const ContractCreate = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+const ContractEdit = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  console.log(params.id);
 
   const auth = useSelector(state => state.auth)
   const [contract, setContract] = useState({
@@ -30,13 +34,16 @@ const ContractCreate = () => {
   const [productSelections, setProductSelections] = useState([])
 
   useEffect(() => {
-    CustomerService.getAll().then((data) => {
+    ContractService.get(params.id).then((data) => {
       if(data && data.code == 200 && data.data){
-        const mappedData = data.data.map(e => ({
-          key : e.name,
-          value: e.id
-        }))
-        setCustomerSelections(mappedData)
+        const c = data.data.data;
+        console.log(c);
+        setContract({
+            ...contract,
+            total: c.total,
+            number: c.contractNumber
+        });
+        // setCustomerSelections(mappedData)
       }
     })
   } , [])
@@ -188,6 +195,7 @@ const ContractCreate = () => {
                   <span className="input--required">(*)</span>
                 </div>
                 <Input 
+                value={contract.number}
                 onChange={(e) => handleInforChange('number', e.target.value)}
                 type="string"  
                 placeholder="Contract Number"/>
@@ -197,6 +205,7 @@ const ContractCreate = () => {
                   <label>Total</label>
                 </div>
               <Input 
+              value={contract.total}
               onChange={(e) => handleInforChange('total', e.target.value)}
               type="number" 
               placeholder="Contract Total"/>
@@ -241,4 +250,4 @@ const ContractCreate = () => {
   );
 };
 
-export default ContractCreate;
+export default ContractEdit;

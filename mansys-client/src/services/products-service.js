@@ -12,4 +12,4 @@ export const ProductsService = {
         const filterResult = await AxiosClient.post(API_PRODUCTS_CREATE, payload)
         return filterResult
     }
-}
+}   

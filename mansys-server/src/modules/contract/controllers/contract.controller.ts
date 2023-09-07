@@ -19,7 +19,12 @@ export class ContractController {
         return this.contractService.create(createContractDto);
     }
 
-    @Get('filterContracts')
+    @Get(':id')
+    get(@Param('id', ParseIntPipe) id) {
+        return this.contractService.getContractById(id);
+    }
+
+    @Get('/r/filter')
     filterContracts(@Query() filterDto: ContractFilterDTO) {
         PaginationRequestModel.applyDefaultPaginationSetting(filterDto);
         return this.contractService.filter(filterDto);

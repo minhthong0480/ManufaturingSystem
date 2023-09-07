@@ -5,9 +5,9 @@ import {requestSucess, requestFail} from '../commons/utilities'
 export const CustomerService = {
     getAll : async function(){
 
-        const callResult = await AxiosClient.get(API_CUSTOMER_GET_ALL)
-        if(callResult.status != 200 || callResult.data.code != 200) return requestFail()
-        return requestSucess(callResult.data.data ? callResult.data.data : [])
+        const result = await AxiosClient.get(API_CUSTOMER_GET_ALL)
+        if(result.status >= 400 || !result.data.isSuccess) return requestFail()
+        return requestSucess(result.data.data ? result.data.data : [])
     },
     
 }

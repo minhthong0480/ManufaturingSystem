@@ -6,7 +6,11 @@ export const API_USER_INFOR_URL = `${BASE_API_URL}/user`
 export const API_CUSTOMER_GET_ALL = `${BASE_API_URL}/customers/getAll`
 
 
-export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/filterContracts`
+export const API_CONTRACT = `${BASE_API_URL}/contract/`
+export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/r/filter/`
+export const API_CONTRACT_CREATE = `${BASE_API_URL}/contract`
+export const API_CONTRACT_DELETE = ``
+
 export const API_PRODUCTS = `${BASE_API_URL}/products`
 export const API_PRODUCTS_CREATE = `${BASE_API_URL}/products/create`
 
@@ -16,6 +20,11 @@ export const API_CONTRACT_UPDATE = `${BASE_API_URL}/contract/`
 export const API_CONTRACT_DELETE = `${BASE_API_URL}/contract/`
 
 export const API_CATEGORY_GETALL = `${BASE_API_URL}/category`
+
+export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`
+export const API_MATERIAL_DELETE = `${BASE_API_URL}/materials/:id`
+export const API_MATERIAL_UPDATE = `${BASE_API_URL}/materials/:id`
+export const API_MATERIAL_CREATE = `${BASE_API_URL}/materials/create`
 
 // use for accessing local storage variables
 export const LOCAL_STORAGE_TOKEN = 'AUTH_TOKEN';
