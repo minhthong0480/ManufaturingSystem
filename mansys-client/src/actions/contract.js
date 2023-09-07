@@ -19,12 +19,11 @@ export const deactivateContract = async (record) => {
     }
 };
 
-
 export const updateContract = (navigate, contractData) => async (dispatch) => {
     const result = await ContractService.update(contractData);
     if (result.code > 400) {
         window.alert("Create Contract Error");
         return;
     }
-    navigate("/contracts");
+    navigate(`/edit_contract/${contractData.id}`);
 };
