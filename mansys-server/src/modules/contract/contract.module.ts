@@ -7,6 +7,7 @@ import { ContractItemService } from './services/contract-item.service';
 import { ContractItem } from './entities/contract-item.entity';
 import { ProductsModule } from '../products/products.module';
 import { CustomersModule } from '../customers/customers.module';
+import { UserModule } from '../users/user.module';
 
 @Global()
 @Module({
@@ -14,6 +15,7 @@ import { CustomersModule } from '../customers/customers.module';
     TypeOrmModule.forFeature([Contract, ContractItem]),
     ProductsModule,
     CustomersModule,
+    UserModule
   ],
   controllers: [ContractController],
   providers: [ContractService, ContractItemService],

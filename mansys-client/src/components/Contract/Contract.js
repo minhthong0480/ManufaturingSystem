@@ -92,7 +92,7 @@ const Contract = () => {
       key: "contractnumber",
     },
     { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
-    { title: "User ID", dataIndex: "userId", key: "userId" },
+    { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Start Date", dataIndex: "dateStart", key: "dateStart" },
     { title: "Deadline", dataIndex: "deadline", key: "deadline" },
     { title: "Total", dataIndex: "total", key: "total" },

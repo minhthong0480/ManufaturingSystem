@@ -9,7 +9,8 @@ import { ResultListModel } from 'src/common/result-list-model';
 import { UpdateContactDto } from '../dtos/update-contract.dto';
 import { ContractItemService } from './contract-item.service';
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
-import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum'
+import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum';
+import { UsersService } from 'src/modules/users/services/users.service';
 @Injectable()
 export class ContractService {
   constructor(
@@ -21,6 +22,9 @@ export class ContractService {
 
     @Inject(CustomersService)
     private readonly customerService: CustomersService,
+
+    @Inject(UsersService)
+    private readonly userService: UsersService,
   ) {}
 
   async create(
@@ -110,7 +114,10 @@ export class ContractService {
     const contracts = await query.getMany();
     for (const c of contracts) {
       const customer = await this.customerService.findOne(c.customerId);
+      const user = await this.userService.findOne(c.userId);
+
       c.customerName = customer.name;
+      c.userName = user.data.name;
     }
     return ResultListModel.success(contracts, totalRows, 'Filtered contracts!');
   }
