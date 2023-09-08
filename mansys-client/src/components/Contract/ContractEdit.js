@@ -1,5 +1,4 @@
 import { React, useState, useEffect, Fragment } from "react";
-import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { updateContract } from "../../actions/contract";
@@ -12,9 +11,9 @@ import { CategoryService } from "../../services/category-service";
 import { useDispatch, useSelector } from "react-redux";
 import ContractProductList from "./ContractProductList";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import moment from "moment";
 import "../../styles/Common.css";
 import { showErrorMessage, showSuccessMessage } from '../../commons/utilities'
+import moment from "moment/moment";
 
 const ContractEdit = () => {
   const dispatch = useDispatch();
@@ -25,8 +24,8 @@ const ContractEdit = () => {
   const [contract, setContract] = useState({
     id: null,
     customerId: null,
-    dateStart: moment(),
-    deadline: moment(),
+    dateStart: null,
+    deadline: null,
     products: [],
     number: null,
     total: null,
@@ -56,7 +55,8 @@ const ContractEdit = () => {
       const allCategories = await CategoryService.getAll();
       setCategorySelections(allCategories.data);
 
-      let contract = null;
+      console.log(getContractResult, getProductResult)
+      let rawContract = null;
       let products = null;
 
       if (
@@ -81,62 +81,64 @@ const ContractEdit = () => {
         getContractResult.data
       ) {
         const c = getContractResult.data.data;
-        setContract({
-          ...contract,
+        const newState = {
           total: c.total,
           number: c.contractNumber,
           id: c.id,
           customerId: c.customerId,
+          statusId: c.statusId,
+          dateStart: moment(c.dateStart, "DD-MM-YYYY"),
+          deadline: moment(c.deadline, "DD-MM-YYYY"),
           products: c.contractItems.map((e) => ({
             id: e.id,
             productId: e.productId,
             quantity: e.quantity,
           })),
-        });
+        }
 
-        contract = getContractResult.data.data;
+        rawContract = newState;
+        setContract(newState);
       } else {
         showErrorMessage('An error is occurred while loading contract!')
       }
 
-      if (contract != null && products != null) {
-        if (
-          contract.contractItems != null &&
-          contract.contractItems.length > 0
-        ) {
-          for (let i = 0; i < contract.contractItems.length; i++) {
-            let item = contract.contractItems[i];
-            let product = products.find((e) => e.id == item.productId);
-            if (product != null) {
-              item.supplier = product.supplier;
-              item.category_id = product.category_id;
-              item.unit = product.unit;
-              item.cost = product.cost;
-              item.price = product.price;
-            }
-          }
+      if (rawContract != null &&
+        products != null &&
+        rawContract.products != null &&
+        rawContract.products.length > 0) {
 
-          setContract({
-            ...contract,
-            total: contract.total,
-            number: contract.contractNumber,
-            id: contract.id,
-            customerId: contract.customerId,
-            products: contract.contractItems.map((e) => ({
-              id: e.id,
-              productId: e.productId,
-              quantity: e.quantity,
-              supplier: e.supplier,
-              category: getCategoryName(allCategories.data, e.category_id),
-              unit: e.unit,
-              cost: e.cost,
-              price: e.price,
-            })),
-          });
+        for (let i = 0; i < rawContract.products.length; i++) {
+          let item = rawContract.products[i];
+          let product = products.find((e) => e.id == item.productId);
+          if (product != null) {
+            item.supplier = product.supplier;
+            item.category_id = product.category_id;
+            item.unit = product.unit;
+            item.cost = product.cost;
+            item.price = product.price;
+          }
         }
-      } else {
-        showErrorMessage('An error is occurred while loading product list information!')
-      }
+
+        setContract({
+          id: rawContract.id,
+          customerId: rawContract.customerId,
+          dateStart: moment(rawContract.dateStart, "DD-MM-YYYY"),
+          deadline: moment(rawContract.deadline, "DD-MM-YYYY"),
+          number: rawContract.number,
+          total: rawContract.total,
+          statusId: rawContract.statusId,
+          products: rawContract.products.map((e) => ({
+            id: e.id,
+            productId: e.productId,
+            quantity: e.quantity,
+            supplier: e.supplier,
+            category: getCategoryName(allCategories.data, e.category_id),
+            unit: e.unit,
+            cost: e.cost,
+            price: e.price,
+          })),
+        });
+      } 
     };
 
     asyncLoad();
@@ -197,15 +199,12 @@ const ContractEdit = () => {
         status.next_stages = []
         for (let n = 0; n < nextStatusIds.length; n++) {
           let pStatus = contractStatusList.find((e) => e.id == Number.parseInt(nextStatusIds[n]))
-          console.log(status.next_stage_ids)
-          console.log(pStatus)
           if (pStatus != null) {
             status.next_stages.push(pStatus)
           }
         }
       }
       setCurrentStatus(status)
-      console.log(status)
     }
   }, [contractStatusList, contract])
 
@@ -318,22 +317,22 @@ const ContractEdit = () => {
     return 0
   }
 
-  function getCurrentStatusPosition(){
-    if(currentStatus != null && contractStatusList != null){
+  function getCurrentStatusPosition() {
+    if (currentStatus != null && contractStatusList != null) {
       const index = contractStatusList.findIndex(e => e.id == currentStatus.id)
       return index < 0 ? 0 : index
     }
     return 0
   }
 
-  function handleOnClickValidate(){
+  function handleOnClickValidate() {
     ContractService.validate(contract.id).then(data => {
-      if(data && data.code < 400){
+      if (data && data.code < 400) {
         showSuccessMessage()
         setTimeout(() => {
           window.location.reload()
         }, 2000)
-      }else {
+      } else {
         showErrorMessage('An error is occurred while validating the contract!')
       }
     })
@@ -355,17 +354,17 @@ const ContractEdit = () => {
           <Steps
             current={getCurrentStatusPosition()}
             percent={getStatusPercentage()}
-            items={[...currentStatus.previous_stages, {name : currentStatus.name, description: currentStatus.description} ,...currentStatus.next_stages].map(e => ({ title: e.name, description: e.description }))}
+            items={[...currentStatus.previous_stages, { name: currentStatus.name, description: currentStatus.description }, ...currentStatus.next_stages].map(e => ({ title: e.name, description: e.description }))}
           />
         </Row>
         {
           currentStatus && currentStatus.next_stages != null && currentStatus.next_stages.length > 0 &&
           (
             <Row className="justify-content--right">
-              <Button 
-              onClick={handleOnClickValidate}
-              disabled={disabled} 
-              type="primary">
+              <Button
+                onClick={handleOnClickValidate}
+                disabled={disabled}
+                type="primary">
                 Validate
               </Button>
             </Row>
@@ -418,7 +417,7 @@ const ContractEdit = () => {
               disabled={disabled}
               className="w-100"
               placeholder="Select Date Start"
-              defaultValue={contract.dateStart}
+              value={contract.dateStart}
               format="DD-MM-YYYY"
             />
           </Col>
@@ -434,7 +433,7 @@ const ContractEdit = () => {
               disabled={disabled}
               className="w-100"
               placeholder="Select Deadline"
-              defaultValue={contract.deadline}
+              value={contract.deadline}
               format="DD-MM-YYYY"
             />
           </Col>
