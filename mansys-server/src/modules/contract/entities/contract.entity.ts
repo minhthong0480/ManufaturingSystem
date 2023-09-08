@@ -26,6 +26,8 @@ export class Contract {
   })
   userId: number;
 
+  userName: string;
+
   @Column({
     type: 'date',
     nullable: false

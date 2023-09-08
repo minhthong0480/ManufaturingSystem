@@ -10,7 +10,8 @@ import { UpdateContactDto } from '../dtos/update-contract.dto';
 import { ContractItemService } from './contract-item.service';
 import { ContractStatusService } from '../../contract_status/services/contract_status.service'
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
-import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum'
+import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum';
+import { UsersService } from 'src/modules/users/services/users.service';
 import { Timeline } from 'src/modules/timeline/entities/timeline.entity';
 
 @Injectable()
@@ -27,6 +28,9 @@ export class ContractService {
 
     @Inject(CustomersService)
     private readonly customerService: CustomersService,
+
+    @Inject(UsersService)
+    private readonly userService: UsersService,
   ) {}
 
   async create(
@@ -116,7 +120,10 @@ export class ContractService {
     const contracts = await query.getMany();
     for (const c of contracts) {
       const customer = await this.customerService.findOne(c.customerId);
+      const user = await this.userService.findOne(c.userId);
+
       c.customerName = customer.name;
+      c.userName = user.data.name;
     }
     return ResultListModel.success(contracts, totalRows, 'Filtered contracts!');
   }
