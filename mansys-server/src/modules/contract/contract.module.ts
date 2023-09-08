@@ -6,11 +6,13 @@ import { ContractController } from './controllers/contract.controller';
 import { ContractItemService } from './services/contract-item.service';
 import { ContractItem } from './entities/contract-item.entity';
 import { ProductsModule } from '../products/products.module';
+import { ContractStatusService} from '../contract_status/services/contract_status.service'
+import { ContractStatus } from '../contract_status/entities/contract_status.entity';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([Contract, ContractItem]), ProductsModule],
+  imports: [TypeOrmModule.forFeature([Contract, ContractItem, ContractStatus]), ProductsModule],
   controllers: [ContractController],
-  providers: [ContractService, ContractItemService],
+  providers: [ContractService, ContractItemService, ContractStatusService],
 })
 export class ContractModule {}

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { updateContract } from "../../actions/contract";
-import { Row, Col, Select, DatePicker, Button, Input } from "antd";
+import { Row, Col, Select, DatePicker, Button, Input, Steps } from "antd";
 import FilterableSelect from "../Commons/FilterableSelection";
 import { CustomerService } from "../../services/customer-service";
 import { ContractService } from "../../services/contract-service";
@@ -14,7 +14,7 @@ import ContractProductList from "./ContractProductList";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import moment from "moment";
 import "../../styles/Common.css";
-import { showErrorMessage } from '../../commons/utilities'
+import { showErrorMessage, showSuccessMessage } from '../../commons/utilities'
 
 const ContractEdit = () => {
   const dispatch = useDispatch();
@@ -30,14 +30,23 @@ const ContractEdit = () => {
     products: [],
     number: null,
     total: null,
-    statusId : null
+    statusId: null
   });
   const [customerSelections, setCustomerSelections] = useState([]);
   const [productSelections, setProductSelections] = useState([]);
   const [categorySelections, setCategorySelections] = useState([]);
   const [contractStatusList, setContractStatusList] = useState([])
   const [products, setProducts] = useState([]);
-
+  const [currentStatus, setCurrentStatus] = useState({
+    id: null,
+    code: null,
+    description: null,
+    name: null,
+    next_stage_ids: null,
+    previous_stage_ids: null,
+    next_stages: [],
+    previous_stages: []
+  });
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
@@ -62,7 +71,7 @@ const ContractEdit = () => {
         setProductSelections(mappedData);
         setProducts(getProductResult.data);
         products = getProductResult.data;
-      }else {
+      } else {
         showErrorMessage('An error is occurred while loading products!')
       }
 
@@ -86,7 +95,7 @@ const ContractEdit = () => {
         });
 
         contract = getContractResult.data.data;
-      }else {
+      } else {
         showErrorMessage('An error is occurred while loading contract!')
       }
 
@@ -125,8 +134,8 @@ const ContractEdit = () => {
             })),
           });
         }
-      }else {
-          showErrorMessage('An error is occurred while loading product list information!')
+      } else {
+        showErrorMessage('An error is occurred while loading product list information!')
       }
     };
 
@@ -150,13 +159,56 @@ const ContractEdit = () => {
 
   useEffect(() => {
     ContractService.getStatus().then((data) => {
-      if(data.code < 400 && data.data){
-        setContractStatusList(data.data.data)
-      }else {
+      if (data.code < 400 && data.data) {
+        const lst = data.data.data.map(e => (
+          {
+            id: e.id,
+            code: e.code,
+            description: e.description,
+            name: e.name,
+            next_stage_ids: e.next_stage_ids,
+            previous_stage_ids: e.previous_stage_ids,
+            next_stages: [],
+            previous_stages: []
+          }))
+        setContractStatusList(lst.sort((a, b) => a.id - b.id))
+      } else {
         showErrorMessage('An error is occurred while loading contract status!')
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (contractStatusList.length > 0 && contract.statusId != null) {
+      const status = contractStatusList.find((e) => e.id == contract.statusId)
+      if (status != null && status.previous_stage_ids != null) {
+        const previousStatusIds = status.previous_stage_ids.split(',')
+        status.previous_stages = []
+        for (let p = 0; p < previousStatusIds.length; p++) {
+          let pStatus = contractStatusList.find((e) => e.id == Number.parseInt(previousStatusIds[p]))
+          if (pStatus != null) {
+            status.previous_stages.push(pStatus)
+          }
+        }
+      }
+
+      if (status != null && status.next_stage_ids != null) {
+        const nextStatusIds = status.next_stage_ids.split(',')
+        status.next_stages = []
+        for (let n = 0; n < nextStatusIds.length; n++) {
+          let pStatus = contractStatusList.find((e) => e.id == Number.parseInt(nextStatusIds[n]))
+          console.log(status.next_stage_ids)
+          console.log(pStatus)
+          if (pStatus != null) {
+            status.next_stages.push(pStatus)
+          }
+        }
+      }
+      setCurrentStatus(status)
+      console.log(status)
+    }
+  }, [contractStatusList, contract])
+
 
   const getCategoryName = (categories, category_id) => {
     return categories.find((c) => c.id == category_id).name;
@@ -251,22 +303,41 @@ const ContractEdit = () => {
     setContract(contractData);
   };
 
-  const getContractStatus = () => {
-    console.log(contractStatusList.length > 0, contractStatusList, contract)
-    if(contractStatusList.length > 0 && contract.statusId != null){
-      const status = contractStatusList.find((e) => e.id == contract.statusId)
-      console.log(status)
-      return status.name
-    }
-    return ''
-  }
-
   function handleEditClick() {
     if (!disabled) {
       window.location.reload();
     } else setDisabled(!disabled);
   }
 
+  function getStatusPercentage() {
+    if (currentStatus != null) {
+      let totalStatus = currentStatus.previous_stages.length + currentStatus.next_stages.length
+      let percentage = (currentStatus.previous_stages.length / (totalStatus == 0 ? 1 : totalStatus)) * 100
+      return percentage
+    }
+    return 0
+  }
+
+  function getCurrentStatusPosition(){
+    if(currentStatus != null && contractStatusList != null){
+      const index = contractStatusList.findIndex(e => e.id == currentStatus.id)
+      return index < 0 ? 0 : index
+    }
+    return 0
+  }
+
+  function handleOnClickValidate(){
+    ContractService.validate(contract.id).then(data => {
+      if(data && data.code < 400){
+        showSuccessMessage()
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+      }else {
+        showErrorMessage('An error is occurred while validating the contract!')
+      }
+    })
+  }
   return (
     <div>
       <div>
@@ -279,30 +350,29 @@ const ContractEdit = () => {
           {disabled ? "Chi tiết Hợp Đồng" : "Chỉnh sửa Hợp Đồng"}
         </Typography>
       </div>
-      <div className="m-top--2rem timeline-container">
+      <div className="m-top--2rem main-content-container">
+        <Row>
+          <Steps
+            current={getCurrentStatusPosition()}
+            percent={getStatusPercentage()}
+            items={[...currentStatus.previous_stages, {name : currentStatus.name, description: currentStatus.description} ,...currentStatus.next_stages].map(e => ({ title: e.name, description: e.description }))}
+          />
+        </Row>
         {
-          contract.statusId && contractStatusList.length > 0 && 
+          currentStatus && currentStatus.next_stages != null && currentStatus.next_stages.length > 0 &&
           (
-            <Fragment>
-                 <div class="timeline-previous-status">
-                    <h2>Left Column</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-                <div class="timeline-next-status">
-                    <div class="right-subcolumn">
-                        <h2>Right Subcolumn 1</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                    <div class="right-subcolumn">
-                        <h2>Right Subcolumn 2</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </Fragment>
+            <Row className="justify-content--right">
+              <Button 
+              onClick={handleOnClickValidate}
+              disabled={disabled} 
+              type="primary">
+                Validate
+              </Button>
+            </Row>
           )
         }
       </div>
-      <div className="main-content-container">
+      <div className="main-content-container m-top--3rem">
         <Row gutter={16} className="m-top--1rem">
           <Col span={12}>
             <div>

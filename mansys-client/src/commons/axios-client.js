@@ -18,7 +18,6 @@ AxiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error.response)
     return Promise.resolve(requestFail('An error is occurred, please try again!'));
   }
 );
