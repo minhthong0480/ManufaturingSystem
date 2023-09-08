@@ -145,16 +145,16 @@ const ContractCreate = () => {
   const handleEditValidation = (submitData) => {
     const errors = {};
     if (!submitData.contractNumber || submitData.contractNumber.length == 0)
-      errors.contractNumber = "Please fill out contractNumber";
+      errors.contractNumber = "Please fill out Contract Number";
     if (!submitData.customerId)
-      errors.customerId = "Please fill out customerId";
+      errors.customerId = "Please fill out Customer Id";
 
     if (
       submitData.dateStart &&
       submitData.deadline &&
       submitData.dateStart > submitData.deadline
     )
-      errors.date = "Deadline must not before date start";
+      errors.date = "Deadline must not before Date Start";
 
     try {
       const total = Number.parseFloat(submitData.total);
