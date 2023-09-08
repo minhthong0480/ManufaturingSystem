@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Row, Col, Select, Button, Table, Input } from "antd";
 import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
+import {formatCurrency} from '../../commons/utilities'
 import "../../styles/Common.css";
 
 const ContractProductList = ({
@@ -70,8 +71,25 @@ const ContractProductList = ({
         return <span>1</span>;
       },
     },
-    { title: "Cost", dataIndex: "cost", key: "cost" },
-    { title: "Price", dataIndex: "price", key: "price" },
+    { title: "Cost",
+     dataIndex: "cost",
+     render: (_, record) => {
+      return (
+        <span>
+          { formatCurrency(record.cost)}
+        </span>
+      )
+     } },
+    { title: "Price",
+     dataIndex: "price",
+     render: (_, record) => {
+      return (
+        <span>
+          { formatCurrency(record.price)}
+        </span>
+      )
+     }
+    },
     {
       title: "Action(s)",
       render: (_, record) => {

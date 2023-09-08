@@ -12,8 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ContractProductList from "./ContractProductList";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import "../../styles/Common.css";
-import { showErrorMessage, showSuccessMessage } from '../../commons/utilities'
-import moment from "moment/moment";
+import { showErrorMessage, showSuccessMessage, formatCurrency } from '../../commons/utilities'
+import * as dayjs from 'dayjs';
 
 const ContractEdit = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const ContractEdit = () => {
     deadline: null,
     products: [],
     number: null,
-    total: null,
+    total: 0,
     statusId: null
   });
   const [customerSelections, setCustomerSelections] = useState([]);
@@ -55,7 +55,6 @@ const ContractEdit = () => {
       const allCategories = await CategoryService.getAll();
       setCategorySelections(allCategories.data);
 
-      console.log(getContractResult, getProductResult)
       let rawContract = null;
       let products = null;
 
@@ -87,8 +86,8 @@ const ContractEdit = () => {
           id: c.id,
           customerId: c.customerId,
           statusId: c.statusId,
-          dateStart: moment(c.dateStart, "DD-MM-YYYY"),
-          deadline: moment(c.deadline, "DD-MM-YYYY"),
+          dateStart: dayjs(c.dateStart, "YYYY-MM-DD"),
+          deadline: dayjs(c.deadline, "YYYY-MM-DD"),
           products: c.contractItems.map((e) => ({
             id: e.id,
             productId: e.productId,
@@ -122,8 +121,8 @@ const ContractEdit = () => {
         setContract({
           id: rawContract.id,
           customerId: rawContract.customerId,
-          dateStart: moment(rawContract.dateStart, "DD-MM-YYYY"),
-          deadline: moment(rawContract.deadline, "DD-MM-YYYY"),
+          dateStart: dayjs(rawContract.dateStart, "YYYY-MM-DD"),
+          deadline: dayjs(rawContract.deadline, "YYYY-MM-DD"),
           number: rawContract.number,
           total: rawContract.total,
           statusId: rawContract.statusId,
@@ -282,18 +281,24 @@ const ContractEdit = () => {
     data.id = contract.id;
     data.contractNumber = contract.number;
     data.customerId = contract.customerId;
-    data.dateStart = contract.dateStart ? contract.dateStart : null;
-    data.deadline = contract.deadline ? contract.deadline : null;
-    data.total = contract.total || 0;
-    data.contractItems = contract.products.map((e) => {
-      return {
+    data.dateStart = contract.dateStart ? contract.dateStart.format('YYYY-MM-DD') : null;
+    data.deadline = contract.deadline ? contract.deadline.format('YYYY-MM-DD') : null;
+
+    data.contractItems = contract.products.map((e) => ({
         productId: e.productId,
         quantity: e.quantity,
         contractId: contract.id,
-      };
-    });
+    }));
 
-    dispatch(updateContract(navigate, data));
+    let total = 0
+    for(let p = 0; p < contract.products.length; p++){
+      const price = Number.parseInt(contract.products[p].price)
+      const quantity = Number.parseInt(contract.products[p].quantity)
+      total += price * quantity
+    }
+    data.total = total
+
+    dispatch(updateContract(data));
   };
 
   const handleInforChange = (name, e) => {
@@ -412,13 +417,13 @@ const ContractEdit = () => {
             </div>
             <DatePicker
               onSelect={(e) => {
-                handleInforChange("dateStart", e);
+                 handleInforChange("dateStart", e);
               }}
               disabled={disabled}
               className="w-100"
               placeholder="Select Date Start"
               value={contract.dateStart}
-              format="DD-MM-YYYY"
+              format="YYYY-MM-DD"
             />
           </Col>
           <Col span={12}>
@@ -427,14 +432,15 @@ const ContractEdit = () => {
               <span className="input--required">(*)</span>
             </div>
             <DatePicker
-              onSelect={(e) => {
-                handleInforChange("deadline", e);
+               onSelect={(e) => {
+                 console.log(e)
+                 handleInforChange("deadline", e);
               }}
               disabled={disabled}
               className="w-100"
               placeholder="Select Deadline"
               value={contract.deadline}
-              format="DD-MM-YYYY"
+              format="YYYY-MM-DD"
             />
           </Col>
         </Row>
@@ -457,10 +463,9 @@ const ContractEdit = () => {
               <label>Total</label>
             </div>
             <Input
-              disabled={disabled}
-              value={contract.total}
-              onChange={(e) => handleInforChange("total", e.target.value)}
-              type="number"
+              disabled={true}
+              value={formatCurrency(contract.total)}
+              type="text"
               placeholder="Contract Total"
             />
           </Col>

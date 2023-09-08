@@ -10,10 +10,10 @@ import { ProductsService } from '../../services/products-service'
 import { useDispatch, useSelector } from 'react-redux'
 import ContractProductList from './ContractProductList'
 import { PlusOutlined, SaveOutlined  } from "@ant-design/icons";
-import moment from 'moment';
 import '../../styles/Common.css';
-import { showErrorMessage } from "../../commons/utilities";
- 
+import { showErrorMessage , formatCurrency} from "../../commons/utilities";
+import * as dayjs from 'dayjs';
+
 const ContractCreate = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -21,11 +21,11 @@ const ContractCreate = () => {
   const auth = useSelector(state => state.auth)
   const [contract, setContract] = useState({
     customerId : null,
-    dateStart: moment(),
-    deadline: moment(),
+    dateStart: dayjs(),
+    deadline: dayjs(),
     products : [],
     number : null,
-    total : null
+    total : 0
   })
   const [customerSelections, setCustomerSelections] = useState([])
   const [productSelections, setProductSelections] = useState([])
@@ -106,8 +106,8 @@ const ContractCreate = () => {
 
     data.contractNumber = contract.number
     data.customerId = contract.customerId
-    data.dateStart = contract.dateStart ? contract.dateStart : null
-    data.deadline = contract.deadline ? contract.deadline : null
+    data.dateStart = contract.dateStart ? contract.dateStart.format('YYYY-MM-DD') : null
+    data.deadline = contract.deadline ? contract.deadline.format('YYYY-MM-DD') : null
     data.total = contract.total || 0 
     data.contractItems = contract.products.map(e => {
       return {
@@ -168,8 +168,8 @@ const ContractCreate = () => {
                     onSelect={(e) => {handleInforChange("dateStart", e)}}
                     className="w-100"
                     placeholder="Select Date Start"
-                    defaultValue={contract.dateStart}
-                    format="DD-MM-YYYY"
+                    value={contract.dateStart}
+                    format="YYYY-MM-DD"
                   />
           </Col>
           <Col span={12}>
@@ -181,8 +181,8 @@ const ContractCreate = () => {
                     onSelect={(e) => {handleInforChange("deadline", e)}}
                     className="w-100"
                     placeholder="Select Deadline"
-                    defaultValue={contract.deadline}
-                    format="DD-MM-YYYY"
+                    value={contract.deadline}
+                    format="YYYY-MM-DD"
               />
           </Col>
         </Row>
@@ -201,9 +201,10 @@ const ContractCreate = () => {
                 <div>
                   <label>Total</label>
                 </div>
-              <Input 
-              onChange={(e) => handleInforChange('total', e.target.value)}
-              type="number" 
+              <Input
+              disabled={true}
+              value={formatCurrency(contract.total)} 
+              type="text" 
               placeholder="Contract Total"/>
           </Col>
         </Row>

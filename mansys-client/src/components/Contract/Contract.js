@@ -7,10 +7,9 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import "../../styles/Contract.css";
 import "../../styles/PaginatedTable.css";
-import { deactivateContract } from "../../actions/contract";
 import { ContractService } from "../../services/contract-service";
 import { PaginatedTable } from '../Commons/PaginatedTable'
-import { showErrorMessage } from '../../commons/utilities'
+import { showErrorMessage , formatCurrency} from '../../commons/utilities'
 const Contract = () => {
   const navigate = useNavigate(); 
 
@@ -95,7 +94,11 @@ const Contract = () => {
     { title: "User ID", dataIndex: "userId", key: "userId" },
     { title: "Start Date", dataIndex: "dateStart", key: "dateStart" },
     { title: "Deadline", dataIndex: "deadline", key: "deadline" },
-    { title: "Total", dataIndex: "total", key: "total" },
+    { title: "Total",
+     dataIndex: "total",
+     render : (_, record) => {
+      return (<span>{formatCurrency(record.total)}</span>)
+     }},
 
     {
       title: "Actions",
@@ -130,7 +133,7 @@ const Contract = () => {
 
   return (
     <Fragment>
-      <h1>Contract List</h1>
+      <h1>Danh sách hợp đồng</h1>
       <div className="contract-list-filter-container--flex">
         <Row justify="end">
           <Input.Search

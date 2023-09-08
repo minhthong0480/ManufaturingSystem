@@ -40,7 +40,7 @@ export class Contract {
 
   @Column({
     type: 'decimal',
-    precision: 10,
+    precision: 17,
     scale: 2
   })
   total: number;

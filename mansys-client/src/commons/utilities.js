@@ -39,3 +39,8 @@ export const showSuccessMessage = function(message){
         type : 'success'
       });
 }
+
+export const formatCurrency = function(number){
+    const vnd = new Intl.NumberFormat('vi-VN', { style: "currency", currency: "VND" })
+    return vnd.format(!number ? 0 : number)
+}
