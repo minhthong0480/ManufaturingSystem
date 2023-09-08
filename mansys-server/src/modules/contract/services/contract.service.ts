@@ -115,10 +115,10 @@ export class ContractService {
     const totalRows = await query.getCount();
 
     const skip = (filterDto.page - 1) * filterDto.pageSize;
+    query.orderBy("contracts.id", "DESC");
     query.skip(skip).take(filterDto.pageSize);
 
     const contracts = await query.getMany();
-    contracts.sort((a,b) => b.id - a.id)
     for (const c of contracts) {
       const customer = await this.customerService.findOne(c.customerId);
       const user = await this.userService.findOne(c.userId);
