@@ -40,4 +40,11 @@ export class ContractController {
     deactivate(@Param('id', ParseIntPipe) id) {
         return this.contractService.deactivate(id);
     }
+
+    @Post('validate')
+    @ApiParam({ name: "id", required: true })
+    validateContractStatus(@Body('id') id: number){
+        console.log('here')
+        return this.contractService.validateStatus(id)
+    }
 }

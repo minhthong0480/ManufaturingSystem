@@ -12,7 +12,7 @@ export const MaterialService = {
     delete: async function(id){
         const result = await AxiosClient.delete(API_MATERIAL_DELETE.replace(':id', id + ''))
         if (result.status >= 400 || result.data.code >= 400) return requestFail();
-        return requestSucess(result.data.message);
+        return requestSucess(result.message);
     },
 
     update: async function(id, data){

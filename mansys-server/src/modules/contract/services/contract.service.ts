@@ -8,9 +8,12 @@ import { ContractFilterDTO } from '../dtos/filter-contract.dto';
 import { ResultListModel } from 'src/common/result-list-model';
 import { UpdateContactDto } from '../dtos/update-contract.dto';
 import { ContractItemService } from './contract-item.service';
+import { ContractStatusService } from '../../contract_status/services/contract_status.service'
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
 import { CONTRACT_STATUS_NEW_ID } from '../../../common/enum';
 import { UsersService } from 'src/modules/users/services/users.service';
+import { Timeline } from 'src/modules/timeline/entities/timeline.entity';
+
 @Injectable()
 export class ContractService {
   constructor(
@@ -19,6 +22,9 @@ export class ContractService {
 
     @Inject(forwardRef(() => ContractItemService))
     private readonly contractItemService: ContractItemService,
+
+    @Inject(forwardRef(() => ContractStatusService))
+    private readonly contractStatusService: ContractStatusService,
 
     @Inject(CustomersService)
     private readonly customerService: CustomersService,
@@ -166,5 +172,26 @@ export class ContractService {
     }
 
     return ResultModel.fail('', 'Get contract failed!');
+  }
+
+  async validateStatus(id : number) : Promise<ResultModel<boolean>>{
+    const contract = await this.contractRepository.findOne({ where: { id : id, isActive: true }} );
+    if(!contract)
+      return ResultModel.fail(false, 'Contract is not existed!')
+    
+    const allStatus = await this.contractStatusService.getAll()
+    if(!allStatus || !allStatus.isSuccess || allStatus.data == null)
+      return ResultModel.fail(false, 'Contract status is not existed!')
+
+    const sortedStatus = allStatus.data.sort((a, b) => a.id - b.id)
+    const currentStatus = sortedStatus.find(e => e.id == contract.statusId)
+    const nextStatus = currentStatus.next_stage_ids.split(',').map(e => Number.parseInt(e))
+    if(nextStatus.length == 0){
+      return ResultModel.fail(false, 'The contract is done, can not be moving to the next step!')
+    }
+
+    contract.statusId = nextStatus[0]
+    this.contractRepository.save(contract)
+    return ResultModel.success(true, 'Validate the contract success!')
   }
 }
