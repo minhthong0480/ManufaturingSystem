@@ -44,3 +44,8 @@ export const formatCurrency = function(number){
     const vnd = new Intl.NumberFormat('vi-VN', { style: "currency", currency: "VND" })
     return vnd.format(!number ? 0 : number)
 }
+
+export const formatNumber = function(number){
+    const vnd = new Intl.NumberFormat('vi-VN')
+    return vnd.format(!number ? 0 : number)
+}

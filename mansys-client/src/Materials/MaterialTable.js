@@ -3,7 +3,7 @@ import { Table, Button, Popconfirm, Modal, Input, Row, Col } from "antd";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { MaterialService } from "../services/material-service"
 import '../styles/Common.css';
-import { showErrorMessage } from '../commons/utilities'
+import { showErrorMessage, formatCurrency, formatNumber } from '../commons/utilities'
 const MaterialTable = () => {
 
   const [materials, setMaterials] = useState([]);
@@ -200,9 +200,21 @@ const MaterialTable = () => {
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Brand", dataIndex: "brand", key: "brand" },
-    { title: "Cost", dataIndex: "cost", key: "cost" },
+    { title: "Cost", 
+    dataIndex: "cost",
+    render: (_, record) => {
+      return (
+        <span>{formatCurrency(record.cost)}</span>
+      )
+    } },
     { title: "Unit", dataIndex: "unit", key: "unit" },
-    { title: "Quantity", dataIndex: "quantity", key: "quantity" },
+    { title: "Quantity",
+     dataIndex: "quantity",
+     render : (_, record) => {
+      return (
+        <span>{formatNumber(record.quantity)}</span>
+      )
+     } },
     { title: "Create Date", dataIndex: "createDate", key: "createDate" },
     
     {
