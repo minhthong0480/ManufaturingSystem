@@ -239,6 +239,11 @@ const ContractEdit = () => {
   };
 
   const handleOnSelectProduct = (product, value) => {
+    const isSelectedExistedProduct = contract.products.findIndex((e) => e.productId == value)
+    if(isSelectedExistedProduct >= 0) {
+      showErrorMessage('The selected product is already in the product list, please choose another product!')
+      return
+    }
     const index = contract.products.findIndex((e) => e.id == product.id);
     const selectedProduct = products.find((e) => e.id == value);
     const editedProduct = {

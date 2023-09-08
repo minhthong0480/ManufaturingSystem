@@ -81,6 +81,11 @@ const ContractCreate = () => {
   }
 
   const handleOnSelectProduct = (product, value) => {
+    const isSelectedExistedProduct = contract.products.findIndex((e) => e.productId == value)
+    if(isSelectedExistedProduct >= 0) {
+      showErrorMessage('The selected product is already in the product list, please choose another product!')
+      return
+    }
     const index = contract.products.findIndex((e) => e.id == product.id) 
     const refProduct = productList.find((e) => e.id == value)
     const editedProduct = {
@@ -90,7 +95,8 @@ const ContractCreate = () => {
       category : refProduct.category,
       unit: refProduct.unit,
       cost: refProduct.cost,
-      price: refProduct.price
+      price: refProduct.price,
+      productId: refProduct.id
     }
     const newProducts = [...contract.products.slice(0,index), editedProduct , ...contract.products.slice(index+1)]
     let total = 0
@@ -138,11 +144,11 @@ const ContractCreate = () => {
     data.total = contract.total || 0 
     data.contractItems = contract.products.map(e => {
       return {
-        productId : e.id,
-        quantity : e.quantity
+        productId : e.productId,
+        quantity : e.quantity,
+        isActive: true
       }
     })
-
     dispatch(createContract(navigate, data))
   }
 
