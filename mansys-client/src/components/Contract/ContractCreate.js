@@ -29,6 +29,7 @@ const ContractCreate = () => {
   })
   const [customerSelections, setCustomerSelections] = useState([])
   const [productSelections, setProductSelections] = useState([])
+  const [productList, setProductList] = useState([])
 
   useEffect(() => {
     CustomerService.getAll().then((data) => {
@@ -52,6 +53,7 @@ const ContractCreate = () => {
           value: e.id
         }))
         setProductSelections(mappedData)
+        setProductList(data.data)
       }else {
         showErrorMessage('An error is occurred while loading products!')
       }
@@ -69,17 +71,35 @@ const ContractCreate = () => {
   const onRemoveProduct = function(product) {
     const index = contract.products.findIndex((e) => e.id == product.id)
     const newProducts = [...contract.products.slice(0,index), ...contract.products.slice(index+1)]
-    setContract({...contract, products: newProducts})
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+    setContract({...contract, products: newProducts, total: total})
   }
 
   const handleOnSelectProduct = (product, value) => {
     const index = contract.products.findIndex((e) => e.id == product.id) 
+    const refProduct = productList.find((e) => e.id == value)
     const editedProduct = {
+      id: value,
       ...product,
-      id: value
+      supplier: refProduct.supplier,
+      category : refProduct.category,
+      unit: refProduct.unit,
+      cost: refProduct.cost,
+      price: refProduct.price
     }
     const newProducts = [...contract.products.slice(0,index), editedProduct , ...contract.products.slice(index+1)]
-    setContract({...contract, products : newProducts})
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+    setContract({...contract, products : newProducts, total : total})
   }
 
   const handleOnQuantityChange = (product, e) => {
@@ -89,7 +109,14 @@ const ContractCreate = () => {
       quantity: Number.parseInt(e.target.value)
     }
     const newProducts = [...contract.products.slice(0,index), editedProduct , ...contract.products.slice(index+1)]
-    setContract({...contract, products : newProducts})
+    
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+    setContract({...contract, products : newProducts, total : total})
   }
 
   const handleSaveContract = () => {

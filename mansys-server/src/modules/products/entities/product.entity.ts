@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn,
   OneToMany,
+  JoinColumn
 } from 'typeorm';
 import { DeliveryNoteItem } from 'src/modules/delivery-note/entities/delivery-note-item.entity';
 import { ReceivingNoteItem } from '../../receiving-note/entities/receiving-note-item.entity';
@@ -52,16 +52,15 @@ export class Product {
     default: new Date(),
   })
   createDate: Date;
-  category: any;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @Column({
     nullable: false,
   })
   category_id: number;
-
-  @ManyToOne(() => Category, (category) => category.products)
-  // @JoinColumn({ category_id: 'category_id' })
-  // productCategory: Category;
 
   @OneToMany(() => Inventory, (inventory) => inventory.product)
   inventories: Inventory[];

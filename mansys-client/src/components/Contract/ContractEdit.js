@@ -29,11 +29,11 @@ const ContractEdit = () => {
     products: [],
     number: null,
     total: 0,
-    statusId: null
+    statusId: null,
+    products: []
   });
   const [customerSelections, setCustomerSelections] = useState([]);
   const [productSelections, setProductSelections] = useState([]);
-  const [categorySelections, setCategorySelections] = useState([]);
   const [contractStatusList, setContractStatusList] = useState([])
   const [products, setProducts] = useState([]);
   const [currentStatus, setCurrentStatus] = useState({
@@ -53,7 +53,6 @@ const ContractEdit = () => {
       const getProductResult = await ProductsService.getAll();
       const getContractResult = await ContractService.get(params.id);
       const allCategories = await CategoryService.getAll();
-      setCategorySelections(allCategories.data);
 
       let rawContract = null;
       let products = null;
@@ -95,7 +94,7 @@ const ContractEdit = () => {
           })),
         }
 
-        rawContract = newState;
+        rawContract = c;
         setContract(newState);
       } else {
         showErrorMessage('An error is occurred while loading contract!')
@@ -103,40 +102,43 @@ const ContractEdit = () => {
 
       if (rawContract != null &&
         products != null &&
-        rawContract.products != null &&
-        rawContract.products.length > 0) {
+        rawContract.contractItems != null &&
+        rawContract.contractItems.length > 0) {
 
-        for (let i = 0; i < rawContract.products.length; i++) {
-          let item = rawContract.products[i];
+        for (let i = 0; i < rawContract.contractItems.length; i++) {
+          let item = rawContract.contractItems[i];
           let product = products.find((e) => e.id == item.productId);
           if (product != null) {
+            item.id = product.id;
             item.supplier = product.supplier;
             item.category_id = product.category_id;
             item.unit = product.unit;
             item.cost = product.cost;
             item.price = product.price;
+            item.category = product.category;
           }
         }
 
-        setContract({
+        const newState = {
           id: rawContract.id,
           customerId: rawContract.customerId,
           dateStart: dayjs(rawContract.dateStart, "YYYY-MM-DD"),
           deadline: dayjs(rawContract.deadline, "YYYY-MM-DD"),
-          number: rawContract.number,
+          number: rawContract.contractNumber,
           total: rawContract.total,
           statusId: rawContract.statusId,
-          products: rawContract.products.map((e) => ({
+          products: rawContract.contractItems.map((e) => ({
             id: e.id,
             productId: e.productId,
             quantity: e.quantity,
             supplier: e.supplier,
-            category: getCategoryName(allCategories.data, e.category_id),
+            category: e.category,
             unit: e.unit,
             cost: e.cost,
             price: e.price,
           })),
-        });
+        }
+        setContract(newState);
       } 
     };
 
@@ -226,7 +228,14 @@ const ContractEdit = () => {
       ...contract.products.slice(0, index),
       ...contract.products.slice(index + 1),
     ];
-    setContract({ ...contract, products: newProducts });
+
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+    setContract({ ...contract, products: newProducts, total : total });
   };
 
   const handleOnSelectProduct = (product, value) => {
@@ -238,17 +247,22 @@ const ContractEdit = () => {
       supplier: selectedProduct.supplier,
       cost: selectedProduct.cost,
       price: selectedProduct.price,
-      category: getCategoryName(
-        categorySelections,
-        selectedProduct.category_id
-      ),
+      category: selectedProduct.category
     };
     const newProducts = [
       ...contract.products.slice(0, index),
       editedProduct,
       ...contract.products.slice(index + 1),
     ];
-    setContract({ ...contract, products: newProducts });
+
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+
+    setContract({ ...contract, products: newProducts, total : total });
   };
 
   const handleOnQuantityChange = (product, e) => {
@@ -262,7 +276,14 @@ const ContractEdit = () => {
       editedProduct,
       ...contract.products.slice(index + 1),
     ];
-    setContract({ ...contract, products: newProducts });
+
+    let total = 0
+    for(var p = 0; p < newProducts.length; p++){
+      const price = Number.parseInt(newProducts[p].price)
+      const quantity = Number.parseInt(newProducts[p].quantity)
+      total+= price * quantity
+    }
+    setContract({ ...contract, products: newProducts, total: total });
   };
 
   const handleSaveContract = () => {

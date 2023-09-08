@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { ResultModel } from 'src/common/result-model';
+import  ProductDto  from '../dto/product.dto'
 
 @Injectable()
 export class ProductsService {
@@ -60,7 +61,10 @@ export class ProductsService {
     return await this.productsRepository.findOneBy({ id });
   }
 
-  async getAll(): Promise<Product[]> {
-    return this.productsRepository.find();
+  async getAll(): Promise<ProductDto[]> {
+    const data = await this.productsRepository.find({relations: ['category']});
+    if(data == null || data.length == 0) 
+      return []
+    return data.map(e => (new ProductDto(e.id, e.name, e.description, e.supplier, e.cost, e.price, e.category != null ? e.category.name : '', e.category_id)));
   }
 }
