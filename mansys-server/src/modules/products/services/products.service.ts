@@ -10,13 +10,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { ResultModel } from 'src/common/result-model';
+import  ProductDto  from '../dto/product.dto'
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
-  ) {}
+  ) { }
 
   async getProducts(filterDto: GetProductsFilterDto): Promise<Product[]> {
     const { search } = filterDto;
@@ -46,7 +47,24 @@ export class ProductsService {
     return ResultModel.fail('', 'Product not exist!');
   }
 
+  async create(CreateProductDto: CreateProductDto) {
+    const checkProduct = await this.productsRepository.findOne({ where: { name: CreateProductDto.name } });
+    if (checkProduct) {
+      return ResultModel.fail('', 'Sản phẩm đã tồn tại!')
+    }
+    const product = await this.productsRepository.create(CreateProductDto);
+    const save = await this.productsRepository.save(product);
+    return ResultModel.success(product, 'Tạo sản phẩm thành công!');
+  }
+
   async getOneById(id: number) {
     return await this.productsRepository.findOneBy({ id });
+  }
+
+  async getAll(): Promise<ProductDto[]> {
+    const data = await this.productsRepository.find({relations: ['category']});
+    if(data == null || data.length == 0) 
+      return []
+    return data.map(e => (new ProductDto(e.id, e.name, e.description, e.supplier, e.cost, e.price, e.category != null ? e.category.name : '', e.category_id)));
   }
 }

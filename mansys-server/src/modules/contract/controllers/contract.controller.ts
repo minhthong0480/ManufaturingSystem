@@ -4,7 +4,7 @@ import { ContractService } from "../services/contract.service";
 import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 import { ContractFilterDTO } from "../dtos/filter-contract.dto";
 import { UpdateContactDto } from "../dtos/update-contract.dto";
-
+import { PaginationRequestModel } from "../../../common/pagination-request-model";
 @ApiTags('contract')
 @ApiBearerAuth()
 @Controller('contract')
@@ -19,9 +19,14 @@ export class ContractController {
         return this.contractService.create(createContractDto);
     }
 
-    @Get()
+    @Get(':id')
+    get(@Param('id', ParseIntPipe) id) {
+        return this.contractService.getContractById(id);
+    }
+
+    @Get('/r/filter')
     filterContracts(@Query() filterDto: ContractFilterDTO) {
-        filterDto.applyDefaultPaginationSetting();
+        PaginationRequestModel.applyDefaultPaginationSetting(filterDto);
         return this.contractService.filter(filterDto);
     }
 
@@ -34,5 +39,12 @@ export class ContractController {
     @ApiParam({ name: "id", required: true })
     deactivate(@Param('id', ParseIntPipe) id) {
         return this.contractService.deactivate(id);
+    }
+
+    @Post('validate')
+    @ApiParam({ name: "id", required: true })
+    validateContractStatus(@Body('id') id: number){
+        console.log('here')
+        return this.contractService.validateStatus(id)
     }
 }

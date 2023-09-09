@@ -2,7 +2,7 @@ import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { InventoryService } from '../services/inventory.service';
 import { CreateInventoryDto } from '../dto/create-inventory.dto';
 import { FilterInventoryDto } from '../dto/filter-inventory.dto';
-
+import { PaginationRequestModel } from '../../../common/pagination-request-model';
 @Controller({ path: '/inventory' })
 export class InventoryController {
   constructor(
@@ -17,7 +17,7 @@ export class InventoryController {
 
   @Get('/filter')
   findWithFilder(@Body() filter: FilterInventoryDto) {
-    filter.applyDefaultPaginationSetting();
+    PaginationRequestModel.applyDefaultPaginationSetting(filter);
     return this.inventoryService.filter(filter);
   }
 }

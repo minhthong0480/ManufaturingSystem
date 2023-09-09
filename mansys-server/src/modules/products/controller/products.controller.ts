@@ -2,15 +2,34 @@ import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post
 import { ProductsService } from '../services/products.service';
 import { Product } from '../entities/product.entity';
 import { GetProductsFilterDto } from '../dto/get-products-filter.dto';
+import { CreateProductDto } from '../dto/create-product.dto';
+import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 
+@ApiTags('customers')
+@ApiBearerAuth()
 @Controller('products')
 export class ProductsController {
-    constructor(private productService: ProductsService) {}
+    constructor(private productService: ProductsService) { }
+
+    @Get('/')
+    findAllProducts() {
+        return this.productService.getAll();
+    }
+
+    @Get('/:id')
+    findByProductsId(@Param('id') id: number) {
+        return this.productService.getProductById(id);
+    }
+
+    @Post('/create')
+    createMaterial(@Body() CreateProductDto: CreateProductDto) {
+        return this.productService.create(CreateProductDto);
+    }
 
     @Get()
     getTasks(
         @Query(ValidationPipe) filterDto: GetProductsFilterDto,
-        ): Promise<Product[]> {
+    ): Promise<Product[]> {
         return this.productService.getProducts(filterDto);
     }
 }

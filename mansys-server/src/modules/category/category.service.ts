@@ -3,6 +3,7 @@ import { Category } from './category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { ResultModel } from 'src/common/result-model';
 
 @Injectable()
 export class CategoryService {
@@ -42,8 +43,12 @@ export class CategoryService {
         return found;
     }
 
-    async getAll(): Promise<Category[]> {
-        return this.categoryRepository.find();
+    async getAll() {
+        const categories = await this.categoryRepository.find();
+        if (!categories) {
+            return ResultModel.fail("", "Failed");
+        }
+        return ResultModel.success(categories, "Success");
     }
 
     async updateCategory(id: number, categoryDto: CreateCategoryDto): Promise<Category> {

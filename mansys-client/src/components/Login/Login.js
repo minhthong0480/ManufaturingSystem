@@ -1,39 +1,20 @@
+import "../../styles//Login.css";
 import React, { useState } from "react";
-import "../../Style/Login.css";
-import { signIn, loggedInUser } from "../../action/login";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { signIn } from "../../actions/auth";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [dataForm, setDataForm] = useState({
     username: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
-
-  
 
   const handleOnSubmit = async (event) => {
-    // console.log("SEND DATA", { dataForm });
-    
-    // const data = await signIn(dataForm);
-    // if (data) {
       dispatch(signIn(dataForm, navigate))
-    //   navigate("/");
-    // }
-    // try {
-    //   const data = await signIn(dataForm);
-  
-    //   // Dispatch an action to update authentication status
-    //   if (data) {
-    //     navigate("/");
-    //   }
-    // } catch (error) {
-    //   // Handle login error here
-    //   console.error("Login error:", error);
-    // }
   };
 
   const handleOnChange = (event) => {
@@ -42,6 +23,12 @@ const Login = () => {
       [event.target.name]: event.target.value,
     });
   };
+
+  const username = useSelector(state => state.auth != null? state.auth.username : null)
+  if(username){
+    return <Navigate to="/"/>
+  }
+
   return (
     <div className="container">
       <div className="screen">

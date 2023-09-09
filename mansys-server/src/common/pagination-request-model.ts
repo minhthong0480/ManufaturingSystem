@@ -9,8 +9,8 @@ export class PaginationRequestModel {
   @ApiProperty()
   pageSize: number;
 
-  public applyDefaultPaginationSetting() {
-    this.page = this.page <= 0 ? 1 : this.page;
-    this.pageSize = this.pageSize <= 0 ? 10 : this.pageSize;
+  public static applyDefaultPaginationSetting(request : PaginationRequestModel) {
+    request.page = request.page <= 0 ? 1 : request.page;
+    request.pageSize = request.pageSize <= 0 ? 10 : request.pageSize;
   }
 }

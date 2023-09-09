@@ -1,0 +1,60 @@
+.main-content-container {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+
+.m-top--4rem {
+  margin-top: 4rem;
+}
+
+.m-top--3rem {
+  margin-top: 3rem;
+}
+
+.m-top--2rem{
+  margin-top: 2rem;  
+}
+
+.m-top--1rem{
+    margin-top: 1rem;  
+}
+
+.w-100{
+    width: 100%;
+}
+.combination-input--lable {
+
+}
+
+.combination-input--input{
+
+}
+
+.input--required{
+  color: red;
+  font-weight: bold;
+}
+
+.text-align-right{
+  text-align: right;
+}
+.pad-right--d5rem{
+  padding-right: .5rem;
+}
+.justify-content--right{
+  justify-content: right;
+}
+
+.primary-cta{
+  background: green;
+  border-color: white;
+  color: 'white';
+  padding: .4rem;
+  border-radius: .4rem;
+}
+
+.error {
+  color: red;
+  margin-top: .3rem;
+}

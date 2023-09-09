@@ -53,7 +53,7 @@ export class ContractItemService {
       productId,
     });
     if (contractItem) {
-      contractItem.quanity += createContractItemDto.quantity;
+      contractItem.quantity += createContractItemDto.quantity;
       contractItem = await this.contractItemRepository.save(contractItem);
     } else {
       contractItem = await this.contractItemRepository.save(
