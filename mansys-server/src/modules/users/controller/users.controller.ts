@@ -45,6 +45,11 @@ export class UsersController {
     return this.userService.findOne(id);
   }
 
+  @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
+
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id, @Body() user: UpdateUserDto) {
     return this.userService.update(id, user);
