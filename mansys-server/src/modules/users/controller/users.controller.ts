@@ -33,6 +33,11 @@ export class UsersController {
     private readonly userService: UsersService,
   ) {}
 
+    @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
+
   @Get()
   @UseGuards(RolesGuard)
   @Roles('admin')
@@ -43,11 +48,6 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(id);
-  }
-
-  @Get()
-  findAll() {
-    return this.userService.findAll();
   }
 
   @Patch(':id')
