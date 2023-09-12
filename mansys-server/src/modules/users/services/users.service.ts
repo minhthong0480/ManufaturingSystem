@@ -74,6 +74,10 @@ export class UsersService {
     return ResultModel.success(toUserDto(user), 'Success');
   }
 
+  async getAll(): Promise<ResultModel<User[]>> {
+    const result = await this.usersRepository.find();
+    return ResultModel.success(result, "Success");
+}
   async findOneByUsername(username: string): Promise<UserDto> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (!user) return null;
