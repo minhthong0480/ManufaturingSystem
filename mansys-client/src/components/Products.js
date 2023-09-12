@@ -11,6 +11,8 @@ import { ThemeContext } from '../context/ThemeContext';
 import moment from "moment";
 import '../styles/Product.css';
 import ProductDetailModal from '../components/Products/ProductDetailModal';
+import { formatCurrency } from "../commons/utilities";
+
 const { Search } = Input;
 const { Option } = Select;
 const { Paragraph, Text } = Typography;
@@ -145,7 +147,7 @@ const Products = () => {
             title: 'Giá (VND)',
             dataIndex: 'price',
             key: 'price',
-            render: (amount) => currencyFormat(amount),
+            render: (amount) => formatCurrency(amount),
         },
         {
             title: 'Thông tin',
@@ -175,7 +177,7 @@ const Products = () => {
             title: 'Thời gian tạo',
             dataIndex: 'createDate',
             key: 'createDate',
-            render: (date) => moment(date).format('DD/MM/YYYY')
+            render: (date) => moment(date).format('YYYY-MM-DD')
         },
     ];
 
