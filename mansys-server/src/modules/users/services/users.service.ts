@@ -74,6 +74,10 @@ export class UsersService {
     return ResultModel.success(toUserDto(user), 'Success');
   }
 
+  async getAll(): Promise<ResultModel<User[]>> {
+    const result = await this.usersRepository.find();
+    return ResultModel.success(result, "Success");
+}
   async findOneByUsername(username: string): Promise<UserDto> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (!user) return null;
@@ -182,6 +186,12 @@ export class UsersService {
       });
     }
 
+    if (filter.name) {
+      query.andWhere('users.name like :name', {
+        name: '%' + filter.name + '%',
+      });
+    }
+
     const totalRows = await query.getCount();
 
     const skip = (page - 1) * limit;
@@ -204,6 +214,7 @@ export class UsersService {
           email: faker.internet.email(),
           phone: faker.phone.phoneNumber(),
           userRole: UserRole.user,
+          name: faker.internet.email()
         });
         total--;
       } catch (error) {

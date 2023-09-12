@@ -1,0 +1,72 @@
+.app-header {
+    background-color: #1976d2;
+    padding: 0;
+    /* display: flex; */
+    /* flex-direction: column; */
+    align-items: left;
+    /* justify-content: space-between; */
+    /* margin-bottom: 20px; */
+    height: 100px;
+  }
+  
+  .company-container {
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid white;
+    margin-bottom: 2px;
+    height: 100px;
+
+    -webkit-box-shadow: 1px 10px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 10px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 1px 10px 5px 0px rgba(0,0,0,0.75);
+  }
+  
+  .company-name {
+    color: white;
+    font-style: italic;
+    font-size: 30px;
+    margin-left: 12px;
+  }
+
+  .user-container{
+    background-color: #F4F9FA;
+    display: flex;
+    flex-direction: row-reverse;
+    border: 1px solid black;
+    border-bottom-left-radius: 5px ;
+    border-bottom-right-radius: 5px ;
+    
+  }
+
+  
+ .avatar-container {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    
+  }
+
+  .user-name {
+    width: 45vw;
+    color: black;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  
+  .menu-button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 300%;
+    margin-right: auto;
+    height: auto;
+    z-index: 5;
+  }
+
+  .ant-dropdown-menu-item a {
+    font-size: 18px;
+    }

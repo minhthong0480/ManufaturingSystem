@@ -3,7 +3,7 @@ import { ContractStatus } from "../entities/contract_status.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateContractStatusDto } from "../dtos/create_contract_status.dto";
-
+import { ResultModel } from '../../../common/result-model'
 @Injectable()
 export class ContractStatusService {
     constructor (
@@ -16,8 +16,9 @@ export class ContractStatusService {
         return await this.ContractStatusRepo.save(constat)
     }
 
-    async getAll(): Promise<ContractStatus[]>{
-        return this.ContractStatusRepo.find();
+    async getAll(): Promise<ResultModel<ContractStatus[]>>{
+        const result = await this.ContractStatusRepo.find()
+        return ResultModel.success(result, null);
     }
 
     async delete(id: number) {

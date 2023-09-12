@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Material } from '../entities/material.entity';
 import { CreateMaterialDto } from '../dtos/create-material.dto';
 import { UpdateMaterialDto } from '../dtos/update-material.dto';
+import { ResultModel } from 'src/common/result-model';
 
 @Injectable()
 export class MaterialService {
@@ -21,8 +22,15 @@ export class MaterialService {
         return await this.materialRepository.findOne({ where: { name } });
     }
 
-    async getAll(): Promise<Material[]> {
-        return this.materialRepository.find();
+    async getAll(name: string): Promise<ResultModel<Material[]>> {
+        let data = null;
+        if(name != null && name.length > 0){
+            data = (await this.materialRepository.find({where: { isActive : true, name: Like(`%${name}%`)} , order: {id : "ASC"}}))
+        }
+        else{
+            data = await this.materialRepository.find({where : {isActive : true}});
+        }
+        return ResultModel.success(data, null)
     }
 
     async update(id: number, updateMaterialDto: UpdateMaterialDto) {
@@ -38,13 +46,12 @@ export class MaterialService {
         return await this.materialRepository.save(material);
     }
 
-    async delete(id: number) {
+    async delete(id: number) : Promise<ResultModel<boolean>> {
         const material = await this.materialRepository.findOneBy({id});
-
-        if (!material) {
-            throw new NotFoundException(`Material with id ${id} not found`);
+        if(material){
+            material.isActive = false;
+            await this.materialRepository.save(material);
         }
-
-        await this.materialRepository.remove(material);
+        return ResultModel.success(true, `Material with id ${id} has been deleted!`)
     }
 }

@@ -37,4 +37,8 @@ export class FilterUserDto extends PaginationRequestModel {
   @IsOptional()
   @IsDateString()
   joinDateTo: Date;
+
+  @ApiProperty()
+  @IsOptional()
+  name:string;
 }

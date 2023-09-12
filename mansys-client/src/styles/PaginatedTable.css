@@ -1,0 +1,14 @@
+.paginated-table-table--block{
+    display: block;
+}
+
+.paginated-table-pagination-container{
+    display: block;
+}
+
+.paginated-table-pagination--center{
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

@@ -8,8 +8,7 @@ export class Material {
 
     @Column({
         nullable: false,
-        unique: true,
-        type: 'varchar'
+        unique: true
     })
     name: string;
 
@@ -18,23 +17,25 @@ export class Material {
     })
     brand: string;
 
+    
     @Column({
-        nullable: false,
-        type: 'decimal'
-    })
-    cost: number;
-
-    @Column({
-        nullable: false,
-        type: 'varchar'
+        nullable: false
     })
     unit: string;
 
     @Column({
-        nullable: false,
-        type: 'int'
+        nullable: false
     })
     quantity: number;
+
+    @Column({
+        nullable: false,
+        type: 'decimal',
+        precision: 10,
+        scale: 2,
+        default : 0.0
+    })
+    cost: number;
 
     @Column({
         type: 'date',
@@ -42,6 +43,13 @@ export class Material {
         default: new Date(),
     })
     createDate: Date;
+
+    @Column({
+        type: 'boolean',
+        nullable: false,
+        default: true,
+      })
+    isActive: boolean = true;
 
     @OneToMany(() => BillOfMaterial, billOfMaterial => billOfMaterial.material)
     billOfMaterials: BillOfMaterial[];

@@ -26,4 +26,8 @@ export class CreateUserDto {
   @IsOptional()
   @ApiProperty()
   userRole: UserRole;
+  
+  @IsOptional()
+  @ApiProperty()
+  name:string;
 }

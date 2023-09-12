@@ -30,6 +30,7 @@ export class UsersBootstrapService implements OnApplicationBootstrap {
         email: process.env.DEFAULT_EMAIL,
         phone: process.env.DEFAULT_PHONE,
         userRole: UserRole.admin,
+        name : 'ADMIN'
       };
       await this.usersService.create(defaultAdmin);
       this.logger.log('Create a default admin user sucessfully!');

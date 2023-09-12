@@ -7,4 +7,5 @@ export class UserDto {
   phone: string;
   @IsNotEmpty()
   roles: string[];
+  name : string;
 }

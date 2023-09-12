@@ -17,6 +17,12 @@ export class User {
   username: string;
 
   @Column({
+    nullable: true,
+    unique: false,
+  })
+  name : string;
+
+  @Column({
     nullable: false,
   })
   password: string;
@@ -60,7 +66,7 @@ export class User {
 
 export const toUserDto = (data: User): UserDto => {
   if(!data) return null;
-  const { id, username, email, phone , userRole} = data;
-  let userDto: UserDto = { id, username, email, phone, roles: [userRole] };
+  const { id, username, email, phone , userRole, name} = data;
+  let userDto: UserDto = { id, username, email, phone, name, roles: [userRole] };
   return userDto;
 };

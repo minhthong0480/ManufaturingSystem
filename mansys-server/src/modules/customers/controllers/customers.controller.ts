@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { CustomersService } from '../sevices/customers.service';
 import { CreateCustomerDto } from '../dtos/create-customer.dto';
 import { UpdateCustomerDto as UpdateCustomerDto } from '../dtos/update-customer.dto';
+import { ApiBearerAuth, ApiTags, ApiParam } from "@nestjs/swagger";
 
+@ApiTags('customers')
+@ApiBearerAuth()
 @Controller('customers')
 export class CustomersController {
     constructor(private customersService: CustomersService) {}
 
-    @Get()
+    @Get('/getAll')
     async getAll() {
         return await this.customersService.getAll();
     }
