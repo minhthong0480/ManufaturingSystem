@@ -33,7 +33,7 @@ export class UsersController {
     private readonly userService: UsersService,
   ) {}
 
-    @Get()
+  @Get()
   findAll() {
     return this.userService.findAll();
   }

@@ -83,7 +83,7 @@ export class UsersService {
   }
 
   async getAll(): Promise<ResultModel<User[]>> {
-    const result = await this.usersRepository.find();
+    const result = await this.usersRepository.findBy({ isActive: true });
     return ResultModel.success(result, 'Success');
   }
   async findOneByUsername(username: string): Promise<UserDto> {
@@ -128,10 +128,13 @@ export class UsersService {
     return ResultModel.success<UserDto>(userDto, 'Success');
   }
 
-  async findAll(): Promise<UserDto[]> {
+  async findAll() {
     try {
-      const users = await this.usersRepository.find();
-      return users.map((user) => toUserDto(user));
+      const users = await this.usersRepository.findBy({ isActive: true });
+      return ResultModel.success(
+        users.map((user) => toUserDto(user)),
+        'Success!',
+      );
     } catch (error) {
       this.logger.error('Get all users error: ', error.message ?? error);
       throw new HttpException(
@@ -197,6 +200,12 @@ export class UsersService {
     if (filter.name) {
       query.andWhere('users.name like :name', {
         name: '%' + filter.name + '%',
+      });
+    }
+
+    if (filter.isActive) {
+      query.andWhere('users.isActive = :isActive', {
+        isActive: filter.isActive,
       });
     }
 
