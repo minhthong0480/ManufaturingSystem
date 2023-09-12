@@ -19,7 +19,7 @@ import * as faker from 'faker';
 import { UserRole } from '../enums/user-role.enum';
 import { FilterUserDto } from '../dto/filter-user.dto';
 import { Roles } from '../../../common/role.decorator';
-
+import { jwtConfig } from 'src/config/auth.config';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
@@ -38,18 +38,26 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const saltOrRounds = 10;
     createUserDto.password = await bcrypt.hash(
       createUserDto.password,
-      saltOrRounds,
+      jwtConfig.saltOrRounds,
     );
 
     user = await this.usersRepository.save(createUserDto);
     return toUserDto(user);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserDto> {
-    const user = await this.findOne(id);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      return ResultModel.fail('User not found!', 'User not found!');
+    }
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(
+        updateUserDto.password,
+        jwtConfig.saltOrRounds,
+      );
+    }
     try {
       const updatedUser = await this.usersRepository.save({
         ...user,
@@ -76,8 +84,8 @@ export class UsersService {
 
   async getAll(): Promise<ResultModel<User[]>> {
     const result = await this.usersRepository.find();
-    return ResultModel.success(result, "Success");
-}
+    return ResultModel.success(result, 'Success');
+  }
   async findOneByUsername(username: string): Promise<UserDto> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (!user) return null;
@@ -214,7 +222,7 @@ export class UsersService {
           email: faker.internet.email(),
           phone: faker.phone.phoneNumber(),
           userRole: UserRole.user,
-          name: faker.internet.email()
+          name: faker.internet.email(),
         });
         total--;
       } catch (error) {
