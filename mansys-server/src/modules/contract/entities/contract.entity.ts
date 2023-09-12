@@ -19,10 +19,14 @@ export class Contract {
   })
   customerId: number;
 
+  customerName: string;
+
   @Column({
     nullable: false,
   })
   userId: number;
+
+  userName: string;
 
   @Column({
     type: 'date',
@@ -38,7 +42,7 @@ export class Contract {
 
   @Column({
     type: 'decimal',
-    precision: 10,
+    precision: 17,
     scale: 2
   })
   total: number;
@@ -50,12 +54,17 @@ export class Contract {
   })
   contractItems: ContractItem[];
 
+  @Column({
+    nullable: false
+  })
+  statusId : number;
+
   @OneToMany(() => Timeline, timeline => timeline.contract, {
     eager: false,
     cascade: ['insert']
   })
   timeline: Timeline[];
-
+ 
   @Column({
     type: 'boolean',
     nullable: false,

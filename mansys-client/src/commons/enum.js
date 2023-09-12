@@ -10,6 +10,8 @@ export const API_CONTRACT = `${BASE_API_URL}/contract/`
 export const API_CONTRACT_FILTER = `${BASE_API_URL}/contract/r/filter/`
 export const API_CONTRACT_CREATE = `${BASE_API_URL}/contract`
 export const API_CONTRACT_DELETE = ``
+export const API_CONTRACT_STATUS = `${BASE_API_URL}/contract_status`
+export const API_CONTRACT_VALIDATE_STATUS = `${BASE_API_URL}/contract/validate`
 
 export const API_PRODUCTS = `${BASE_API_URL}/products`
 export const API_PRODUCTS_CREATE = `${BASE_API_URL}/products/create`

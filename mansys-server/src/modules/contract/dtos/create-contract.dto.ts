@@ -5,6 +5,7 @@ import {
   IsDateString,
   IsNotEmpty,
   IsNumber,
+  IsOptional
 } from 'class-validator';
 import { ContractItem } from '../entities/contract-item.entity';
 
@@ -37,4 +38,7 @@ export class CreateContractDto {
 
   @IsBoolean()
   isActive: boolean;
+
+  @IsOptional()
+  statusId : number;
 }

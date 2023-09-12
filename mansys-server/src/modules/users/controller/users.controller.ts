@@ -33,6 +33,11 @@ export class UsersController {
     private readonly userService: UsersService,
   ) {}
 
+    @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
+
   @Get()
   @UseGuards(RolesGuard)
   @Roles('admin')

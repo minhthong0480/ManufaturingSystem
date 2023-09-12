@@ -1,31 +1,20 @@
-import axios from "axios";
-import "../styles/Contract.css";
 import { ContractService } from "../services/contract-service";
+import { showErrorMessage } from "../commons/utilities"
 
 export const createContract = (navigate, contractData) => async (dispatch) => {
     const result = await ContractService.create(contractData);
-    if (result.code > 400) {
-        window.alert("Create Contract Error");
+    if (result.code >= 400) {
+        showErrorMessage(result.message || 'An error is occurred while creating the contract!')
         return;
     }
     navigate("/contracts");
 };
 
-export const deactivateContract = async (record) => {
-    const result = await ContractService.delete(record);
-    if (result.code > 400) {
-        window.alert("Delete Contract Error");
+export const updateContract = (contractData) => async (dispatch) => {
+    const result = await ContractService.update(contractData);
+    if (result.code >= 400) {
+        showErrorMessage(result.message || 'An error is occurred while updating the contract!')
         return;
     }
+    window.location.reload()
 };
-
-export const updateContract = async (token, updateData, id) =>
-    await axios.patch(
-        `${process.env.REACT_APP_API}/contract/${id}`,
-        updateData,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
-    );
