@@ -3,7 +3,14 @@ import { Button, Form, Input, Popconfirm, Space, Table } from "antd";
 import "../../styles//EmployeeTable.css";
 import Search from "antd/es/input/Search";
 import EmployeeModal from "./EmployeeModal";
-import { getAllUser } from "../../actions/user";
+import {
+  createUser,
+  deleteUser,
+  getAllUser,
+  saveUser,
+} from "../../actions/user";
+import { DeleteOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -84,29 +91,54 @@ const EditableCell = ({
 const EmployeeTable = () => {
   const [bottom, setBottom] = useState("bottomLeft");
   const [dataSource, setDataSource] = useState([]);
+  const [deleteID, setDeleteID] = useState();
+
+  const fetchAllUser = async () => {
+    const data = await getAllUser();
+    setDataSource(data.sort((a, b) => a.id - b.id));
+  };
 
   useEffect(() => {
-    async function fetchAllUser() {
-      const { data } = await getAllUser();
-      setDataSource(data.sort((a, b) => a.id - b.id));
-    }
     fetchAllUser();
-  }, []);
+  }, [deleteID]);
 
   const [count, setCount] = useState(2);
-  const [editMode, setEditMode] = useState(true);
-  const handleDelete = (key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
+  const [editEmployee, setEditEmployee] = useState(true);
+  const handleDelete = async (key) => {
+    const { data } = await deleteUser(key.id);
+    setDeleteID(data?.id);
   };
+  const handleAdd = async (form) => {
+    try {
+      const { data } = await createUser(form);
+      toast.success("Customer added");
+      setDataSource([...dataSource, data]);
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
+  };
+  const handleSave = async (form) => {
+    try {
+      const { data } = await saveUser(editEmployee.id, form);
+      toast.success("Customer added");
+      setDataSource(
+        dataSource.map((customer) =>
+          customer.id === editEmployee.id ? data : customer
+        )
+      );
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
+  };
+
   const defaultColumns = [
     {
-      title: "Avatar",
-      dataIndex: "avatar",
+      title: "Employee ID",
+      dataIndex: "id",
     },
     {
-      title: "Employee ID",
-      dataIndex: "employeeId",
+      title: "Username",
+      dataIndex: "username",
     },
     {
       title: "Name",
@@ -122,11 +154,7 @@ const EmployeeTable = () => {
     },
     {
       title: "Role",
-      dataIndex: "role",
-    },
-    {
-      title: "Active",
-      dataIndex: "active",
+      dataIndex: "roles",
     },
     {
       title: "Action",
@@ -134,38 +162,27 @@ const EmployeeTable = () => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Space size="middle">
-            <a
+            <Button
+              type="primary"
               onClick={() => {
-                setEditMode(true);
+                setEditEmployee(record);
                 showModal();
               }}
             >
               Edit
-            </a>
+            </Button>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
+              onConfirm={() => handleDelete(record)}
             >
-              <a>Delete</a>
+              <DeleteOutlined
+                style={{ marginLeft: "10px", fontSize: "20px" }}
+              />
             </Popconfirm>
           </Space>
         ) : null,
     },
   ];
-  const handleAdd = (form) => {
-    setDataSource([...dataSource, { ...form }]);
-    setCount(count + 1);
-  };
-  const handleSave = (row) => {
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    setDataSource(newData);
-  };
   const components = {
     body: {
       row: EditableRow,
@@ -187,7 +204,13 @@ const EmployeeTable = () => {
       }),
     };
   });
-  const onSearch = (value) => console.log(value);
+  const onSearch = (value) => {
+    if (!value) {
+      fetchAllUser();
+    } else {
+      setDataSource(dataSource.filter((data) => data.name.includes(value)));
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -208,11 +231,14 @@ const EmployeeTable = () => {
           placeholder="input search text"
           onSearch={onSearch}
           enterButton
-          // style={{ width: 304 }}
+          style={{ width: 304 }}
         />
         <Button
           classname="create-button"
-          onClick={showModal}
+          onClick={() => {
+            showModal();
+            setEditEmployee(null);
+          }}
           type="primary"
           style={{ width: "200px" }}
         >
@@ -233,7 +259,8 @@ const EmployeeTable = () => {
         handleOk={handleOk}
         handleCancel={handleCancel}
         handleAdd={handleAdd}
-        editMode={editMode}
+        handleSave={handleSave}
+        editEmployee={editEmployee}
       />
     </div>
   );

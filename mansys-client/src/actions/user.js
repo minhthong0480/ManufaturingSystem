@@ -10,5 +10,6 @@ export const createUser = async (userData) =>
 
 export const saveUser = async (id, userData) =>
   await AxiosClient.patch(`${process.env.REACT_APP_API}/users/${id}`, userData);
+
 export const deleteUser = async (id) =>
   await AxiosClient.delete(`${process.env.REACT_APP_API}/users/${id}`);

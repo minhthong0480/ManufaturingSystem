@@ -103,11 +103,34 @@ const CustomerTable = () => {
   }, [deleteID]);
 
   const [count, setCount] = useState(2);
-  const [editCustomer, setEditCustomer] = useState(null);
+  const [editCustomer, setEditCustomer] = useState(true);
 
   const handleDelete = async (key) => {
     const { data } = await deleteCustomer(key.id);
     setDeleteID(data?.id);
+  };
+  const handleAdd = async (form) => {
+    try {
+      const { data } = await createCustomer(form);
+      toast.success("Customer added");
+      setDataSource([...dataSource, data]);
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
+  };
+  const handleSave = async (form) => {
+    console.log(form);
+    try {
+      const { data } = await saveCustomer(editCustomer.id, form);
+      toast.success("Customer added");
+      setDataSource(
+        dataSource.map((customer) =>
+          customer.id === editCustomer.id ? data : customer
+        )
+      );
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
   };
 
   const defaultColumns = [
@@ -158,29 +181,7 @@ const CustomerTable = () => {
         ) : null,
     },
   ];
-  const handleAdd = async (form) => {
-    try {
-      const { data } = await createCustomer(form);
-      toast.success("Customer added");
-      setDataSource([...dataSource, data]);
-    } catch (error) {
-      toast.error("Fail to create new Customer");
-    }
-  };
-  const handleSave = async (form) => {
-    console.log(form);
-    try {
-      const { data } = await saveCustomer(editCustomer.id, form);
-      toast.success("Customer added");
-      setDataSource(
-        dataSource.map((customer) =>
-          customer.id === editCustomer.id ? data : customer
-        )
-      );
-    } catch (error) {
-      toast.error("Fail to create new Customer");
-    }
-  };
+
   const components = {
     body: {
       row: EditableRow,
