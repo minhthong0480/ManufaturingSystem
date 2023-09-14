@@ -16,3 +16,11 @@ export const createProducts = (payload) => async () => {
     }
     return onSuccess(result.data);
 }
+export const updateProduct = (payload) => async () => {
+    const result = await ProductsService.update(payload);
+    const { onSuccess = () => { } } = payload;
+    if (result.status !== 200) {
+        return onSuccess(result.data);
+    }
+    return onSuccess(result.data);
+}

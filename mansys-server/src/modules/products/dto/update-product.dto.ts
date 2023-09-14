@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, IsDecimal, IsOptional, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Supplier } from '../../suppliers/entities/suppliers.entity';
 
 class UpdateMaterialDto {
   @IsNumber()
@@ -16,27 +17,25 @@ export class UpdateProductDto {
   name?: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   @IsOptional() 
-  quantity?: number;
+  description?: string;
 
   @IsNotEmpty()
-  @IsDecimal()
   @IsOptional() 
   price?: number;
 
   @IsDecimal()
   @IsOptional()
-  tax?: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @IsOptional() 
-  sold?: number;
+  cost?: number;
 
   @IsNumber()
   @IsOptional() 
-  categoryId?: number;
+  category_id?: number;
+
+  @IsNumber()
+  @IsOptional() 
+  supplier_id?: number;
 
   @IsArray()
   @ValidateNested({ each: true })

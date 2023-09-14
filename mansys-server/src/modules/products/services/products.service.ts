@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { ResultModel } from 'src/common/result-model';
 import ProductDto from '../dto/product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -57,6 +58,24 @@ export class ProductsService {
     const product = await this.productsRepository.create(CreateProductDto);
     const save = await this.productsRepository.save(product);
     return ResultModel.success(product, 'Tạo sản phẩm thành công!');
+  }
+
+  async update(id: number, dto: UpdateProductDto) {
+    console.log(id)
+    console.log(dto)
+    const product = await this.productsRepository.findOneBy({ id });
+    if (!product) {
+      return ResultModel.fail('', 'Product not found!');
+    }
+
+    const update = await this.productsRepository.save({
+      ...product,
+      ...dto,
+    });
+
+    console.log(update)
+
+    return ResultModel.success(update, 'Success!');
   }
 
   async getOneById(id: number) {
