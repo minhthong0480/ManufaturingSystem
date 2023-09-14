@@ -1,102 +1,138 @@
-import { Descriptions, Modal, List, Typography } from 'antd';
+import { Descriptions, Modal, List, Typography } from "antd";
 import { React, useState, useEffect, Fragment } from "react";
 import moment from "moment";
-import { Row, Col, Select, DatePicker, Button, Input, Steps, TextArea } from "antd";
+import {
+  Row,
+  Col,
+  Select,
+  DatePicker,
+  Button,
+  Input,
+  Steps,
+  TextArea,
+} from "antd";
 import { formatCurrency } from "../../commons/utilities";
 import FilterableSelect from "../Commons/FilterableSelection";
-import { CategoryService } from "../../services/category-service";
+import { SupplierService } from "../../services/supplier-service";
 
 const ProductDetail = (props) => {
   const { Text } = Typography;
   const { isModalOpen, record, setIsModalDetailOpen, dataCategory } = props;
   const { name, price, createDate, supplier, category_id } = record;
 
-
   const [disabled, setDisabled] = useState(true);
-  const [product, setProduct] = useState({})
-
-  console.log(record);
+  const [product, setProduct] = useState({});
+  const [supplierSelections, setSupplierSelections] = useState([]);
 
   useEffect(() => {
     setProduct({
       name: name,
       price: price,
       category_id: category_id,
-      category: record.category
-    })
+      category: record.category,
+      supplier_id: record.supplier_id,
+      supplier: record.supplier,
+    });
+
+    const loadData = async () => {
+      const allSupplers = await SupplierService.getAll();
+      if (allSupplers.isSuccess && allSupplers.data && allSupplers.data.data) {
+        const mappedSuppliers = allSupplers.data.data.map((e) => ({
+          key: e.name,
+          value: e.id,
+        }));
+        setSupplierSelections(mappedSuppliers);
+      }
+      console.log("supp", allSupplers);
+    };
+    loadData();
   }, [record]);
 
   const dataMaterial = [
     {
-      title: 'Mặt bàn gỗ ',
-      description: '20cm*80cm*18mm'
+      title: "Mặt bàn gỗ ",
+      description: "20cm*80cm*18mm",
     },
     {
-      title: 'gỗ làm kệ',
-      description: '40cm*80cm*18mm'
-    }
-  ]
+      title: "gỗ làm kệ",
+      description: "40cm*80cm*18mm",
+    },
+  ];
   const items = [
     {
-      key: '1',
-      label: 'Tên sản phẩm',
+      key: "1",
+      label: "Tên sản phẩm",
       children: name,
     },
     {
-      key: '2',
-      label: 'Giá',
+      key: "2",
+      label: "Giá",
       span: 2,
-      children: Math.round(price).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,') + " VND",
+      children:
+        Math.round(price)
+          .toFixed(0)
+          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + " VND",
     },
     {
-      key: '4',
-      label: 'Ngày tạo',
-      children: moment(createDate).format('DD/MM/YYYY')
+      key: "4",
+      label: "Ngày tạo",
+      children: moment(createDate).format("DD/MM/YYYY"),
     },
     {
-      key: '5',
-      label: 'Nhà cung cấp',
+      key: "5",
+      label: "Nhà cung cấp",
       span: 2,
       children: supplier,
     },
     {
-      key: '6',
-      label: 'Ngành hàng',
+      key: "6",
+      label: "Ngành hàng",
       span: 3,
-      children: dataCategory.find(f => f.id == category_id)?.name || "không có",
+      children:
+        dataCategory.find((f) => f.id == category_id)?.name || "không có",
     },
     {
-      key: '7',
-      label: 'Nguyên vật liệu',
-      children: <List
-        itemLayout="horizontal"
-        dataSource={dataMaterial}
-        renderItem={(item, index) => (
-          <List.Item>
-            <List.Item.Meta
-              title={<a href="https://ant.design">{item.title}</a>}
-              description={item.description}
-            />
-            <Text>Số lượng : 1</Text>
-          </List.Item>
-        )}
-      />
+      key: "7",
+      label: "Nguyên vật liệu",
+      children: (
+        <List
+          itemLayout="horizontal"
+          dataSource={dataMaterial}
+          renderItem={(item, index) => (
+            <List.Item>
+              <List.Item.Meta
+                title={<a href="https://ant.design">{item.title}</a>}
+                description={item.description}
+              />
+              <Text>Số lượng : 1</Text>
+            </List.Item>
+          )}
+        />
+      ),
     },
   ];
 
   const handleChangeCategory = (category_id) => {
     setProduct({
       ...product,
-      category_id: category_id
-    })
-  }
+      category_id: category_id,
+    });
+  };
+
+  const handleChangeSupplier = (supplier_id) => {
+    setProduct({
+      ...product,
+      supplier_id: supplier_id,
+      supplier: supplierSelections.find((e) => e.value == supplier_id).key,
+    });
+  };
 
   const handleOk = () => {
-    setIsModalDetailOpen(false)
+    setIsModalDetailOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalDetailOpen(false)
+    setIsModalDetailOpen(false);
   };
 
   function handleEditClick() {
@@ -107,11 +143,12 @@ const ProductDetail = (props) => {
 
   function resetData() {
     // TODO
-    setDisabled(!disabled)
+    setDisabled(!disabled);
   }
 
   return (
-    <Modal title="Thông tin chi tiết sản phẩm"
+    <Modal
+      title="Thông tin chi tiết sản phẩm"
       width="60vw"
       open={isModalOpen}
       onOk={handleOk}
@@ -218,18 +255,20 @@ const ProductDetail = (props) => {
             <div>
               <label>Supllier</label>
             </div>
-            <Select
+            <FilterableSelect
+              onChange={(e) => {
+                handleChangeSupplier(e);
+              }}
               disabled={disabled}
-              defaultOptions={record.supplier}
-              value={record.category}
+              defaultOptions={supplierSelections}
+              value={product.supplier_id}
               className="w-100"
               placeholder="Select an option"
             />
           </Col>
         </Row>
       </div>
-
     </Modal>
-  )
-}
+  );
+};
 export default ProductDetail;
