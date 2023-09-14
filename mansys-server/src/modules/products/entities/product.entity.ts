@@ -1,5 +1,5 @@
 import { Inventory } from 'src/modules/inventory/entities/inventory.entity';
-import { BillOfMaterial } from '../../billOfMaterial/entities/billOfMaterial.entity';
+import { BillOfMaterial } from '../../billOfMaterial/entities/bill-of-material.entity';
 import { Category } from '../../category/category.entity';
 import {
   Entity,

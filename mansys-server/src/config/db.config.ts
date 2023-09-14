@@ -3,7 +3,7 @@ import { User } from '../modules/users/entities/user.entity';
 import { Material } from '../modules/materials/entities/material.entity';
 import { Customer } from '../modules/customers/entities/customers.entity';
 import { Category } from '../modules/category/category.entity';
-import { BillOfMaterial } from '../modules/billOfMaterial/entities/billOfMaterial.entity';
+import { BillOfMaterial } from '../modules/billOfMaterial/entities/bill-of-material.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { Contract } from 'src/modules/contract/entities/contract.entity';
 import { ContractItem } from 'src/modules/contract/entities/contract-item.entity';
