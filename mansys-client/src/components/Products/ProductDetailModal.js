@@ -4,14 +4,28 @@ import moment from "moment";
 import { Row, Col, Select, DatePicker, Button, Input, Steps, TextArea } from "antd";
 import { formatCurrency } from "../../commons/utilities";
 import FilterableSelect from "../Commons/FilterableSelection";
+import { CategoryService } from "../../services/category-service";
 
 const ProductDetail = (props) => {
   const { Text } = Typography;
   const { isModalOpen, record, setIsModalDetailOpen, dataCategory } = props;
   const { name, price, createDate, supplier, category_id } = record;
 
+
   const [disabled, setDisabled] = useState(true);
+  const [product, setProduct] = useState({})
+
   console.log(record);
+
+  useEffect(() => {
+    setProduct({
+      name: name,
+      price: price,
+      category_id: category_id,
+      category: record.category
+    })
+  }, [record]);
+
   const dataMaterial = [
     {
       title: 'Mặt bàn gỗ ',
@@ -69,6 +83,13 @@ const ProductDetail = (props) => {
       />
     },
   ];
+
+  const handleChangeCategory = (category_id) => {
+    setProduct({
+      ...product,
+      category_id: category_id
+    })
+  }
 
   const handleOk = () => {
     setIsModalDetailOpen(false)
@@ -182,10 +203,13 @@ const ProductDetail = (props) => {
             <div>
               <label>Category</label>
             </div>
-            <Select
+            <FilterableSelect
+              onChange={(e) => {
+                handleChangeCategory(e);
+              }}
               disabled={disabled}
-              defaultOptions={record.category}
-              value={record.category}
+              defaultOptions={dataCategory}
+              value={product.category_id}
               className="w-100"
               placeholder="Select an option"
             />

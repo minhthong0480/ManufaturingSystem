@@ -12,6 +12,7 @@ import moment from "moment";
 import '../styles/Product.css';
 import ProductDetailModal from '../components/Products/ProductDetailModal';
 import { formatCurrency } from "../commons/utilities";
+import { CategoryService } from "../services/category-service";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -88,7 +89,17 @@ const Products = () => {
 
     useEffect(() => {
         dispatch(getAllProducts({ onSuccess: onSuccessProducts }));
-        dispatch(getAllCategory({ onSuccess: onSuccessCategory }));
+        // dispatch(getAllCategory({ onSuccess: onSuccessCategory }));
+    }, [])
+
+    useEffect(() => {
+        const loadData = async () => {
+            const categories = await CategoryService.getAll();
+            console.log("er", categories)
+            setdataSelect(categories.data)
+        }
+
+        loadData();
     }, [])
 
     const onSeach = () => {
@@ -283,7 +294,11 @@ const Products = () => {
                 isModalOpen={isModalDetailOpen}
                 record={dataDetail}
                 setIsModalDetailOpen={setIsModalDetailOpen}
-                dataCategory={dataSelect}
+                dataCategory={dataSelect.map((e) => ({
+                    key: e.name,
+                    value: e.id,
+                }))}
+
             />
         </Layout>
     );
