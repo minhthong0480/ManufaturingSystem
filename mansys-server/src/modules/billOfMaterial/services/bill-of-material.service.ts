@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BillOfMaterial } from '../entities/bill-of-material.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ResultModel } from 'src/common/result-model';
 
 @Injectable()
 export class BillOfMaterialService {
@@ -16,6 +17,10 @@ export class BillOfMaterialService {
       where: { product_id },
     });
 
-    return bills;
+    if (!bills) {
+      return ResultModel.fail('', 'fail');
+    }
+
+    return ResultModel.success(bills, 'Success!');
   }
 }

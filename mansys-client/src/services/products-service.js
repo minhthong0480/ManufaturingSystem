@@ -1,5 +1,5 @@
 import { AxiosClient } from "../commons/axios-client";
-import { API_PRODUCTS, API_PRODUCTS_CREATE } from "../commons/enum";
+import { API_PRODUCTS, API_PRODUCTS_CREATE, API_BILL_PRODUCT } from "../commons/enum";
 import { requestSucess, requestFail } from "../commons/utilities";
 
 export const ProductsService = {
@@ -23,4 +23,14 @@ export const ProductsService = {
       data: result.data.data,
     });
   },
+
+  getProductBill: async function (productId) {
+    const api = `${API_BILL_PRODUCT}/${productId}`;
+    const result = await AxiosClient.get(api);
+    if (result.status >= 400 || !result.data.isSuccess)
+      return requestFail(result.message);
+    return requestSucess({
+      data: result.data.data,
+    });
+  }
 };
