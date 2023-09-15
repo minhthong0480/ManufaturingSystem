@@ -16,8 +16,8 @@ export class CreateProductDto {
   name: string;
 
   @IsNotEmpty()
-  @IsString()
-  supplier: string;
+  @IsNumber()
+  supplier_id: number;
 
   @IsNotEmpty()
   @IsString()

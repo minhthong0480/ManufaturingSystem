@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import {BillOfMaterial} from "../../billOfMaterial/entities/billOfMaterial.entity"
+import {BillOfMaterial} from "../../billOfMaterial/entities/bill-of-material.entity"
 
 @Entity('material')
 export class Material {

@@ -41,4 +41,8 @@ export class FilterUserDto extends PaginationRequestModel {
   @ApiProperty()
   @IsOptional()
   name:string;
+
+  @ApiProperty()
+  @IsOptional()
+  isActive:boolean;
 }
