@@ -25,7 +25,7 @@ export class UpdateProductDto {
   @IsOptional() 
   price?: number;
 
-  @IsDecimal()
+  @IsNotEmpty()
   @IsOptional()
   cost?: number;
 
