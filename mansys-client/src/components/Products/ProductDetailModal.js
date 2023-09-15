@@ -131,7 +131,7 @@ const ProductDetail = (props) => {
       ...material,
       material_id: selectedMaterial.value,
       brand: selectedMaterial.brand,
-      cost: selectedMaterial.cost
+      cost: selectedMaterial.cost,
     };
 
     const newProducts = [
@@ -218,6 +218,7 @@ const ProductDetail = (props) => {
       cost: product.cost,
       category_id: product.category_id,
       supplier_id: product.supplier_id,
+      materials: billList
     };
     setDisabled(!disabled);
     dispatch(updateProduct(update, onSuccessSave));

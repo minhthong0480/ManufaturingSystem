@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString, IsDecimal, IsOptional, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Supplier } from '../../suppliers/entities/suppliers.entity';
+import { Material } from 'src/modules/materials/entities/material.entity';
 
 class UpdateMaterialDto {
   @IsNumber()
@@ -38,8 +39,6 @@ export class UpdateProductDto {
   supplier_id?: number;
 
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => UpdateMaterialDto)
   @IsOptional()
-  requiredMaterials?: UpdateMaterialDto[];
+  materials?: Material[];
 }

@@ -18,9 +18,33 @@ export class BillOfMaterialService {
     });
 
     if (!bills) {
-      return ResultModel.fail('', 'fail');
+      return ResultModel.fail([], 'fail');
     }
 
     return ResultModel.success(bills, 'Success!');
+  }
+
+  async saveAll(bills) {
+    return await this.billRepository.save(bills);
+  }
+
+  async updateBills(product_id, newBills) {
+    const bills = await this.billRepository.findBy({ product_id });
+    const deletedBills = bills
+      .filter((bill) => {
+        const a = newBills.find((e) => e.id == bill.id);
+        return a ? false : true;
+      })
+      .map((e) => e.id);
+
+    if (deletedBills && deletedBills.length > 0)
+      await this.billRepository.delete(deletedBills);
+
+    if (newBills && newBills.length > 0)
+      await this.saveAll(
+        newBills.map((e: BillOfMaterial) => {
+          return { ...e, product_id: product_id };
+        }),
+      );
   }
 }
