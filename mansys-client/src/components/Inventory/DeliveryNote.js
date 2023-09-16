@@ -11,36 +11,14 @@ import { PaginatedTable } from '../Commons/PaginatedTable'
 import { showErrorMessage, formatCurrency } from '../../commons/utilities'
 import { Row, Col, Select, DatePicker, Button, Input, Steps, Tabs } from "antd";
 import InventoryList from './InventoryList';
-import DeliveryNote from "./DeliveryNote";
-import ReceivingNote from "./ReceivingNote";
 
-const Inventory = () => {
+const DeliveryNote = () => {
   const navigate = useNavigate();
-  const items = [
-    {
-      key: '1',
-      label: 'Inventory',
-      children: <InventoryList></InventoryList>,
-    },
-    {
-      key: '2',
-      label: 'Delivery Note',
-      children: <DeliveryNote></DeliveryNote>,
-    },
-    {
-      key: '3',
-      label: 'Receiving Note',
-      children: <ReceivingNote></ReceivingNote>,
-    },
-  ];
-  const onChange = (key) => {
-    console.log(key);
-  };
   return (
     <Fragment>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <h1>Quan li Delivery Note</h1>
     </Fragment>
   );
 };
 
-export default Inventory;
+export default DeliveryNote;
