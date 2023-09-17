@@ -25,6 +25,8 @@ export const API_BILL_PRODUCT = `${BASE_API_URL}/bills/product`
 export const API_INVENTORY = `${BASE_API_URL}/inventory/`
 export const API_INVENTORY_FILTER = `${BASE_API_URL}/inventory/filter`
 
+export const API_DELIVERY_NOTE_FILTER = `${BASE_API_URL}/delivery-notes/filter`
+
 export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`
 export const API_MATERIAL_DELETE = `${BASE_API_URL}/materials/:id`
 export const API_MATERIAL_UPDATE = `${BASE_API_URL}/materials/:id`
