@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -12,12 +13,16 @@ import { Product } from '../entities/product.entity';
 import { ResultModel } from 'src/common/result-model';
 import ProductDto from '../dto/product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
+import { BillOfMaterialService } from '../../billOfMaterial/services/bill-of-material.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
+
+    @Inject(BillOfMaterialService)
+    private readonly billService: BillOfMaterialService,
   ) {}
 
   async getProducts(filterDto: GetProductsFilterDto): Promise<Product[]> {
@@ -61,8 +66,7 @@ export class ProductsService {
   }
 
   async update(id: number, dto: UpdateProductDto) {
-    console.log(id)
-    console.log(dto)
+    console.log(dto);
     const product = await this.productsRepository.findOneBy({ id });
     if (!product) {
       return ResultModel.fail('', 'Product not found!');
@@ -73,7 +77,7 @@ export class ProductsService {
       ...dto,
     });
 
-    console.log(update)
+    await this.billService.updateBills(id, dto.materials);
 
     return ResultModel.success(update, 'Success!');
   }

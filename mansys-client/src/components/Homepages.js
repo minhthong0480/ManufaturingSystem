@@ -65,6 +65,12 @@ const cardData = [
     url: "/products",
     name: "Quản Lý sản phẩm",
   },
+  {
+    id: 7,
+    imageSrc: <InboxOutlined />,
+    url: "/inventory",
+    name: "Quản Lý Iventory",
+  },
 ];
 
 function Homepage() {
