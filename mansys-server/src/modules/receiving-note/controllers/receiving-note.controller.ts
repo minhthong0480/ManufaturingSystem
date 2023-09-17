@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ReceivingNoteService } from '../services/receiving-note.service';
 import { CreateReceivingNoteDto } from '../dto/create-receiving-note.dto';
 import { FilterReceivingNoteDto } from '../dto/filter-receiving-note.dto';
@@ -12,8 +12,8 @@ export class ReceivingNoteController {
     return this.receivingNoteService.create(dto);
   }
 
-  @Post('/filter')
-  filter(@Body() dto: FilterReceivingNoteDto) {
+  @Get('/filter')
+  filter(@Query() dto: FilterReceivingNoteDto) {
     return this.receivingNoteService.filter(dto);
   }
 }
