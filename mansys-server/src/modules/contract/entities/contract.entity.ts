@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { ContractItem } from './contract-item.entity';
 import { Timeline } from '../../timeline/entities/timeline.entity';
+import { ContractStatus } from 'src/modules/contract_status/entities/contract_status.entity';
 
 @Entity('contract')
 export class Contract {
@@ -58,6 +59,10 @@ export class Contract {
     nullable: false
   })
   statusId : number;
+
+  @ManyToOne(() => ContractStatus)
+  @JoinColumn({ name: 'statusId' })
+  status : ContractStatus;
 
   @OneToMany(() => Timeline, timeline => timeline.contract, {
     eager: false,

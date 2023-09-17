@@ -28,6 +28,8 @@ export const signOut = (navigate) => async (dispatch) => {
     dispatch({
       type: ACTION_AUTH_LOGOUT
     });
-    navigate("/login");
+    window.setTimeout(() => {
+      navigate("/login");
+    }, 2000)
   }
 };

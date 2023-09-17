@@ -50,7 +50,7 @@ export class ContractService {
   async filter(
     filterDto: ContractFilterDTO,
   ): Promise<ResultListModel<Contract>> {
-    var query = this.contractRepository.createQueryBuilder('contracts');
+    var query = this.contractRepository.createQueryBuilder('contracts').leftJoinAndSelect("contracts.status", "status");
 
     if (filterDto.contractNumber) {
       query.andWhere('contracts.contractNumber like :contractNumber', {
@@ -110,6 +110,11 @@ export class ContractService {
       query.andWhere('contracts.isActive = :isActive', {
         isActive: filterDto.isActive,
       });
+    }
+
+    let listOfStatus = filterDto.listOfStatus != null ? filterDto.listOfStatus.split(',').map(e => Number.parseInt(e)) : []
+    if(listOfStatus.length > 0){
+      query.andWhere('contracts.statusId IN (:...values)', {values : listOfStatus});
     }
 
     const totalRows = await query.getCount();

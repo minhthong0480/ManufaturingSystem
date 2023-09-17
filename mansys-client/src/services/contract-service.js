@@ -13,15 +13,21 @@ export const ContractService = {
 		})
 	},
 
-	filter: async function (page, pageSize, term, isActive) {
-		let result;
-		if (term) {
-			const contractNumber = term;
-
-			result = await AxiosClient.get(API_CONTRACT_FILTER, { params: { page, pageSize, isActive, contractNumber} })
+	filter: async function (page, pageSize, term, listOfStatus, isActive) {
+		
+		let params = {
+			page, pageSize, isActive
 		}
-		else
-			result = await AxiosClient.get(API_CONTRACT_FILTER, { params: { page, pageSize, isActive } })
+
+		if (term) {
+			params.term = term
+		}
+
+		if(listOfStatus != null && listOfStatus.length > 0){
+			params.listOfStatus = listOfStatus.join(',')
+		}
+		
+		let result = await AxiosClient.get(API_CONTRACT_FILTER, { params})
 
 		if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
 		return requestSucess({
