@@ -20,6 +20,10 @@
     margin-top: 1rem;  
 }
 
+.m-left--1rem{
+  margin-left: 1rem;  
+}
+
 .w-100{
     width: 100%;
 }

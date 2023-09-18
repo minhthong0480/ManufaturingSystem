@@ -10,7 +10,7 @@ import { MaterialModule } from './modules/materials/material.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ProductsModule } from './modules/products/products.module';
-import { BillOfMaterialModule } from './modules/billOfMaterial/billOfMaterial.module';
+import { BillOfMaterialModule } from './modules/billOfMaterial/bill-of-material.module';
 import { TimelineModule } from './modules/timeline/timeline.module';
 import { ContractModule } from './modules/contract/contract.module';
 import { ContractStatusModule } from './modules/contract_status/contract_status.module';

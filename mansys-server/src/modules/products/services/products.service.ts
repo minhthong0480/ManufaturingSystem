@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -10,14 +11,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { ResultModel } from 'src/common/result-model';
-import  ProductDto  from '../dto/product.dto'
+import ProductDto from '../dto/product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
+import { BillOfMaterialService } from '../../billOfMaterial/services/bill-of-material.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productsRepository: Repository<Product>,
-  ) { }
+
+    @Inject(BillOfMaterialService)
+    private readonly billService: BillOfMaterialService,
+  ) {}
 
   async getProducts(filterDto: GetProductsFilterDto): Promise<Product[]> {
     const { search } = filterDto;
@@ -48,13 +54,32 @@ export class ProductsService {
   }
 
   async create(CreateProductDto: CreateProductDto) {
-    const checkProduct = await this.productsRepository.findOne({ where: { name: CreateProductDto.name } });
+    const checkProduct = await this.productsRepository.findOne({
+      where: { name: CreateProductDto.name },
+    });
     if (checkProduct) {
-      return ResultModel.fail('', 'Sản phẩm đã tồn tại!')
+      return ResultModel.fail('', 'Sản phẩm đã tồn tại!');
     }
     const product = await this.productsRepository.create(CreateProductDto);
     const save = await this.productsRepository.save(product);
     return ResultModel.success(product, 'Tạo sản phẩm thành công!');
+  }
+
+  async update(id: number, dto: UpdateProductDto) {
+    console.log(dto);
+    const product = await this.productsRepository.findOneBy({ id });
+    if (!product) {
+      return ResultModel.fail('', 'Product not found!');
+    }
+
+    const update = await this.productsRepository.save({
+      ...product,
+      ...dto,
+    });
+
+    await this.billService.updateBills(id, dto.materials);
+
+    return ResultModel.success(update, 'Success!');
   }
 
   async getOneById(id: number) {
@@ -62,9 +87,23 @@ export class ProductsService {
   }
 
   async getAll(): Promise<ProductDto[]> {
-    const data = await this.productsRepository.find({relations: ['category']});
-    if(data == null || data.length == 0) 
-      return []
-    return data.map(e => (new ProductDto(e.id, e.name, e.description, e.supplier, e.cost, e.price, e.category != null ? e.category.name : '', e.category_id)));
+    const data = await this.productsRepository.find({
+      relations: ['category', 'supplier'],
+    });
+    if (data == null || data.length == 0) return [];
+    return data.map(
+      (e) =>
+        new ProductDto(
+          e.id,
+          e.name,
+          e.description,
+          e.supplier != null ? e.supplier.name : '',
+          e.supplier_id,
+          e.cost,
+          e.price,
+          e.category != null ? e.category.name : '',
+          e.category_id,
+        ),
+    );
   }
 }

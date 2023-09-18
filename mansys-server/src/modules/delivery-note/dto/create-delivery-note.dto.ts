@@ -6,7 +6,6 @@ export class CreateDeliveryNoteDto {
   customerId: number;
 
   @IsNotEmpty()
-  @IsDateString()
   deliveryDate: Date;
 
   @IsNotEmpty()
