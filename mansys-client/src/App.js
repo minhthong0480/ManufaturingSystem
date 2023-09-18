@@ -20,6 +20,7 @@ import { Layout, Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import ContractEdit from "./components/Contract/ContractEdit";
 import Inventory from "./components/Inventory/Inventory";
+import DeliveryNoteEdit from "./components/Inventory/DeliveryNoteEdit";
 const { Content, Footer } = Layout;
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <Route exact path="/material" element={<MaterialForm />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/inventory" element={<Inventory />} />
+          <Route exact path="/delivery_note/:id" element={<DeliveryNoteEdit />} />
         </Routes>
       </Content>
       <Footer

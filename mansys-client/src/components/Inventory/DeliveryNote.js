@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
@@ -49,9 +49,8 @@ const DeliveryNote = () => {
   };
 
   const handleEdit = (record) => {
-    // let path = `/edit_inventory/${record.id}`;
-    // navigate(path);
-    console.log("edit")
+    const path = `/delivery_note/${record.id}`
+    navigate(path);
   };
 
   const handleDelete = async (record) => {

@@ -18,6 +18,14 @@ export class DeliveryNoteSerive {
     private readonly customerService: CustomersService,
   ) {}
 
+  async get (id: number) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({id});
+    if (!deliveryNote) {
+      return ResultModel.fail({}, "Failed!");
+    }
+    return ResultModel.success(deliveryNote, "Success!!!");
+  }
+
   async create(dto: CreateDeliveryNoteDto) {
     const customer = await this.customerService.findOne(dto.customerId);
     if (!customer) {

@@ -1,5 +1,5 @@
 import { AxiosClient } from '../commons/axios-client'
-import { API_DELIVERY_NOTE_FILTER, API_INVENTORY } from '../commons/enum'
+import { API_DELIVERY_NOTE_FILTER, API_DELIVERY_NOTE } from '../commons/enum'
 import { requestSucess, requestFail } from '../commons/utilities'
 
 export const DeliveryNoteService = {
@@ -27,4 +27,22 @@ export const DeliveryNoteService = {
       data: result.data.data
     })
   },
+
+  get: async function (id) {
+    const api = `${API_DELIVERY_NOTE}${id}`;
+    const result = await AxiosClient.get(api)
+    if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
+    return requestSucess({
+      data: result.data.data
+    })
+  },
+
+  update: async function (deliveryNote) {
+    const api = `${API_DELIVERY_NOTE}${deliveryNote.id}`;
+    const result = await AxiosClient.patch(api, deliveryNote)
+    if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
+    return requestSucess({
+      data: result.data.data
+    })
+  }
 }
