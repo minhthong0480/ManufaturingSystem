@@ -18,7 +18,7 @@ import { ProductsService } from "../../services/products-service";
 import { MaterialService } from "../../services/material-service";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProduct } from "../../actions/products";
-import ProducMaterial from "./ProductMaterial"
+import ProducMaterial from "./ProductMaterial";
 import {
   showErrorMessage,
   showSuccessMessage,
@@ -28,7 +28,13 @@ import {
 const ProductDetail = (props) => {
   const dispatch = useDispatch();
   const { Text } = Typography;
-  const { isModalOpen, record, setIsModalDetailOpen, dataCategory, onSuccessSave } = props;
+  const {
+    isModalOpen,
+    record,
+    setIsModalDetailOpen,
+    dataCategory,
+    onSuccessSave,
+  } = props;
 
   const [disabled, setDisabled] = useState(true);
   const [product, setProduct] = useState({
@@ -71,18 +77,18 @@ const ProductDetail = (props) => {
       if (record.id) {
         const allBills = await ProductsService.getProductBill(record.id);
         if (allBills.isSuccess && allBills.data) {
-          const mapped = allBills.data.data.map(bill => {
+          const mapped = allBills.data.data.map((bill) => {
             const material = bill.material;
-            delete bill.material
+            delete bill.material;
             return {
               ...bill,
               name: material.name,
               brand: material.brand,
-              cost: material.cost
-            }
-          })
+              cost: material.cost,
+            };
+          });
           setBillList(mapped);
-          console.log(mapped)
+          console.log(mapped);
         }
       }
 
@@ -92,7 +98,7 @@ const ProductDetail = (props) => {
           key: e.name,
           value: e.id,
           brand: e.brand,
-          cost: e.cost
+          cost: e.cost,
         }));
         setMaterialList(mapped);
       }
@@ -147,7 +153,7 @@ const ProductDetail = (props) => {
       const quantity = Number.parseInt(newProducts[p].quantity);
       total += price * quantity;
     }
-    setProduct({ ...product, cost: total })
+    setProduct({ ...product, cost: total });
   };
 
   const handleOnQuantityChange = (bill, e) => {
@@ -166,11 +172,11 @@ const ProductDetail = (props) => {
     for (var p = 0; p < newBillList.length; p++) {
       const price = Number.parseInt(newBillList[p].cost);
       const quantity = Number.parseInt(newBillList[p].quantity);
-      console.log(price, " ", quantity)
+      console.log(price, " ", quantity);
       total += price * quantity;
     }
     setBillList(newBillList);
-    setProduct({ ...product, cost: total })
+    setProduct({ ...product, cost: total });
   };
 
   const handleOnRemoveMaterial = function (bill) {
@@ -184,18 +190,18 @@ const ProductDetail = (props) => {
     for (var p = 0; p < newBillList.length; p++) {
       const price = Number.parseInt(newBillList[p].cost);
       const quantity = Number.parseInt(newBillList[p].quantity);
-      console.log(price, " ", quantity)
+      console.log(price, " ", quantity);
       total += price * quantity;
     }
     setBillList(newBillList);
-    setProduct({ ...product, cost: total })
+    setProduct({ ...product, cost: total });
   };
 
   const handleAddMaterial = (e) => {
     let nextId = billList.length + 1;
     nextId = nextId == 0 ? -1 : -nextId;
     const nextBill = { id: nextId, quantity: 0 };
-    setBillList([...billList, nextBill])
+    setBillList([...billList, nextBill]);
     // document.getElementById("saveBtn").scrollIntoView({ behavior: "smooth" });
   };
 
@@ -218,11 +224,11 @@ const ProductDetail = (props) => {
       cost: product.cost,
       category_id: product.category_id,
       supplier_id: product.supplier_id,
-      materials: billList
+      materials: billList,
     };
     setDisabled(!disabled);
     dispatch(updateProduct(update, onSuccessSave));
-    onSuccessSave(update)
+    onSuccessSave(update);
   };
 
   const handleCancel = () => {
@@ -381,7 +387,11 @@ const ProductDetail = (props) => {
               </h4>
             </div>
             <div className="text-align-right">
-              <Button type="primary" onClick={handleAddMaterial} disabled={disabled}>
+              <Button
+                type="primary"
+                onClick={handleAddMaterial}
+                disabled={disabled}
+              >
                 <PlusOutlined />
                 Add Material
               </Button>
