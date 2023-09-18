@@ -25,6 +25,7 @@ import {
 } from "../../commons/utilities";
 import { useNavigate, useParams } from "react-router-dom";
 import { DeliveryNoteService } from "../../services/delivery-note-service"
+import DeliveryNoteItems from "./DeliveryNoteItems";
 
 const DeliveryNoteEdit = (props) => {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const DeliveryNoteEdit = (props) => {
   });
   const [billList, setBillList] = useState([]);
   const [deliverNoteError, setDeliveryNoteError] = useState([]);
+  const [productSelections, setProductSelections] = useState([]);
 
   const loadData = async () => {
     const getDeliveryNote = await DeliveryNoteService.get(params.id);
@@ -50,52 +52,23 @@ const DeliveryNoteEdit = (props) => {
       setDeliveryNote(deliveryNote);
       console.log(deliveryNote)
     }
+
+    const getAllProduct = await ProductsService.getAll();
+    if (getAllProduct.status == 200 && getAllProduct.data) {
+      const mappedData = getAllProduct.data.map((e) => ({
+        key: e.name,
+        value: e.id,
+      }));
+      setProductSelections(mappedData);
+    } else {
+      showErrorMessage("An error is occurred while loading products!");
+    }
   }
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const handleOnQuantityChange = (bill, e) => {
-    const index = billList.findIndex((e) => e.id == bill.id);
-    const editedBill = {
-      ...bill,
-      quantity: Number.parseInt(e.target.value),
-    };
-    const newBillList = [
-      ...billList.slice(0, index),
-      editedBill,
-      ...billList.slice(index + 1),
-    ];
-
-    let total = 0;
-    for (var p = 0; p < newBillList.length; p++) {
-      const price = Number.parseInt(newBillList[p].cost);
-      const quantity = Number.parseInt(newBillList[p].quantity);
-      console.log(price, " ", quantity)
-      total += price * quantity;
-    }
-    setBillList(newBillList);
-    setDeliveryNote({ ...deliveryNote, cost: total })
-  };
-
-  const handleOnRemoveMaterial = function (bill) {
-    const index = billList.findIndex((e) => e.id == bill.id);
-    const newBillList = [
-      ...billList.slice(0, index),
-      ...billList.slice(index + 1),
-    ];
-
-    let total = 0;
-    for (var p = 0; p < newBillList.length; p++) {
-      const price = Number.parseInt(newBillList[p].cost);
-      const quantity = Number.parseInt(newBillList[p].quantity);
-      console.log(price, " ", quantity)
-      total += price * quantity;
-    }
-    setBillList(newBillList);
-    setDeliveryNote({ ...deliveryNote, cost: total })
-  };
 
   const handleAddMaterial = (e) => {
     let nextId = billList.length + 1;
@@ -167,6 +140,97 @@ const DeliveryNoteEdit = (props) => {
 
     setDeliveryNoteError(errors);
     return errors;
+  };
+
+  const handleAddItem = (e) => {
+    let nextId = deliveryNote.deliveryNoteItems.length + 1;
+    nextId = nextId == 0 ? -1 : -nextId;
+    const nextItem = { id: nextId, quantity: 0, unitPrice: 0, remarks: "", totalPrice: 0, deliveryNoteId: Number.parseInt(deliveryNote.id) };
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: [...deliveryNote.deliveryNoteItems, nextItem] });
+  };
+
+  const onRemoveItem = function (item) {
+    if (disabled) return;
+    const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
+    const newItems = [
+      ...deliveryNote.deliveryNoteItems.slice(0, index),
+      ...deliveryNote.deliveryNoteItems.slice(index + 1),
+    ];
+
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
+  };
+
+  const handleOnSelectProduct = (item, value) => {
+    const isSelectedExistedProduct = deliveryNote.deliveryNoteItems.findIndex(
+      (e) => e.productId == value
+    );
+    if (isSelectedExistedProduct >= 0) {
+      showErrorMessage(
+        "The selected product is already in the product list, please choose another product!"
+      );
+      return;
+    }
+    const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
+    const selectedProduct = productSelections.find((e) => e.id == value);
+    const editedItem = {
+      ...item,
+      productId: value,
+    };
+    const newItems = [
+      ...deliveryNote.deliveryNoteItems.slice(0, index),
+      editedItem,
+      ...deliveryNote.deliveryNoteItems.slice(index + 1),
+    ];
+
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
+    console.log(item)
+  };
+
+  const handleOnQuantityChange = (item, e) => {
+    const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
+    const editedItem = {
+      ...item,
+      quantity: Number.parseInt(e.target.value),
+      totalPrice: Number.parseInt(e.target.value) * Number.parseInt(item.unitPrice)
+    };
+    const newItems = [
+      ...deliveryNote.deliveryNoteItems.slice(0, index),
+      editedItem,
+      ...deliveryNote.deliveryNoteItems.slice(index + 1),
+    ];
+
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
+  };
+
+  const onUnitPriceChange = (item, e) => {
+    const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
+    const editedItem = {
+      ...item,
+      unitPrice: Number.parseInt(e.target.value),
+      totalPrice: Number.parseInt(e.target.value) * Number.parseInt(item.quantity)
+    };
+    const newItems = [
+      ...deliveryNote.deliveryNoteItems.slice(0, index),
+      editedItem,
+      ...deliveryNote.deliveryNoteItems.slice(index + 1),
+    ];
+
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
+  };
+
+  const handleOnRemarkChange = (item, e) => {
+    const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
+    const editedItem = {
+      ...item,
+      remarks: e.target.value,
+    };
+    const newItems = [
+      ...deliveryNote.deliveryNoteItems.slice(0, index),
+      editedItem,
+      ...deliveryNote.deliveryNoteItems.slice(index + 1),
+    ];
+
+    setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
   };
 
   return (
@@ -273,6 +337,25 @@ const DeliveryNoteEdit = (props) => {
         </Row>
 
       </div>
+      <div className="main-content-container m-top--2rem">
+        <div className="text-align-right">
+          <Button type="primary" onClick={handleAddItem} disabled={disabled}>
+            <PlusOutlined />
+            Add Items
+          </Button>
+        </div>
+        <DeliveryNoteItems
+          className="m-top--1rem"
+          disabled={disabled}
+          deliveryNoteItems={deliveryNote.deliveryNoteItems}
+          productListSelections={productSelections}
+          onRemoveItem={onRemoveItem}
+          onSelectProduct={handleOnSelectProduct}
+          onQuantityChange={handleOnQuantityChange}
+          onRemarkChange={handleOnRemarkChange}
+          onUnitPriceChange={onUnitPriceChange}
+        />
+      </div>
       <div className="m-top--2rem">
         <div className="main-content-container text-align-right">
           <Button
@@ -286,6 +369,7 @@ const DeliveryNoteEdit = (props) => {
           </Button>
         </div>
       </div>
+
     </Fragment>
   );
 };

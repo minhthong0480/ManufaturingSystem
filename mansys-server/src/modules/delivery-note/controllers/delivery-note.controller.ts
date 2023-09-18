@@ -17,8 +17,8 @@ export class DeliveryNoteController {
   }
 
   @Get('/filter/')
-  filter(@Query() dto: FilterDeliveryNoteDto) {
-    return this.deliveryNoteSerive.filter(dto);
+  async filter(@Query() dto: FilterDeliveryNoteDto) {
+    return await this.deliveryNoteSerive.filter(dto);
   }
 
   @Get(':id')
