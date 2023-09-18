@@ -94,7 +94,7 @@ const EmployeeTable = () => {
   const [deleteID, setDeleteID] = useState();
 
   const fetchAllUser = async () => {
-    const data = await getAllUser();
+    const { data } = await getAllUser();
     setDataSource(data.sort((a, b) => a.id - b.id));
   };
 
@@ -106,26 +106,31 @@ const EmployeeTable = () => {
   const [editEmployee, setEditEmployee] = useState(true);
   const handleDelete = async (key) => {
     const { data } = await deleteUser(key.id);
-    setDeleteID(data?.id);
+    setDeleteID(key.id);
   };
   const handleAdd = async (form) => {
     try {
-      const { data } = await createUser(form);
-      toast.success("Customer added");
-      setDataSource([...dataSource, data]);
+      const { data, status } = await createUser(form);
+
+      if (status === 201) {
+        toast.success("Customer added");
+        setDataSource([...dataSource, data]);
+      }
     } catch (error) {
       toast.error("Fail to create new Customer");
     }
   };
   const handleSave = async (form) => {
     try {
-      const { data } = await saveUser(editEmployee.id, form);
-      toast.success("Customer added");
-      setDataSource(
-        dataSource.map((customer) =>
-          customer.id === editEmployee.id ? data : customer
-        )
-      );
+      const { data, status } = await saveUser(editEmployee.id, form);
+      if (status === 200) {
+        toast.success("Customer added");
+        setDataSource(
+          dataSource.map((customer) =>
+            customer.id === editEmployee.id ? data : customer
+          )
+        );
+      }
     } catch (error) {
       toast.error("Fail to create new Customer");
     }
