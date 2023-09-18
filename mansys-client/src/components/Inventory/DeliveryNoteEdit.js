@@ -40,9 +40,8 @@ const DeliveryNoteEdit = (props) => {
     remarks: null,
     deliveryNoteItems: [],
   });
-  const [supplierSelections, setSupplierSelections] = useState([]);
   const [billList, setBillList] = useState([]);
-  const [materialList, setMaterialList] = useState([]);
+  const [deliverNoteError, setDeliveryNoteError] = useState([]);
 
   const loadData = async () => {
     const getDeliveryNote = await DeliveryNoteService.get(params.id);
@@ -124,6 +123,11 @@ const DeliveryNoteEdit = (props) => {
     data.remarks = deliveryNote.remarks;
     data.deliveryNoteItems = deliveryNote.deliveryNoteItems;
 
+    const errors = handleEditValidation(data);
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     dispatch(updateDeliveryNote(data));
   };
 
@@ -143,6 +147,27 @@ const DeliveryNoteEdit = (props) => {
     setDisabled(!disabled);
     loadData();
   }
+
+  const handleEditValidation = (data) => {
+    const errors = {};
+    if (!data.customerId)
+      errors.customerId = "Please fill out Customer ID";
+
+    if (!data.deliveryDate)
+      errors.deliveryDate = "Please fill out Delivery Date";
+
+    if (!data.deliveryBy)
+      errors.deliveryBy = "Please fill out Delivery By";
+
+    if (!data.remarks)
+      errors.remarks = "Please fill out Remarks";
+
+    if (!data.salesOrder)
+      errors.salesOrder = "Please fill out Sale Orders";
+
+    setDeliveryNoteError(errors);
+    return errors;
+  };
 
   return (
     <Fragment>
@@ -168,9 +193,6 @@ const DeliveryNoteEdit = (props) => {
               type="string"
               placeholder="delivery note id"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
           </Col>
           <Col span={4}>
             <div>
@@ -183,9 +205,9 @@ const DeliveryNoteEdit = (props) => {
               type="string"
               placeholder="Customer Id"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
+            {deliverNoteError.customerId && (
+              <span className="error">{deliverNoteError.customerId}</span>
+            )}
           </Col>
           <Col span={2}>
             <div>
@@ -198,9 +220,9 @@ const DeliveryNoteEdit = (props) => {
               type="string"
               placeholder="Deliver Date"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
+            {deliverNoteError.salesOrder && (
+              <span className="error">{deliverNoteError.salesOrder}</span>
+            )}
           </Col>
           <Col span={10}>
             <div>
@@ -213,9 +235,9 @@ const DeliveryNoteEdit = (props) => {
               type="string"
               placeholder="Deliver Date"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
+            {deliverNoteError.remarks && (
+              <span className="error">{deliverNoteError.remarks}</span>
+            )}
           </Col>
           <Col span={4}>
             <div>
@@ -228,9 +250,9 @@ const DeliveryNoteEdit = (props) => {
               type="string"
               placeholder="Deliver Date"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
+            {deliverNoteError.deliveryBy && (
+              <span className="error">{deliverNoteError.deliveryBy}</span>
+            )}
           </Col>
           <Col span={2}>
             <div>
@@ -243,9 +265,9 @@ const DeliveryNoteEdit = (props) => {
               type="date"
               placeholder="Deliver Date"
             />
-            {/* {editContractErrors.contractNumber && (
-              <span className="error">{editContractErrors.contractNumber}</span>
-            )} */}
+            {deliverNoteError.deliveryDate && (
+              <span className="error">{deliverNoteError.deliveryDate}</span>
+            )}
           </Col>
 
         </Row>
