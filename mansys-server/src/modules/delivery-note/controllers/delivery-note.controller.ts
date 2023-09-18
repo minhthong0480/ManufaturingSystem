@@ -1,7 +1,8 @@
-import { Controller, Inject, Post, Body, Query, Get, Param } from '@nestjs/common';
+import { Controller, Inject, Post, Body, Query, Get, Param, Patch } from '@nestjs/common';
 import { DeliveryNoteSerive } from '../services/delivery-note.service';
 import { CreateDeliveryNoteDto } from '../dto/create-delivery-note.dto';
 import { FilterDeliveryNoteDto } from '../dto/filter-delivery-note.dto';
+import { UpdateDeliveryNoteDto } from '../dto/update-delivery-note.dto';
 
 @Controller('delivery-notes')
 export class DeliveryNoteController {
@@ -23,5 +24,10 @@ export class DeliveryNoteController {
   @Get(':id')
   async get(@Param('id') id) {
     return await this.deliveryNoteSerive.get(id);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() dto: UpdateDeliveryNoteDto) {
+    return await this.deliveryNoteSerive.update(id, dto);
   }
 }

@@ -17,7 +17,7 @@ import { SupplierService } from "../../services/supplier-service";
 import { ProductsService } from "../../services/products-service";
 import { MaterialService } from "../../services/material-service";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProduct } from "../../actions/products";
+import { updateDeliveryNote } from "../../actions/delivery-note";
 import {
   showErrorMessage,
   showSuccessMessage,
@@ -44,16 +44,16 @@ const DeliveryNoteEdit = (props) => {
   const [billList, setBillList] = useState([]);
   const [materialList, setMaterialList] = useState([]);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const getDeliveryNote = await DeliveryNoteService.get(params.id);
-      if (getDeliveryNote.isSuccess && getDeliveryNote.data && getDeliveryNote.data.data) {
-        const deliveryNote = getDeliveryNote.data.data;
-        setDeliveryNote(deliveryNote);
-        console.log(deliveryNote)
-      }
-
+  const loadData = async () => {
+    const getDeliveryNote = await DeliveryNoteService.get(params.id);
+    if (getDeliveryNote.isSuccess && getDeliveryNote.data && getDeliveryNote.data.data) {
+      const deliveryNote = getDeliveryNote.data.data;
+      setDeliveryNote(deliveryNote);
+      console.log(deliveryNote)
     }
+  }
+
+  useEffect(() => {
     loadData();
   }, []);
 
@@ -118,27 +118,20 @@ const DeliveryNoteEdit = (props) => {
 
     data.id = deliveryNote.id;
     data.customerId = deliveryNote.customerId;
+    data.salesOrder = deliveryNote.salesOrder;
     data.deliveryDate = deliveryNote.deliveryDate;
     data.deliveryBy = deliveryNote.deliveryBy;
     data.remarks = deliveryNote.remarks;
     data.deliveryNoteItems = deliveryNote.deliveryNoteItems;
+
+    dispatch(updateDeliveryNote(data));
   };
 
   const handleInforChange = (name, e) => {
-    const productData = { ...deliveryNote };
-    productData[name] = e.target.value;
-    setDeliveryNote(productData);
+    const data = { ...deliveryNote };
+    data[name] = e;
+    setDeliveryNote(data);
   };
-
-  const handleSave = () => {
-    const update = {
-    };
-    setDisabled(!disabled);
-    dispatch(updateProduct(update, onSuccessSave));
-    onSuccessSave(update)
-  };
-
-  const onSuccessSave = {}
 
   function handleEditClick() {
     if (!disabled) {
@@ -147,8 +140,8 @@ const DeliveryNoteEdit = (props) => {
   }
 
   function resetData() {
-    // TODO
     setDisabled(!disabled);
+    loadData();
   }
 
   return (
@@ -173,7 +166,7 @@ const DeliveryNoteEdit = (props) => {
               disabled={true}
               value={deliveryNote.id}
               type="string"
-              placeholder="Product Id"
+              placeholder="delivery note id"
             />
             {/* {editContractErrors.contractNumber && (
               <span className="error">{editContractErrors.contractNumber}</span>
@@ -184,6 +177,7 @@ const DeliveryNoteEdit = (props) => {
               <label>Customer ID</label>
             </div>
             <Input
+              onChange={(e) => handleInforChange("customerId", e.target.value)}
               disabled={disabled}
               value={deliveryNote.customerId}
               type="string"
@@ -198,6 +192,7 @@ const DeliveryNoteEdit = (props) => {
               <label>Sale Orders</label>
             </div>
             <Input
+              onChange={(e) => handleInforChange("salesOrder", e.target.value)}
               disabled={disabled}
               value={deliveryNote.salesOrder}
               type="string"
@@ -212,6 +207,7 @@ const DeliveryNoteEdit = (props) => {
               <label>Remarks</label>
             </div>
             <Input
+              onChange={(e) => handleInforChange("remarks", e.target.value)}
               disabled={disabled}
               value={deliveryNote.remarks}
               type="string"
@@ -226,6 +222,7 @@ const DeliveryNoteEdit = (props) => {
               <label>Delivery By</label>
             </div>
             <Input
+              onChange={(e) => handleInforChange("deliveryBy", e.target.value)}
               disabled={disabled}
               value={deliveryNote.deliveryBy}
               type="string"
@@ -242,6 +239,7 @@ const DeliveryNoteEdit = (props) => {
             <Input
               disabled={disabled}
               value={deliveryNote.deliveryDate}
+              onChange={(e) => handleInforChange("deliveryDate", e.target.value)}
               type="date"
               placeholder="Deliver Date"
             />

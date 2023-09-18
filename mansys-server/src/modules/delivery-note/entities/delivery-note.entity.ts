@@ -30,6 +30,7 @@ export class DeliveryNote {
 
   @Column({
     nullable: false,
+    type: 'date',
   })
   deliveryDate: Date;
 

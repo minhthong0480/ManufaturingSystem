@@ -7,6 +7,7 @@ import { ResultModel } from 'src/common/result-model';
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
 import { FilterDeliveryNoteDto } from '../dto/filter-delivery-note.dto';
 import { ResultListModel } from 'src/common/result-list-model';
+import { UpdateDeliveryNoteDto } from '../dto/update-delivery-note.dto';
 
 @Injectable()
 export class DeliveryNoteSerive {
@@ -18,12 +19,12 @@ export class DeliveryNoteSerive {
     private readonly customerService: CustomersService,
   ) {}
 
-  async get (id: number) {
-    const deliveryNote = await this.deliveryNoteRepository.findOneBy({id});
+  async get(id: number) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
     if (!deliveryNote) {
-      return ResultModel.fail({}, "Failed!");
+      return ResultModel.fail({}, 'Failed!');
     }
-    return ResultModel.success(deliveryNote, "Success!!!");
+    return ResultModel.success(deliveryNote, 'Success!!!');
   }
 
   async create(dto: CreateDeliveryNoteDto) {
@@ -104,5 +105,19 @@ export class DeliveryNoteSerive {
       totalRows,
       'Filter deliveryNotes successful!',
     );
+  }
+
+  async update(id: number, dto: UpdateDeliveryNoteDto) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
+    if (!deliveryNote) {
+      return ResultModel.fail({}, 'Failed');
+    }
+
+    const updated = await this.deliveryNoteRepository.save({
+      ...deliveryNote,
+      ...dto,
+    });
+
+    return ResultModel.success(updated, 'Success');
   }
 }
