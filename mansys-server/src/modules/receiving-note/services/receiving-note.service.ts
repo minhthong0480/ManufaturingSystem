@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReceivingNote } from '../entities/receiving-note.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,8 @@ import { SupplierService } from 'src/modules/suppliers/services/suppliers.servic
 import { ResultModel } from 'src/common/result-model';
 import { FilterReceivingNoteDto } from '../dto/filter-receiving-note.dto';
 import { ResultListModel } from 'src/common/result-list-model';
+import { UpdateReceivingNoteDto } from '../dto/update-receiving-note.dto';
+import { ReceivingNoteItemService } from './receiving-note-item.service';
 
 @Injectable()
 export class ReceivingNoteService {
@@ -16,6 +18,9 @@ export class ReceivingNoteService {
 
     @Inject(SupplierService)
     private readonly supplierService: SupplierService,
+
+    @Inject(forwardRef(() => ReceivingNoteItemService))
+    private readonly itemService: ReceivingNoteItemService,
   ) {}
 
   async create(dto: CreateReceivingNoteDto) {
@@ -33,6 +38,31 @@ export class ReceivingNoteService {
       receivingNote,
       'Create Receiving Note successful!',
     );
+  }
+
+  async get(id: number) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    return ResultModel.success(receivingNote, 'Success!');
+  }
+
+  async update(id: number, dto: UpdateReceivingNoteDto) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Update failed!');
+    }
+
+    console.log(dto.receivingNoteItems);
+    await this.itemService.updateItems(id, dto.receivingNoteItems);
+
+    const updated = await this.receivingNoteRepository.save({
+      ...receivingNote,
+      ...dto,
+    });
+
+    return ResultModel.success(updated, 'Update Success!');
   }
 
   async getOneById(id: number) {

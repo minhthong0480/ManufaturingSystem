@@ -28,6 +28,7 @@ export const API_INVENTORY_FILTER = `${BASE_API_URL}/inventory/filter`
 export const API_DELIVERY_NOTE = `${BASE_API_URL}/delivery-notes/`
 export const API_DELIVERY_NOTE_FILTER = `${BASE_API_URL}/delivery-notes/filter`
 
+export const API_RECEIVING_NOTE = `${BASE_API_URL}/receiving-notes/`
 export const API_RECEIVING_NOTE_FILTER = `${BASE_API_URL}/receiving-notes/filter`
 
 export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`

@@ -1,4 +1,3 @@
-import { Customer } from 'src/modules/customers/entities/customers.entity';
 import {
   Column,
   Entity,
@@ -23,11 +22,15 @@ export class ReceivingNote {
   @OneToMany(
     () => ReceivingNoteItem,
     (receivingNoteItem) => receivingNoteItem.receivingNote,
+    {
+      eager: true,
+    },
   )
   receivingNoteItems: ReceivingNoteItem[];
 
   @Column({
     nullable: false,
+    type: 'date'
   })
   receiptDate: Date;
 

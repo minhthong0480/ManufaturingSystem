@@ -49,9 +49,8 @@ const ReceivingNote = () => {
   };
 
   const handleEdit = (record) => {
-    // let path = `/edit_inventory/${record.id}`;
-    // navigate(path);
-    console.log("edit")
+    let path = `/receiving_note/${record.id}`;
+    navigate(path);
   };
 
   const handleDelete = async (record) => {
