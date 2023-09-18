@@ -1,5 +1,5 @@
 import { AxiosClient } from '../commons/axios-client'
-import { API_RECEIVING_NOTE_FILTER, API_RECEIVING_NOTE } from '../commons/enum'
+import { API_RECEIVING_NOTE_FILTER, API_RECEIVING_NOTE, API_RECEIVING_NOTE_APPROVE } from '../commons/enum'
 import { requestSucess, requestFail } from '../commons/utilities'
 
 export const ReceivingNoteService = {
@@ -40,6 +40,15 @@ export const ReceivingNoteService = {
 
   get: async function (id) {
     const api = API_RECEIVING_NOTE + id;
+    const result = await AxiosClient.get(api)
+    if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
+    return requestSucess({
+      data: result.data.data
+    })
+  },
+
+  approve: async function (id) {
+    const api = API_RECEIVING_NOTE_APPROVE + id;
     const result = await AxiosClient.get(api)
     if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
     return requestSucess({

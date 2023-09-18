@@ -36,6 +36,12 @@ export class ReceivingNote {
 
   @Column({
     nullable: false,
+    default: false
+  })
+  approval: boolean;
+
+  @Column({
+    nullable: false,
   })
   purchaseOrder: string;
 

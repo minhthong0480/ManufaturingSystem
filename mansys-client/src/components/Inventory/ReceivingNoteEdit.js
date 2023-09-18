@@ -22,6 +22,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ReceivingNoteService } from "../../services/receiving-note-service"
 import { ProductsService } from "../../services/products-service";
 import ReceivingNoteItems from "./ReceivingNoteItems";
+import { LOCAL_STORAGE_USER, USER_ROLE_ADMIN } from "../../commons/enum"
 
 const ReceivingNoteEdit = (props) => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const ReceivingNoteEdit = (props) => {
     purchaseOrder: null,
     receivedBy: null,
     remarks: null,
+    approval: false,
     receivingNoteItems: [],
   });
   const [receivingNoteError, setReceivingNoteError] = useState([]);
@@ -258,17 +260,38 @@ const ReceivingNoteEdit = (props) => {
     setReceivingNote({ ...receivingNote, receivingNoteItems: newItems });
   };
 
+  const handleApproval = () => {
+    const user = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER));
+    if (user.roles.includes(USER_ROLE_ADMIN)) {
+      doApprove()
+    }
+  }
+
+  const doApprove = async () => {
+    const approveRequest = await ReceivingNoteService.approve(receivingNote.id);
+    if (approveRequest.isSuccess) window.location.reload()
+  }
+
   return (
     <Fragment>
-      <div>
-        <div className="text-align-right">
-          <Button type="primary" onClick={handleEditClick}>
-            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
-          </Button>
-        </div>
+      <div className="main-content-container">
         <h1 className="m-top--1rem">
           {disabled ? "Chi tiết Receiving Note" : "Chỉnh sửa Receiving Note"}
         </h1>
+        <div className="text-align-right">
+          {
+            receivingNote.approval ?
+              "Approved"
+              :
+              <Button type="primary" onClick={handleApproval}>
+                {"Approve this ReceivingNote"}
+              </Button>
+          }
+
+          <Button className="m-left--1rem" type="primary" onClick={handleEditClick}>
+            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
+          </Button>
+        </div>
       </div>
       <div className="main-content-container m-top--3rem">
         <Row gutter={16} className="m-top--1rem">

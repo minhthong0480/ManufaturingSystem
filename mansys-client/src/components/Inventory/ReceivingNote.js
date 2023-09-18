@@ -72,6 +72,12 @@ const ReceivingNote = () => {
     { title: "Received By", dataIndex: "receivedBy", key: "receivedBy" },
     { title: "Receipt Date", dataIndex: "receiptDate", key: "receiptDate" },
     {
+      title: "Approval", dataIndex: "approval", render: (_, record) => (
+        <span>{record.approval ? "Approved" : "N/A"}</span>
+      ),
+    },
+
+    {
       title: "Actions",
       dataIndex: "actions",
       render: (_, record) => (
@@ -96,8 +102,6 @@ const ReceivingNote = () => {
 
   return (
     <Fragment>
-      <h1>Quan li Delivery Note</h1>
-
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

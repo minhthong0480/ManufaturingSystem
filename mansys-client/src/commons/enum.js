@@ -30,6 +30,7 @@ export const API_DELIVERY_NOTE_FILTER = `${BASE_API_URL}/delivery-notes/filter`
 
 export const API_RECEIVING_NOTE = `${BASE_API_URL}/receiving-notes/`
 export const API_RECEIVING_NOTE_FILTER = `${BASE_API_URL}/receiving-notes/filter`
+export const API_RECEIVING_NOTE_APPROVE = `${BASE_API_URL}/receiving-notes/approve/`
 
 export const API_MATERIAL_GETALL = `${BASE_API_URL}/materials`
 export const API_MATERIAL_DELETE = `${BASE_API_URL}/materials/:id`
@@ -45,6 +46,8 @@ export const LOCAL_STORAGE_USER = 'AUTH_USER';
 export const ACTION_AUTH_LOGIN_SUCCESS = 'LOGGED_IN_USER';
 export const ACTION_AUTH_LOGOUT = 'LOGOUT';
 export const ACTION_PRODUCTS_SUCCESS = 'PRODUCTS';
+
+export const USER_ROLE_ADMIN = 'admin';
 
 // use for http request
 
