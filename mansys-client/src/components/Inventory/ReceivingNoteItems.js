@@ -56,17 +56,6 @@ const ReceivingNoteItems = ({
     triggerFilter(filter.page, pageSize, filter.searchText);
   };
 
-  const handleDelete = async (record) => {
-    if (!window.confirm("Do you want to delete this inventory?")) return;
-    const deleteResult = await InventoryService.delete(record)
-    if (deleteResult.code >= 400) {
-      showErrorMessage('An error is occured while deleting, please try again!')
-    } else {
-      toast.success("Contract Deleted");
-      setFilter({ ...filter, data: [...filter.data.filter(e => e.id != record.id)] })
-    }
-  };
-
   const columns = [
     {
       title: "Product",
@@ -138,7 +127,6 @@ const ReceivingNoteItems = ({
               <span className="error">{record.errors.quantity}</span>
             )}
           </div>
-
         );
       },
     },
@@ -160,7 +148,6 @@ const ReceivingNoteItems = ({
               <span className="error">{record.errors.unitPrice}</span>
             )}
           </div>
-
         );
       },
     },

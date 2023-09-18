@@ -46,7 +46,6 @@ const ReceivingNoteEdit = (props) => {
     if (getReceivingNote.isSuccess && getReceivingNote.data && getReceivingNote.data.data) {
       const receivingNote = getReceivingNote.data.data;
       setReceivingNote(receivingNote);
-      console.log(receivingNote)
     }
 
     const getAllProduct = await ProductsService.getAll();

@@ -69,14 +69,6 @@ const DeliveryNoteEdit = (props) => {
     loadData();
   }, []);
 
-
-  const handleAddMaterial = (e) => {
-    let nextId = billList.length + 1;
-    nextId = nextId == 0 ? -1 : -nextId;
-    const nextBill = { id: nextId, quantity: 0 };
-    setBillList([...billList, nextBill])
-  };
-
   const onSaveDeliveryNote = () => {
     const data = {
       id: null,
@@ -138,9 +130,37 @@ const DeliveryNoteEdit = (props) => {
     if (!data.salesOrder)
       errors.salesOrder = "Please fill out Sale Orders";
 
+    if (data.deliveryNoteItems) {
+      data.deliveryNoteItems.forEach(item => handleEditItemValidation(errors, item))
+    }
+
     setDeliveryNoteError(errors);
     return errors;
   };
+
+  const handleEditItemValidation = (errorsValidation, data) => {
+    const errors = {};
+    if (!data.productId) {
+      errors.productId = "Please choose Product"
+    }
+
+    if (!data.remarks)
+      errors.remarks = "Please fill out Remarks";
+
+    if (Number.parseInt(data.quantity) < 0) {
+      errors.quantity = "Quantity must be higher than 0"
+    }
+
+    if (Number.parseInt(data.unitPrice) < 0) {
+      errors.unitPrice = "Unit Price must be higher than 0"
+    }
+
+    data.errors = errors;
+    if (Object.keys(errors).length > 0) {
+      errorsValidation.item = true;
+    }
+    return data;
+  }
 
   const handleAddItem = (e) => {
     let nextId = deliveryNote.deliveryNoteItems.length + 1;
