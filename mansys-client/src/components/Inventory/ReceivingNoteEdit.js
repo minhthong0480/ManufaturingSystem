@@ -122,6 +122,7 @@ const ReceivingNoteEdit = (props) => {
 
   const handleEditValidation = (data) => {
     const errors = {};
+
     if (!data.supplierId)
       errors.supplierId = "Please fill out Supplier ID";
 
@@ -137,9 +138,37 @@ const ReceivingNoteEdit = (props) => {
     if (!data.purchaseOrder)
       errors.purchaseOrder = "Please fill out Purchase Orders";
 
+    if (data.receivingNoteItems) {
+      data.receivingNoteItems.forEach(item => handleEditItemValidation(errors, item))
+    }
+
     setReceivingNoteError(errors);
     return errors;
   };
+
+  const handleEditItemValidation = (errorsValidation, data) => {
+    const errors = {};
+    if (!data.productId) {
+      errors.productId = "Please choose Product"
+    }
+
+    if (!data.remarks)
+      errors.remarks = "Please fill out Remarks";
+
+    if (Number.parseInt(data.quantity) < 0) {
+      errors.quantity = "Quantity must be higher than 0"
+    }
+
+    if (Number.parseInt(data.unitPrice) < 0) {
+      errors.unitPrice = "Unit Price must be higher than 0"
+    }
+
+    data.errors = errors;
+    if (Object.keys(errors).length > 0) {
+      errorsValidation.item = true;
+    }
+    return data;
+  }
 
   const handleAddItem = (e) => {
     let nextId = receivingNote.receivingNoteItems.length + 1;

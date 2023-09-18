@@ -73,23 +73,29 @@ const ReceivingNoteItems = ({
       dataIndex: "product",
       render: (_, record) => {
         return (
-          <Select
-            className="w-100"
-            placeholder="Select a product"
-            disabled={disabled}
-            onChange={(e) => {
-              if (onSelectProduct) onSelectProduct(record, e);
-            }}
-            value={record.productId > 0 ? record.productId : null}
-          >
-            {!productListSelections
-              ? ""
-              : productListSelections.map((e) => (
-                <Select.Option key={e.value} value={e.value}>
-                  {e.key}{" "}
-                </Select.Option>
-              ))}
-          </Select>
+          <div>
+            <Select
+              className="w-100"
+              placeholder="Select a product"
+              disabled={disabled}
+              onChange={(e) => {
+                if (onSelectProduct) onSelectProduct(record, e);
+              }}
+              value={record.productId > 0 ? record.productId : null}
+            >
+              {!productListSelections
+                ? ""
+                : productListSelections.map((e) => (
+                  <Select.Option key={e.value} value={e.value}>
+                    {e.key}{" "}
+                  </Select.Option>
+                ))}
+
+            </Select>
+            {record.errors && (
+              <span className="error">{record.errors.productId}</span>
+            )}
+          </div>
         );
       },
     },
@@ -97,15 +103,20 @@ const ReceivingNoteItems = ({
       title: "Remarks",
       render: (_, record) => {
         return (
-          <Input
-            placeholder="Remarks"
-            disabled={disabled}
-            type="text"
-            onChange={(e) => {
-              if (onRemarkChange) onRemarkChange(record, e);
-            }}
-            value={record.remarks}
-          />
+          <div>
+            <Input
+              placeholder="Remarks"
+              disabled={disabled}
+              type="text"
+              onChange={(e) => {
+                if (onRemarkChange) onRemarkChange(record, e);
+              }}
+              value={record.remarks}
+            />
+            {record.errors && (
+              <span className="error">{record.errors.remarks}</span>
+            )}
+          </div>
         );
       },
     },
@@ -113,15 +124,21 @@ const ReceivingNoteItems = ({
       title: "Quantity",
       render: (_, record) => {
         return (
-          <Input
-            placeholder="Quantity"
-            disabled={disabled}
-            type="number"
-            onChange={(e) => {
-              if (onQuantityChange) onQuantityChange(record, e);
-            }}
-            defaultValue={record.quantity}
-          />
+          <div>
+            <Input
+              placeholder="Quantity"
+              disabled={disabled}
+              type="number"
+              onChange={(e) => {
+                if (onQuantityChange) onQuantityChange(record, e);
+              }}
+              value={record.quantity}
+            />
+            {record.errors && (
+              <span className="error">{record.errors.quantity}</span>
+            )}
+          </div>
+
         );
       },
     },
@@ -129,15 +146,21 @@ const ReceivingNoteItems = ({
       title: "Unit Price",
       render: (_, record) => {
         return (
-          <Input
-            placeholder="Unit Price"
-            disabled={disabled}
-            type="number"
-            onChange={(e) => {
-              if (onUnitPriceChange) onUnitPriceChange(record, e);
-            }}
-            value={record.unitPrice}
-          />
+          <div>
+            <Input
+              placeholder="Unit Price"
+              disabled={disabled}
+              type="number"
+              onChange={(e) => {
+                if (onUnitPriceChange) onUnitPriceChange(record, e);
+              }}
+              value={record.unitPrice}
+            />
+            {record.errors && (
+              <span className="error">{record.errors.unitPrice}</span>
+            )}
+          </div>
+
         );
       },
     },
