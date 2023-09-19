@@ -46,6 +46,7 @@ export class DeliveryNoteSerive {
       return ResultModel.fail(deliveryNote, 'Create Delivery Note Failed');
     }
 
+    await this.itemService.saveItems(deliveryNote.id, dto.deliveryNoteItems);
     return ResultModel.success(
       deliveryNote,
       'Delivery Note create successful!',

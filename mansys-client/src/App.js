@@ -22,6 +22,7 @@ import ContractEdit from "./components/Contract/ContractEdit";
 import Inventory from "./components/Inventory/Inventory";
 import DeliveryNoteEdit from "./components/Inventory/DeliveryNoteEdit";
 import ReceivingNoteEdit from "./components/Inventory/ReceivingNoteEdit";
+import DeliveryNoteCreate from "./components/Inventory/DeliveryNoteCreate";
 const { Content, Footer } = Layout;
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/inventory" element={<Inventory />} />
           <Route exact path="/delivery_note/:id" element={<DeliveryNoteEdit />} />
+          <Route exact path="/delivery_note/create" element={<DeliveryNoteCreate />} />
           <Route exact path="/receiving_note/:id" element={<ReceivingNoteEdit />} />
         </Routes>
       </Content>

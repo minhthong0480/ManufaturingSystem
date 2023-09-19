@@ -28,6 +28,14 @@ export const DeliveryNoteService = {
     })
   },
 
+  create: async function (data) {
+    const result = await AxiosClient.post(API_DELIVERY_NOTE, data)
+    if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
+    return requestSucess({
+      data: result.data.data
+    })
+  },
+
   get: async function (id) {
     const api = `${API_DELIVERY_NOTE}${id}`;
     const result = await AxiosClient.get(api)

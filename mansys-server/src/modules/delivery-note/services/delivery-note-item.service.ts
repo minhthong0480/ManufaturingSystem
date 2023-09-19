@@ -74,4 +74,12 @@ export class DeliveryNoteItemSerive {
       await this.deliveryNoteItemRepository.save(newItems);
     }
   }
+
+  async saveItems(deliveryNoteId: number, newItems: Array<DeliveryNoteItem>) {
+    newItems.map((item) => {
+      item.deliveryNoteId = deliveryNoteId;
+      return item;
+    });
+    await this.deliveryNoteItemRepository.save(newItems);
+  }
 }

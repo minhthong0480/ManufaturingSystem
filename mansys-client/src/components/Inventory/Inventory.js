@@ -24,13 +24,13 @@ const Inventory = () => {
     },
     {
       key: '2',
-      label: 'Delivery Note',
-      children: <DeliveryNote></DeliveryNote>,
+      label: 'Receiving Note',
+      children: <ReceivingNote></ReceivingNote>,
     },
     {
       key: '3',
-      label: 'Receiving Note',
-      children: <ReceivingNote></ReceivingNote>,
+      label: 'Delivery Note',
+      children: <DeliveryNote></DeliveryNote>,
     },
   ];
   const onChange = (key) => {

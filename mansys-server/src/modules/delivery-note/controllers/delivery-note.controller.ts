@@ -12,8 +12,9 @@ export class DeliveryNoteController {
   ) {}
 
   @Post()
-  create(@Body() dto: CreateDeliveryNoteDto) {
-    return this.deliveryNoteSerive.create(dto);
+  async create(@Body() dto: CreateDeliveryNoteDto) {
+    console.log(dto)
+    return await this.deliveryNoteSerive.create(dto);
   }
 
   @Get('/filter/')
