@@ -1,7 +1,5 @@
-import { Descriptions, Modal, List, Typography } from "antd";
 import { React, useState, useEffect, Fragment } from "react";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import moment, { now } from "moment";
 import {
     Row,
     Col,
@@ -12,10 +10,7 @@ import {
     Steps,
     TextArea,
 } from "antd";
-import FilterableSelect from "../Commons/FilterableSelection";
-import { SupplierService } from "../../services/supplier-service";
 import { ProductsService } from "../../services/products-service";
-import { MaterialService } from "../../services/material-service";
 import { useDispatch, useSelector } from "react-redux";
 import { createDeliveryNote } from "../../actions/delivery-note";
 import {
@@ -23,6 +18,7 @@ import {
     showSuccessMessage,
     formatCurrency,
 } from "../../commons/utilities";
+import { getAllCustomer } from "../../actions/customer.js";
 import { useNavigate, useParams } from "react-router-dom";
 import { DeliveryNoteService } from "../../services/delivery-note-service"
 import DeliveryNoteItems from "./DeliveryNoteItems";
@@ -36,16 +32,16 @@ const DeliveryNoteCreate = (props) => {
     const [deliveryNote, setDeliveryNote] = useState({
         id: null,
         customerId: null,
-        deliveryDate: new Date().toISOString().substring(0,10),
+        deliveryDate: new Date().toISOString().substring(0, 10),
         salesOrder: null,
         deliveryBy: null,
         remarks: null,
         approval: false,
         deliveryNoteItems: [],
     });
-    const [billList, setBillList] = useState([]);
     const [deliverNoteError, setDeliveryNoteError] = useState([]);
     const [productSelections, setProductSelections] = useState([]);
+    const [customerSelections, setCustomerSelections] = useState([]);
 
     const loadData = async () => {
         const getDeliveryNote = await DeliveryNoteService.get();
@@ -63,6 +59,17 @@ const DeliveryNoteCreate = (props) => {
             setProductSelections(mappedData);
         } else {
             showErrorMessage("An error is occurred while loading products!");
+        }
+
+        const allCustomer = await getAllCustomer();
+        if (allCustomer.data) {
+            const mappedData = allCustomer.data.map((e) => ({
+                key: e.name,
+                value: e.id,
+            }));
+            setCustomerSelections(mappedData);
+        } else {
+            showErrorMessage("An error is occurred while loading customers!");
         }
     }
 
@@ -100,17 +107,6 @@ const DeliveryNoteCreate = (props) => {
         data[name] = e;
         setDeliveryNote(data);
     };
-
-    function handleEditClick() {
-        if (!disabled) {
-            resetData();
-        } else setDisabled(!disabled);
-    }
-
-    function resetData() {
-        setDisabled(!disabled);
-        loadData();
-    }
 
     const handleEditValidation = (data) => {
         const errors = {};
@@ -164,7 +160,7 @@ const DeliveryNoteCreate = (props) => {
     const handleAddItem = (e) => {
         let nextId = deliveryNote.deliveryNoteItems.length + 1;
         nextId = nextId == 0 ? -1 : -nextId;
-        const nextItem = { id: nextId, quantity: 0, unitPrice: 0, remarks: "", totalPrice: 0};
+        const nextItem = { id: nextId, quantity: 0, unitPrice: 0, remarks: "", totalPrice: 0 };
         setDeliveryNote({ ...deliveryNote, deliveryNoteItems: [...deliveryNote.deliveryNoteItems, nextItem] });
     };
 
@@ -284,15 +280,24 @@ const DeliveryNoteCreate = (props) => {
                     </Col>
                     <Col span={4}>
                         <div>
-                            <label>Customer ID</label>
+                            <label>Customer</label>
                         </div>
-                        <Input
-                            onChange={(e) => handleInforChange("customerId", e.target.value)}
+                        <Select
+                            className="w-100"
+                            placeholder="Select a Customer"
                             disabled={disabled}
-                            value={deliveryNote.customerId}
-                            type="string"
-                            placeholder="Customer Id"
-                        />
+                            onSelect={(e) => handleInforChange("customerId", e)}
+                            value={deliveryNote.customerId > 0 ? deliveryNote.customerId : null}
+                        >
+                            {!customerSelections
+                                ? ""
+                                : customerSelections.map((e) => (
+                                    <Select.Option key={e.value} value={e.value}>
+                                        {e.key}{" "}
+                                    </Select.Option>
+                                ))}
+
+                        </Select>
                         {deliverNoteError.customerId && (
                             <span className="error">{deliverNoteError.customerId}</span>
                         )}

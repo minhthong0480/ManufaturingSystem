@@ -13,7 +13,6 @@ export class DeliveryNoteController {
 
   @Post()
   async create(@Body() dto: CreateDeliveryNoteDto) {
-    console.log(dto)
     return await this.deliveryNoteSerive.create(dto);
   }
 
