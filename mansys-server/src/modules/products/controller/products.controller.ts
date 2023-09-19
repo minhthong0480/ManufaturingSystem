@@ -37,8 +37,8 @@ export class ProductsController {
   }
 
   @Post('/create')
-  createMaterial(@Body() CreateProductDto: CreateProductDto) {
-    return this.productService.create(CreateProductDto);
+  async createMaterial(@Body() dto: CreateProductDto) {
+    return await this.productService.create(dto);
   }
 
   @Patch('/:id')

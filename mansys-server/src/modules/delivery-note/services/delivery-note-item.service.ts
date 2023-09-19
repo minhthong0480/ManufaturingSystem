@@ -91,7 +91,6 @@ export class DeliveryNoteItemSerive {
       await this.deliveryNoteItemRepository.delete(items.map((e) => e.id));
   }
 
-  
   async deleteItems(items: Array<DeliveryNoteItem>) {
     if (items.length > 0)
       await this.deliveryNoteItemRepository.delete(items.map((e) => e.id));
