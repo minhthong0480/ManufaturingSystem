@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -34,6 +35,11 @@ export class ReceivingNoteController {
   @Get(':id')
   async get(@Param('id') id: number) {
     return await this.receivingNoteService.get(id);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.receivingNoteService.delete(id);
   }
 
   @Patch(':id')

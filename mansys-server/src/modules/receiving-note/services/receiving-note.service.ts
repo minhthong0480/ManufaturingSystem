@@ -46,6 +46,16 @@ export class ReceivingNoteService {
     );
   }
 
+  async delete(id: number) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    await this.itemService.deleteItems(receivingNote.receivingNoteItems);
+    await this.receivingNoteRepository.delete(receivingNote.id);
+    return ResultModel.success({}, 'Success!!!');
+  }
+
   async approve(id: number) {
     const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
     if (!receivingNote || receivingNote.approval) {

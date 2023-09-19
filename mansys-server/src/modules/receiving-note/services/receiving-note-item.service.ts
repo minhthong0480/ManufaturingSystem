@@ -85,4 +85,17 @@ export class ReceivingNoteItemService {
     });
     await this.receivingNoteItemRepository.save(newItems);
   }
+
+  async deleteByReceivingNoteId(receivingNoteId: number) {
+    const items = await this.receivingNoteItemRepository.findBy({
+      receivingNoteId: receivingNoteId,
+    });
+    if (items.length > 0)
+      await this.receivingNoteItemRepository.delete(items.map((e) => e.id));
+  }
+
+  async deleteItems(items: Array<ReceivingNoteItem>) {
+    if (items.length > 0)
+      await this.receivingNoteItemRepository.delete(items.map((e) => e.id));
+  }
 }
