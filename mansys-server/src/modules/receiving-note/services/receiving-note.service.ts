@@ -39,6 +39,7 @@ export class ReceivingNoteService {
       return ResultModel.fail('', 'Create Receiving Note failed!');
     }
 
+    await this.itemService.saveItems(receivingNote.id, dto.receivingNoteItems);
     return ResultModel.success(
       receivingNote,
       'Create Receiving Note successful!',

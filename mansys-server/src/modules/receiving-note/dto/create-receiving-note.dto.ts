@@ -1,4 +1,5 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ReceivingNoteItem } from '../entities/receiving-note-item.entity';
 
 export class CreateReceivingNoteDto {
   @IsNotEmpty()
@@ -20,4 +21,7 @@ export class CreateReceivingNoteDto {
   @IsNotEmpty()
   @IsString()
   remarks: string;
+
+  @IsOptional()
+  receivingNoteItems: Array<ReceivingNoteItem>;
 }

@@ -9,3 +9,13 @@ export const updateReceivingNote = (receivingNote) => async (dispatch) => {
     }
     window.location.reload()
 };
+
+export const createReceivingNote = (receivingNote, navigate) => async (dispatch) => {
+    const result = await ReceivingNoteService.create(receivingNote);
+    if (result.code >= 400) {
+        showErrorMessage(result.message || 'An error is occurred while updating the receiving note!')
+        return;
+    }
+    const path = `/receiving_note/${result.data.data.id}`
+    navigate(path);
+};

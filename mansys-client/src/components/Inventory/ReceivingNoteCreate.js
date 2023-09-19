@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { SupplierService } from "../../services/supplier-service";
 import { useDispatch } from "react-redux";
-import { updateReceivingNote } from "../../actions/receiving-note";
+import { createReceivingNote } from "../../actions/receiving-note";
 import {
   showErrorMessage,
   showSuccessMessage,
@@ -24,15 +24,15 @@ import { ProductsService } from "../../services/products-service";
 import ReceivingNoteItems from "./ReceivingNoteItems";
 import { LOCAL_STORAGE_USER, USER_ROLE_ADMIN } from "../../commons/enum"
 
-const ReceivingNoteEdit = (props) => {
+const ReceivingNoteCreate = (props) => {
   const dispatch = useDispatch();
-  const params = useParams();
+  const navigate = useNavigate();
 
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const [receivingNote, setReceivingNote] = useState({
     id: null,
     supplierId: null,
-    receiptDate: null,
+    receiptDate: new Date().toISOString().substring(0, 10),
     purchaseOrder: null,
     receivedBy: null,
     remarks: null,
@@ -44,12 +44,6 @@ const ReceivingNoteEdit = (props) => {
   const [supplierSelections, setSupplierSelections] = useState([]);
 
   const loadData = async () => {
-    const getReceivingNote = await ReceivingNoteService.get(params.id);
-    if (getReceivingNote.isSuccess && getReceivingNote.data && getReceivingNote.data.data) {
-      const receivingNote = getReceivingNote.data.data;
-      setReceivingNote(receivingNote);
-    }
-
     const getAllProduct = await ProductsService.getAll();
     if (getAllProduct.status == 200 && getAllProduct.data) {
       const mappedData = getAllProduct.data.map((e) => ({
@@ -69,7 +63,7 @@ const ReceivingNoteEdit = (props) => {
       }));
       setSupplierSelections(mappedData);
     } else {
-      showErrorMessage("An error is occurred while loading supplier!");
+      showErrorMessage("An error is occurred while loading suppliers!");
     }
   }
 
@@ -79,7 +73,6 @@ const ReceivingNoteEdit = (props) => {
 
   const onSaveReceivingNote = () => {
     const data = {
-      id: null,
       supplierId: null,
       receiptDate: null,
       purchaseOrder: null,
@@ -88,7 +81,6 @@ const ReceivingNoteEdit = (props) => {
       receivingNoteItems: [],
     };
 
-    data.id = receivingNote.id;
     data.supplierId = receivingNote.supplierId;
     data.purchaseOrder = receivingNote.purchaseOrder;
     data.receiptDate = receivingNote.receiptDate;
@@ -101,7 +93,7 @@ const ReceivingNoteEdit = (props) => {
       return;
     }
 
-    dispatch(updateReceivingNote(data));
+    dispatch(createReceivingNote(data, navigate));
   };
 
   const handleInforChange = (name, e) => {
@@ -109,17 +101,6 @@ const ReceivingNoteEdit = (props) => {
     data[name] = e;
     setReceivingNote(data);
   };
-
-  function handleEditClick() {
-    if (!disabled) {
-      resetData();
-    } else setDisabled(!disabled);
-  }
-
-  function resetData() {
-    setDisabled(!disabled);
-    loadData();
-  }
 
   const handleEditValidation = (data) => {
     const errors = {};
@@ -276,22 +257,8 @@ const ReceivingNoteEdit = (props) => {
     <Fragment>
       <div className="main-content-container">
         <h1 className="m-top--1rem">
-          {disabled ? "Chi tiết Receiving Note" : "Chỉnh sửa Receiving Note"}
+            Create Receiving Note
         </h1>
-        <div className="text-align-right">
-          {
-            receivingNote.approval ?
-              "Approved"
-              :
-              <Button type="primary" onClick={handleApproval}>
-                {"Approve this ReceivingNote"}
-              </Button>
-          }
-
-          <Button className="m-left--1rem" type="primary" onClick={handleEditClick}>
-            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
-          </Button>
-        </div>
       </div>
       <div className="main-content-container m-top--3rem">
         <Row gutter={16} className="m-top--1rem">
@@ -430,4 +397,4 @@ const ReceivingNoteEdit = (props) => {
     </Fragment>
   );
 };
-export default ReceivingNoteEdit;
+export default ReceivingNoteCreate;

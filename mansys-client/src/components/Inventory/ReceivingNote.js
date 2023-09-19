@@ -102,6 +102,15 @@ const ReceivingNote = () => {
 
   return (
     <Fragment>
+      <div className="main-content-container">
+        <div className="text-align-right">
+          <Button type="primary" onClick={() => {
+            navigate("/receiving_note/create")
+          }}>
+            Create Receiving Note
+          </Button>
+        </div>
+      </div>
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

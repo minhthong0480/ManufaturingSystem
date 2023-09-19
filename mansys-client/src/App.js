@@ -23,6 +23,7 @@ import Inventory from "./components/Inventory/Inventory";
 import DeliveryNoteEdit from "./components/Inventory/DeliveryNoteEdit";
 import ReceivingNoteEdit from "./components/Inventory/ReceivingNoteEdit";
 import DeliveryNoteCreate from "./components/Inventory/DeliveryNoteCreate";
+import ReceivingNoteCreate from "./components/Inventory/ReceivingNoteCreate";
 const { Content, Footer } = Layout;
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route exact path="/delivery_note/:id" element={<DeliveryNoteEdit />} />
           <Route exact path="/delivery_note/create" element={<DeliveryNoteCreate />} />
           <Route exact path="/receiving_note/:id" element={<ReceivingNoteEdit />} />
+          <Route exact path="/receiving_note/create" element={<ReceivingNoteCreate />} />
         </Routes>
       </Content>
       <Footer
