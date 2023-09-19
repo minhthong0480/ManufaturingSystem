@@ -9,6 +9,7 @@ import { FilterDeliveryNoteDto } from '../dto/filter-delivery-note.dto';
 import { ResultListModel } from 'src/common/result-list-model';
 import { UpdateDeliveryNoteDto } from '../dto/update-delivery-note.dto';
 import { DeliveryNoteItemSerive } from './delivery-note-item.service';
+import { InventoryService } from 'src/modules/inventory/services/inventory.service';
 
 @Injectable()
 export class DeliveryNoteSerive {
@@ -21,6 +22,9 @@ export class DeliveryNoteSerive {
 
     @Inject(forwardRef(() => DeliveryNoteItemSerive))
     private readonly itemService: DeliveryNoteItemSerive,
+
+    @Inject(InventoryService)
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async get(id: number) {
@@ -50,6 +54,26 @@ export class DeliveryNoteSerive {
 
   async findOneById(id: number) {
     return await this.deliveryNoteRepository.findOneBy({ id });
+  }
+
+  async approve(id: number) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
+    if (!deliveryNote || deliveryNote.approval) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+
+    for (const item of deliveryNote.deliveryNoteItems) {
+      const inventory = await this.inventoryService.getOneByProductId(
+        item.productId,
+      );
+      if (inventory) {
+        inventory.stockOut += item.quantity;
+        await this.inventoryService.save(inventory);
+      }
+    }
+    deliveryNote.approval = true;
+    const approved = await this.deliveryNoteRepository.save(deliveryNote);
+    return ResultModel.success(approved, 'Success!');
   }
 
   async filter(filter: FilterDeliveryNoteDto) {

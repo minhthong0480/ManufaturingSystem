@@ -26,6 +26,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { DeliveryNoteService } from "../../services/delivery-note-service"
 import DeliveryNoteItems from "./DeliveryNoteItems";
+import { LOCAL_STORAGE_USER, USER_ROLE_ADMIN } from "../../commons/enum"
 
 const DeliveryNoteEdit = (props) => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const DeliveryNoteEdit = (props) => {
     salesOrder: null,
     deliveryBy: null,
     remarks: null,
+    approval: false,
     deliveryNoteItems: [],
   });
   const [billList, setBillList] = useState([]);
@@ -191,7 +193,6 @@ const DeliveryNoteEdit = (props) => {
       return;
     }
     const index = deliveryNote.deliveryNoteItems.findIndex((e) => e.id == item.id);
-    const selectedProduct = productSelections.find((e) => e.id == value);
     const editedItem = {
       ...item,
       productId: value,
@@ -253,17 +254,38 @@ const DeliveryNoteEdit = (props) => {
     setDeliveryNote({ ...deliveryNote, deliveryNoteItems: newItems });
   };
 
+  const handleApproval = () => {
+    const user = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER));
+    if (user.roles.includes(USER_ROLE_ADMIN)) {
+      doApprove()
+    }
+  }
+
+  const doApprove = async () => {
+    const approveRequest = await DeliveryNoteService.approve(deliveryNote.id);
+    if (approveRequest.isSuccess) window.location.reload()
+  }
+
   return (
     <Fragment>
-      <div>
-        <div className="text-align-right">
-          <Button type="primary" onClick={handleEditClick}>
-            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
-          </Button>
-        </div>
+      <div className="main-content-container">
         <h1 className="m-top--1rem">
           {disabled ? "Chi tiết Delivery Note" : "Chỉnh sửa Delivery Note"}
         </h1>
+        <div className="text-align-right">
+          {
+            deliveryNote.approval ?
+              "Approved"
+              :
+              <Button type="primary" onClick={handleApproval}>
+                {"Approve this DeliveryNote"}
+              </Button>
+          }
+
+          <Button className="m-left--1rem" type="primary" onClick={handleEditClick}>
+            {disabled ? "Chỉnh sửa" : "Huỷ chỉnh sửa"}
+          </Button>
+        </div>
       </div>
       <div className="main-content-container m-top--3rem">
         <Row gutter={16} className="m-top--1rem">

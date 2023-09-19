@@ -98,8 +98,6 @@ const InventoryList = () => {
 
   return (
     <Fragment>
-      <h1>Quan li Inventory</h1>
-
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

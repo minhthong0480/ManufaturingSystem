@@ -47,7 +47,7 @@ export class ReceivingNoteService {
 
   async approve(id: number) {
     const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
-    if (!receivingNote) {
+    if (!receivingNote || receivingNote.approval) {
       return ResultModel.fail({}, 'Failed!');
     }
 
