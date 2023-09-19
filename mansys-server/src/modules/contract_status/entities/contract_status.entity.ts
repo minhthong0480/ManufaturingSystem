@@ -35,4 +35,9 @@ export class ContractStatus {
         cascade: ['insert']
         })
     timeline: Timeline[];
+
+    @Column({
+        nullable: true,
+    })
+    color: string;
 }

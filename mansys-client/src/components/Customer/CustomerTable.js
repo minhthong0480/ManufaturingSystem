@@ -3,6 +3,14 @@ import { Button, Form, Input, Popconfirm, Space, Table } from "antd";
 import "../../styles//CustomerTable.css";
 import Search from "antd/es/input/Search";
 import CustomerModal from "./CustomerModal";
+import {
+  createCustomer,
+  deleteCustomer,
+  getAllCustomer,
+  saveCustomer,
+} from "../../actions/customer.js";
+import { toast } from "react-toastify";
+import { DeleteOutlined } from "@ant-design/icons";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -31,6 +39,7 @@ const EditableCell = ({
       inputRef.current.focus();
     }
   }, [editing]);
+
   const toggleEdit = () => {
     setEditing(!editing);
     form.setFieldsValue({
@@ -82,40 +91,52 @@ const EditableCell = ({
 };
 const CustomerTable = () => {
   const [bottom, setBottom] = useState("bottomLeft");
-  const [dataSource, setDataSource] = useState([
-    {
-      key: "0",
-      avatar: "Edward King 0",
-      employeeId: "32",
-      name: "London, Park Lane no. 0",
-      email: "123",
-      phone: "13214",
-      role: "1234123",
-    },
-    {
-      key: "1",
-      avatar: "Edward King 0",
-      employeeId: "32",
-      name: "London, Park Lane no. 0",
-      email: "123",
-      phone: "13214",
-      role: "1234123",
-    },
-  ]);
-  const [count, setCount] = useState(2);
-  const [editMode, setEditMode] = useState(true);
-  const handleDelete = (key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
+  const [dataSource, setDataSource] = useState([]);
+  const [deleteID, setDeleteID] = useState();
+  const fetchAllCustomer = async () => {
+    const { data } = await getAllCustomer();
+    setDataSource(data.sort((a, b) => a.id - b.id).filter((c) => c.isActive));
   };
+
+  useEffect(() => {
+    fetchAllCustomer();
+  }, [deleteID]);
+
+  const [count, setCount] = useState(2);
+  const [editCustomer, setEditCustomer] = useState(true);
+
+  const handleDelete = async (key) => {
+    const { data } = await deleteCustomer(key.id);
+    setDeleteID(data?.id);
+  };
+  const handleAdd = async (form) => {
+    try {
+      const { data } = await createCustomer(form);
+      toast.success("Customer added");
+      setDataSource([...dataSource, data]);
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
+  };
+  const handleSave = async (form) => {
+    console.log(form);
+    try {
+      const { data } = await saveCustomer(editCustomer.id, form);
+      toast.success("Customer added");
+      setDataSource(
+        dataSource.map((customer) =>
+          customer.id === editCustomer.id ? data : customer
+        )
+      );
+    } catch (error) {
+      toast.error("Fail to create new Customer");
+    }
+  };
+
   const defaultColumns = [
     {
-      title: "Avatar",
-      dataIndex: "avatar",
-    },
-    {
       title: "Customer ID",
-      dataIndex: "customerId",
+      dataIndex: "id",
     },
     {
       title: "Name",
@@ -130,12 +151,8 @@ const CustomerTable = () => {
       dataIndex: "phone",
     },
     {
-      title: "Role",
-      dataIndex: "role",
-    },
-    {
-      title: "Active",
-      dataIndex: "active",
+      title: "Tax Number",
+      dataIndex: "taxNumber",
     },
     {
       title: "Action",
@@ -143,38 +160,28 @@ const CustomerTable = () => {
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Space size="middle">
-            <a
+            <Button
+              type="primary"
               onClick={() => {
-                setEditMode(true);
+                setEditCustomer(record);
                 showModal();
               }}
             >
               Edit
-            </a>
+            </Button>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => handleDelete(record.key)}
+              onConfirm={() => handleDelete(record)}
             >
-              <a>Delete</a>
+              <DeleteOutlined
+                style={{ marginLeft: "10px", fontSize: "20px" }}
+              />
             </Popconfirm>
           </Space>
         ) : null,
     },
   ];
-  const handleAdd = (form) => {
-    setDataSource([...dataSource, { ...form }]);
-    setCount(count + 1);
-  };
-  const handleSave = (row) => {
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    setDataSource(newData);
-  };
+
   const components = {
     body: {
       row: EditableRow,
@@ -196,7 +203,13 @@ const CustomerTable = () => {
       }),
     };
   });
-  const onSearch = (value) => console.log(value);
+  const onSearch = (value) => {
+    if (!value) {
+      fetchAllCustomer();
+    } else {
+      setDataSource(dataSource.filter((data) => data.name.includes(value)));
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -221,13 +234,21 @@ const CustomerTable = () => {
         }}
       >
         <Search
-          placeholder="input search text"
+          placeholder="Search name"
           onSearch={onSearch}
           enterButton
           style={{ width: 304 }}
         />
-        <Button onClick={showModal} type="primary">
-          Add a row
+        <Button
+          classname="create-button"
+          onClick={() => {
+            showModal();
+            setEditCustomer(null);
+          }}
+          type="primary"
+          style={{ width: "200px" }}
+        >
+          Add a new customer
         </Button>
       </div>
 
@@ -244,7 +265,8 @@ const CustomerTable = () => {
         handleOk={handleOk}
         handleCancel={handleCancel}
         handleAdd={handleAdd}
-        editMode={editMode}
+        handleSave={handleSave}
+        editCustomer={editCustomer}
       />
     </div>
   );

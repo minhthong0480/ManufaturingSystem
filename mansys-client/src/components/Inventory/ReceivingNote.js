@@ -49,9 +49,8 @@ const ReceivingNote = () => {
   };
 
   const handleEdit = (record) => {
-    // let path = `/edit_inventory/${record.id}`;
-    // navigate(path);
-    console.log("edit")
+    let path = `/receiving_note/${record.id}`;
+    navigate(path);
   };
 
   const handleDelete = async (record) => {
@@ -72,6 +71,12 @@ const ReceivingNote = () => {
     { title: "Remarks", dataIndex: "remarks", key: "remarks" },
     { title: "Received By", dataIndex: "receivedBy", key: "receivedBy" },
     { title: "Receipt Date", dataIndex: "receiptDate", key: "receiptDate" },
+    {
+      title: "Approval", dataIndex: "approval", render: (_, record) => (
+        <span>{record.approval ? "Approved" : "N/A"}</span>
+      ),
+    },
+
     {
       title: "Actions",
       dataIndex: "actions",
@@ -97,8 +102,6 @@ const ReceivingNote = () => {
 
   return (
     <Fragment>
-      <h1>Quan li Delivery Note</h1>
-
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

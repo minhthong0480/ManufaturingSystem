@@ -3,7 +3,8 @@ import {LOCAL_STORAGE_USER, ACTION_AUTH_LOGIN_SUCCESS, ACTION_AUTH_LOGOUT} from 
  let initUserInformation = {
     userId: null,
     username : null,
-    token : null
+    token : null,
+    role: null
  }
 
 if(window.localStorage.getItem(LOCAL_STORAGE_USER)){

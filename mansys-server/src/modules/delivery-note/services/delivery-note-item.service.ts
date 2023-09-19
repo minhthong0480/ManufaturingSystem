@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResultModel } from 'src/common/result-model';
@@ -17,7 +17,7 @@ export class DeliveryNoteItemSerive {
     @Inject(ProductsService)
     private readonly productsService: ProductsService,
 
-    @Inject(DeliveryNoteSerive)
+    @Inject(forwardRef(() => DeliveryNoteSerive))
     private readonly deliveryNoteSerive: DeliveryNoteSerive,
 
     @Inject(InventoryService)
@@ -54,5 +54,24 @@ export class DeliveryNoteItemSerive {
       deliveryNoteItem,
       'Delivery Note Item create successful!',
     );
+  }
+
+  async updateItems(deliveryNoteId: number, newItems: Array<DeliveryNoteItem>) {
+    const items = await this.deliveryNoteItemRepository.findBy({
+      deliveryNoteId,
+    });
+    const deletedItems = items
+      .filter((bill) => {
+        const a = newItems.find((e) => e.id == bill.id);
+        return a ? false : true;
+      })
+      .map((e) => e.id);
+
+    if (deletedItems && deletedItems.length > 0)
+      await this.deliveryNoteItemRepository.delete(deletedItems);
+
+    if (newItems && newItems.length > 0) {
+      await this.deliveryNoteItemRepository.save(newItems);
+    }
   }
 }

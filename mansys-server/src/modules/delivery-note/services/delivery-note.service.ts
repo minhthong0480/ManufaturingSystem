@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateDeliveryNoteDto } from '../dto/create-delivery-note.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeliveryNote } from '../entities/delivery-note.entity';
@@ -7,6 +7,8 @@ import { ResultModel } from 'src/common/result-model';
 import { CustomersService } from 'src/modules/customers/sevices/customers.service';
 import { FilterDeliveryNoteDto } from '../dto/filter-delivery-note.dto';
 import { ResultListModel } from 'src/common/result-list-model';
+import { UpdateDeliveryNoteDto } from '../dto/update-delivery-note.dto';
+import { DeliveryNoteItemSerive } from './delivery-note-item.service';
 
 @Injectable()
 export class DeliveryNoteSerive {
@@ -16,7 +18,18 @@ export class DeliveryNoteSerive {
 
     @Inject(CustomersService)
     private readonly customerService: CustomersService,
+
+    @Inject(forwardRef(() => DeliveryNoteItemSerive))
+    private readonly itemService: DeliveryNoteItemSerive,
   ) {}
+
+  async get(id: number) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
+    if (!deliveryNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    return ResultModel.success(deliveryNote, 'Success!!!');
+  }
 
   async create(dto: CreateDeliveryNoteDto) {
     const customer = await this.customerService.findOne(dto.customerId);
@@ -96,5 +109,21 @@ export class DeliveryNoteSerive {
       totalRows,
       'Filter deliveryNotes successful!',
     );
+  }
+
+  async update(id: number, dto: UpdateDeliveryNoteDto) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
+    if (!deliveryNote) {
+      return ResultModel.fail({}, 'Failed');
+    }
+
+    await this.itemService.updateItems(id, dto.deliveryNoteItems);
+
+    const updated = await this.deliveryNoteRepository.save({
+      ...deliveryNote,
+      ...dto,
+    });
+
+    return ResultModel.success(updated, 'Success');
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReceivingNote } from '../entities/receiving-note.entity';
 import { Repository } from 'typeorm';
@@ -7,6 +7,10 @@ import { SupplierService } from 'src/modules/suppliers/services/suppliers.servic
 import { ResultModel } from 'src/common/result-model';
 import { FilterReceivingNoteDto } from '../dto/filter-receiving-note.dto';
 import { ResultListModel } from 'src/common/result-list-model';
+import { UpdateReceivingNoteDto } from '../dto/update-receiving-note.dto';
+import { ReceivingNoteItemService } from './receiving-note-item.service';
+import { InventoryService } from 'src/modules/inventory/services/inventory.service';
+import { Inventory } from 'src/modules/inventory/entities/inventory.entity';
 
 @Injectable()
 export class ReceivingNoteService {
@@ -16,6 +20,12 @@ export class ReceivingNoteService {
 
     @Inject(SupplierService)
     private readonly supplierService: SupplierService,
+
+    @Inject(forwardRef(() => ReceivingNoteItemService))
+    private readonly itemService: ReceivingNoteItemService,
+
+    @Inject(InventoryService)
+    private readonly inventoryService: InventoryService,
   ) {}
 
   async create(dto: CreateReceivingNoteDto) {
@@ -33,6 +43,51 @@ export class ReceivingNoteService {
       receivingNote,
       'Create Receiving Note successful!',
     );
+  }
+
+  async approve(id: number) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+
+    for (const item of receivingNote.receivingNoteItems) {
+      const inventory = await this.inventoryService.getOneByProductId(
+        item.productId,
+      );
+      if (inventory) {
+        inventory.stockIn += item.quantity;
+        await this.inventoryService.save(inventory);
+      }
+    }
+    receivingNote.approval = true;
+    const approved = await this.receivingNoteRepository.save(receivingNote);
+    return ResultModel.success(approved, 'Success!');
+  }
+
+  async get(id: number) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    return ResultModel.success(receivingNote, 'Success!');
+  }
+
+  async update(id: number, dto: UpdateReceivingNoteDto) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Update failed!');
+    }
+
+    console.log(dto.receivingNoteItems);
+    await this.itemService.updateItems(id, dto.receivingNoteItems);
+
+    const updated = await this.receivingNoteRepository.save({
+      ...receivingNote,
+      ...dto,
+    });
+
+    return ResultModel.success(updated, 'Update Success!');
   }
 
   async getOneById(id: number) {

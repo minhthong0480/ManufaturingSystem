@@ -74,5 +74,8 @@ export class ContractFilterDTO extends PaginationRequestModel{
   @IsBoolean()
   @Transform(({ value} ) => value === 'true')
   isActive?: boolean;
+
+  @IsOptional()
+  listOfStatus?: string;
 }
 
