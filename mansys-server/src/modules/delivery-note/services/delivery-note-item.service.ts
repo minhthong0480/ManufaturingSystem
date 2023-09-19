@@ -61,8 +61,8 @@ export class DeliveryNoteItemSerive {
       deliveryNoteId,
     });
     const deletedItems = items
-      .filter((bill) => {
-        const a = newItems.find((e) => e.id == bill.id);
+      .filter((item) => {
+        const a = newItems.find((e) => e.id == item.id);
         return a ? false : true;
       })
       .map((e) => e.id);
@@ -81,5 +81,19 @@ export class DeliveryNoteItemSerive {
       return item;
     });
     await this.deliveryNoteItemRepository.save(newItems);
+  }
+
+  async deleteByDeliveryNoteId(deliveryNoteId: number) {
+    const items = await this.deliveryNoteItemRepository.findBy({
+      deliveryNoteId,
+    });
+    if (items.length > 0)
+      await this.deliveryNoteItemRepository.delete(items.map((e) => e.id));
+  }
+
+  
+  async deleteItems(items: Array<DeliveryNoteItem>) {
+    if (items.length > 0)
+      await this.deliveryNoteItemRepository.delete(items.map((e) => e.id));
   }
 }

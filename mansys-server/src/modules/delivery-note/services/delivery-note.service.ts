@@ -35,6 +35,16 @@ export class DeliveryNoteSerive {
     return ResultModel.success(deliveryNote, 'Success!!!');
   }
 
+  async delete(id: number) {
+    const deliveryNote = await this.deliveryNoteRepository.findOneBy({ id });
+    if (!deliveryNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    await this.itemService.deleteByDeliveryNoteId(id);
+    await this.deliveryNoteRepository.delete(deliveryNote.id);
+    return ResultModel.success({}, 'Success!!!');
+  }
+
   async create(dto: CreateDeliveryNoteDto) {
     const customer = await this.customerService.findOne(dto.customerId);
     if (!customer) {

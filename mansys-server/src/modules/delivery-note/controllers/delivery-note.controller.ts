@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Body, Query, Get, Param, Patch } from '@nestjs/common';
+import { Controller, Inject, Post, Body, Query, Get, Param, Patch, Delete } from '@nestjs/common';
 import { DeliveryNoteSerive } from '../services/delivery-note.service';
 import { CreateDeliveryNoteDto } from '../dto/create-delivery-note.dto';
 import { FilterDeliveryNoteDto } from '../dto/filter-delivery-note.dto';
@@ -29,6 +29,11 @@ export class DeliveryNoteController {
   @Get(':id')
   async get(@Param('id') id) {
     return await this.deliveryNoteSerive.get(id);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.deliveryNoteSerive.delete(id);
   }
 
   @Patch(':id')
