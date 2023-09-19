@@ -69,7 +69,7 @@ const cardData = [
     id: 7,
     imageSrc: <InboxOutlined />,
     url: "/inventory",
-    name: "Quản Lý Iventory",
+    name: "Quản Lý Kho",
   },
 ];
 
