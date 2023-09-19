@@ -21,6 +21,11 @@ export class DeliveryNoteController {
     return await this.deliveryNoteSerive.filter(dto);
   }
 
+  @Get('/approve/:id')
+  async approve(@Param('id') id: number) {
+    return await this.deliveryNoteSerive.approve(id);
+  }
+
   @Get(':id')
   async get(@Param('id') id) {
     return await this.deliveryNoteSerive.get(id);

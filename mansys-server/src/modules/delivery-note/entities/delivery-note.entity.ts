@@ -36,6 +36,12 @@ export class DeliveryNote {
 
   @Column({
     nullable: false,
+    default: false
+  })
+  approval: boolean;
+
+  @Column({
+    nullable: false,
   })
   salesOrder: string;
 
