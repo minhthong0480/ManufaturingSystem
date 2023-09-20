@@ -1,4 +1,5 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { DeliveryNoteItem } from '../entities/delivery-note-item.entity';
 
 export class CreateDeliveryNoteDto {
   @IsNotEmpty()
@@ -10,7 +11,7 @@ export class CreateDeliveryNoteDto {
 
   @IsNotEmpty()
   @IsString()
-  sales_order: string;
+  salesOrder: string;
 
   @IsNotEmpty()
   @IsString()
@@ -19,4 +20,7 @@ export class CreateDeliveryNoteDto {
   @IsNotEmpty()
   @IsString()
   remarks: string;
+
+  @IsOptional()
+  deliveryNoteItems: Array<DeliveryNoteItem>;
 }

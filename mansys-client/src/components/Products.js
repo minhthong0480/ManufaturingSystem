@@ -1,8 +1,10 @@
 import Layout from "antd/es/layout/layout";
-import { Button, Form, Input, Select, Col, Modal, InputNumber, notification, Typography } from "antd";
+import { Button, Form, Input, Select, Col, Modal, InputNumber, Typography } from "antd";
+import { showErrorMessage, showSuccessMessage } from '../commons/utilities'
 import { omitBy, isNil, isNumber } from 'lodash';
 import { getAllProducts, createProducts } from "../actions/products";
 import { getAllCategory } from "../actions/category";
+import { SupplierService } from "../services/supplier-service";
 import { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import MyTable from "./MyTable/MyTable";
@@ -28,6 +30,7 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
   const [isLoadingDataTable, setIsLoadingDataTable] = useState(true);
+  const [supplierSelections, setSupplierSelections] = useState([]);
   const [form] = Form.useForm();
   const [formSearch] = Form.useForm();
   const showModal = () => {
@@ -45,20 +48,19 @@ const Products = () => {
     );
   };
 
-  const onSuccessCreate = (value) => {
+  const onSuccessCreate = (data) => {
     setLoading(false);
-    switch (value.code) {
-      case 200:
-        notification.success(value)
-        break;
-      default:
-        notification.error(value)
-        break;
+    if (data && data.isSuccess) {
+      showSuccessMessage(data.message)
+    }
+    else {
+      showErrorMessage(data.message)
     }
   }
   const handleOk = () => {
     form.validateFields().then((values) => {
       values.cost = values.price;
+      values.supplier_id = Number.parseInt(values.supplier)
       dispatch(createProducts({
         ...values,
         onSuccess: onSuccessCreate,
@@ -109,6 +111,17 @@ const Products = () => {
     const loadData = async () => {
       const categories = await CategoryService.getAll();
       setdataSelect(categories.data)
+
+      const getAllSupplier = await SupplierService.getAll();
+      if (getAllSupplier.status == 200 && getAllSupplier.data) {
+        const mappedData = getAllSupplier.data.data.map((e) => ({
+          key: e.name,
+          value: e.id,
+        }));
+        setSupplierSelections(getAllSupplier.data.data);
+      } else {
+        showErrorMessage("An error is occurred while loading supplier!");
+      }
     }
 
     loadData();
@@ -289,7 +302,9 @@ const Products = () => {
               required: true,
             },
           ]}>
-            <Input placeholder="Nhập nhà cung câp" />
+            <Select placeholder="--- Vui lòng chọn ---" >
+              {supplierSelections.map((item) => itemSelect(item))}
+            </Select>
           </Form.Item>
           <Form.Item label="Thể loại sản phẩm" name="category_id" rules={[
             {

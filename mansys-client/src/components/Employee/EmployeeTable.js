@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Input, Popconfirm, Space, Table } from "antd";
+import { showErrorMessage, formatCurrency, showSuccessMessage } from '../../commons/utilities'
+import { LOCAL_STORAGE_USER, USER_ROLE_ADMIN } from "../../commons/enum"
 import "../../styles//EmployeeTable.css";
 import Search from "antd/es/input/Search";
 import EmployeeModal from "./EmployeeModal";
@@ -88,6 +90,7 @@ const EditableCell = ({
   }
   return <td {...restProps}>{childNode}</td>;
 };
+
 const EmployeeTable = () => {
   const [bottom, setBottom] = useState("bottomLeft");
   const [dataSource, setDataSource] = useState([]);
@@ -102,6 +105,7 @@ const EmployeeTable = () => {
     fetchAllUser();
   }, [deleteID]);
 
+  const user = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_USER));
   const [count, setCount] = useState(2);
   const [editEmployee, setEditEmployee] = useState(true);
   const handleDelete = async (key) => {
@@ -165,7 +169,8 @@ const EmployeeTable = () => {
       title: "Action",
       dataIndex: "action",
       render: (_, record) =>
-        dataSource.length >= 1 ? (
+        user.roles.includes(USER_ROLE_ADMIN) &&
+          dataSource.length >= 1 ? (
           <Space size="middle">
             <Button
               type="primary"
@@ -176,14 +181,18 @@ const EmployeeTable = () => {
             >
               Edit
             </Button>
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record)}
-            >
-              <DeleteOutlined
-                style={{ marginLeft: "10px", fontSize: "20px" }}
-              />
-            </Popconfirm>
+            {
+              (record.username == 'admin') ? <span></span>
+                :
+                <Popconfirm
+                  title="Sure to delete?"
+                  onConfirm={() => handleDelete(record)}
+                >
+                  <DeleteOutlined
+                    style={{ marginLeft: "10px", fontSize: "20px" }}
+                  />
+                </Popconfirm>
+            }
           </Space>
         ) : null,
     },

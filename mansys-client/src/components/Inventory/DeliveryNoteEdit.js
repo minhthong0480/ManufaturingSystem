@@ -1,7 +1,5 @@
-import { Descriptions, Modal, List, Typography } from "antd";
 import { React, useState, useEffect, Fragment } from "react";
 import { PlusOutlined, SaveOutlined } from "@ant-design/icons";
-import moment from "moment";
 import {
   Row,
   Col,
@@ -12,10 +10,8 @@ import {
   Steps,
   TextArea,
 } from "antd";
-import FilterableSelect from "../Commons/FilterableSelection";
-import { SupplierService } from "../../services/supplier-service";
 import { ProductsService } from "../../services/products-service";
-import { MaterialService } from "../../services/material-service";
+import { getAllCustomer } from "../../actions/customer.js";
 import { useDispatch, useSelector } from "react-redux";
 import { updateDeliveryNote } from "../../actions/delivery-note";
 import {
@@ -43,16 +39,15 @@ const DeliveryNoteEdit = (props) => {
     approval: false,
     deliveryNoteItems: [],
   });
-  const [billList, setBillList] = useState([]);
   const [deliverNoteError, setDeliveryNoteError] = useState([]);
   const [productSelections, setProductSelections] = useState([]);
+  const [customerSelections, setCustomerSelections] = useState([]);
 
   const loadData = async () => {
     const getDeliveryNote = await DeliveryNoteService.get(params.id);
     if (getDeliveryNote.isSuccess && getDeliveryNote.data && getDeliveryNote.data.data) {
       const deliveryNote = getDeliveryNote.data.data;
       setDeliveryNote(deliveryNote);
-      console.log(deliveryNote)
     }
 
     const getAllProduct = await ProductsService.getAll();
@@ -64,6 +59,17 @@ const DeliveryNoteEdit = (props) => {
       setProductSelections(mappedData);
     } else {
       showErrorMessage("An error is occurred while loading products!");
+    }
+
+    const allCustomer = await getAllCustomer();
+    if (allCustomer.data) {
+      const mappedData = allCustomer.data.map((e) => ({
+        key: e.name,
+        value: e.id,
+      }));
+      setCustomerSelections(mappedData);
+    } else {
+      showErrorMessage("An error is occurred while loading customers!");
     }
   }
 
@@ -302,15 +308,24 @@ const DeliveryNoteEdit = (props) => {
           </Col>
           <Col span={4}>
             <div>
-              <label>Customer ID</label>
+              <label>Customer</label>
             </div>
-            <Input
-              onChange={(e) => handleInforChange("customerId", e.target.value)}
+            <Select
+              className="w-100"
+              placeholder="Select a Customer"
               disabled={disabled}
-              value={deliveryNote.customerId}
-              type="string"
-              placeholder="Customer Id"
-            />
+              onSelect={(e) => handleInforChange("customerId", e)}
+              value={deliveryNote.customerId > 0 ? deliveryNote.customerId : null}
+            >
+              {!customerSelections
+                ? ""
+                : customerSelections.map((e) => (
+                  <Select.Option key={e.value} value={e.value}>
+                    {e.key}{" "}
+                  </Select.Option>
+                ))}
+
+            </Select>
             {deliverNoteError.customerId && (
               <span className="error">{deliverNoteError.customerId}</span>
             )}

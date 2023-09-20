@@ -56,7 +56,10 @@ export class ReceivingNoteItemService {
     );
   }
 
-  async updateItems(receivingNoteId: number, newItems: Array<ReceivingNoteItem>) {
+  async updateItems(
+    receivingNoteId: number,
+    newItems: Array<ReceivingNoteItem>,
+  ) {
     const items = await this.receivingNoteItemRepository.findBy({
       receivingNoteId,
     });
@@ -73,5 +76,26 @@ export class ReceivingNoteItemService {
     if (newItems && newItems.length > 0) {
       await this.receivingNoteItemRepository.save(newItems);
     }
+  }
+
+  async saveItems(receivingNoteId: number, newItems: Array<ReceivingNoteItem>) {
+    newItems.map((item) => {
+      item.receivingNoteId = receivingNoteId;
+      return item;
+    });
+    await this.receivingNoteItemRepository.save(newItems);
+  }
+
+  async deleteByReceivingNoteId(receivingNoteId: number) {
+    const items = await this.receivingNoteItemRepository.findBy({
+      receivingNoteId: receivingNoteId,
+    });
+    if (items.length > 0)
+      await this.receivingNoteItemRepository.delete(items.map((e) => e.id));
+  }
+
+  async deleteItems(items: Array<ReceivingNoteItem>) {
+    if (items.length > 0)
+      await this.receivingNoteItemRepository.delete(items.map((e) => e.id));
   }
 }

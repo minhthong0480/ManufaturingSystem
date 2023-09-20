@@ -8,7 +8,7 @@ import "../../styles/Contract.css";
 import "../../styles/PaginatedTable.css";
 import { ContractService } from "../../services/contract-service";
 import { PaginatedTable } from '../Commons/PaginatedTable'
-import { showErrorMessage, formatCurrency } from '../../commons/utilities'
+import { showErrorMessage, formatCurrency, showSuccessMessage } from '../../commons/utilities'
 import { Row, Col, Select, DatePicker, Button, Input, Steps, Tabs } from "antd";
 import { DeliveryNoteService } from "../../services/delivery-note-service";
 
@@ -59,8 +59,8 @@ const DeliveryNote = () => {
     if (deleteResult.code >= 400) {
       showErrorMessage('An error is occured while deleting, please try again!')
     } else {
-      toast.success("Contract Deleted");
       setFilter({ ...filter, data: [...filter.data.filter(e => e.id != record.id)] })
+      showSuccessMessage("Delete success")
     }
   };
 
@@ -101,6 +101,15 @@ const DeliveryNote = () => {
 
   return (
     <Fragment>
+      <div className="main-content-container">
+        <div className="text-align-right">
+          <Button type="primary" onClick={() => {
+            navigate("/delivery_note/create")
+          }}>
+            Create Delivery Note
+          </Button>
+        </div>
+      </div>
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

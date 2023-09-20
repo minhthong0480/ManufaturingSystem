@@ -20,7 +20,7 @@ export const ReceivingNoteService = {
   },
 
   delete: async function (data) {
-    const api = API_RECEIVING_NOTE_FILTER + data.id;
+    const api = API_RECEIVING_NOTE + data.id;
     const result = await AxiosClient.delete(api)
     if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
     return requestSucess({
@@ -37,6 +37,13 @@ export const ReceivingNoteService = {
     })
   },
 
+  create: async function (data) {
+    const result = await AxiosClient.post(API_RECEIVING_NOTE, data)
+    if (result.status >= 400 || !result.data.isSuccess) return requestFail(result.message)
+    return requestSucess({
+      data: result.data.data
+    })
+  },
 
   get: async function (id) {
     const api = API_RECEIVING_NOTE + id;

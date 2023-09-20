@@ -29,7 +29,7 @@ export const PaginatedTable = ({ columns, page, pageSize, totalRows, data, pageC
     return (
       <div>
         <Table
-          className="paginated-table-table--block"
+          className="m-top--1rem paginated-table-table--block"
           dataSource={data}
           columns={columns}
           pagination={false}

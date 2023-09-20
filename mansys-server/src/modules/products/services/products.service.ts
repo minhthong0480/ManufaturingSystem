@@ -53,15 +53,15 @@ export class ProductsService {
     return ResultModel.fail('', 'Product not exist!');
   }
 
-  async create(CreateProductDto: CreateProductDto) {
+  async create(dto: CreateProductDto) {
+    console.log(dto);
     const checkProduct = await this.productsRepository.findOne({
-      where: { name: CreateProductDto.name },
+      where: { name: dto.name },
     });
     if (checkProduct) {
       return ResultModel.fail('', 'Sản phẩm đã tồn tại!');
     }
-    const product = await this.productsRepository.create(CreateProductDto);
-    const save = await this.productsRepository.save(product);
+    const product = await this.productsRepository.save(dto);
     return ResultModel.success(product, 'Tạo sản phẩm thành công!');
   }
 

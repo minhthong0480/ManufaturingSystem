@@ -39,10 +39,21 @@ export class ReceivingNoteService {
       return ResultModel.fail('', 'Create Receiving Note failed!');
     }
 
+    await this.itemService.saveItems(receivingNote.id, dto.receivingNoteItems);
     return ResultModel.success(
       receivingNote,
       'Create Receiving Note successful!',
     );
+  }
+
+  async delete(id: number) {
+    const receivingNote = await this.receivingNoteRepository.findOneBy({ id });
+    if (!receivingNote) {
+      return ResultModel.fail({}, 'Failed!');
+    }
+    await this.itemService.deleteItems(receivingNote.receivingNoteItems);
+    await this.receivingNoteRepository.delete(receivingNote.id);
+    return ResultModel.success({}, 'Success!!!');
   }
 
   async approve(id: number) {

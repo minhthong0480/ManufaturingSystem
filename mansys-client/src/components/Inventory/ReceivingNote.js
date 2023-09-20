@@ -2,13 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import "../../styles/Contract.css";
 import "../../styles/PaginatedTable.css";
-import { ContractService } from "../../services/contract-service";
 import { PaginatedTable } from '../Commons/PaginatedTable'
-import { showErrorMessage, formatCurrency } from '../../commons/utilities'
+import { showErrorMessage, formatCurrency, showSuccessMessage } from '../../commons/utilities'
 import { Row, Col, Select, DatePicker, Button, Input, Steps, Tabs } from "antd";
 import { ReceivingNoteService } from "../../services/receiving-note-service";
 
@@ -59,8 +56,8 @@ const ReceivingNote = () => {
     if (deleteResult.code >= 400) {
       showErrorMessage('An error is occured while deleting, please try again!')
     } else {
-      toast.success("Contract Deleted");
       setFilter({ ...filter, data: [...filter.data.filter(e => e.id != record.id)] })
+      showSuccessMessage("Delete success")
     }
   };
 
@@ -102,6 +99,15 @@ const ReceivingNote = () => {
 
   return (
     <Fragment>
+      <div className="main-content-container">
+        <div className="text-align-right">
+          <Button type="primary" onClick={() => {
+            navigate("/receiving_note/create")
+          }}>
+            Create Receiving Note
+          </Button>
+        </div>
+      </div>
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}

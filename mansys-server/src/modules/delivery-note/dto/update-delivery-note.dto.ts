@@ -4,6 +4,4 @@ import { IsOptional } from 'class-validator';
 import { DeliveryNoteItem } from '../entities/delivery-note-item.entity';
 
 export class UpdateDeliveryNoteDto extends PartialType(CreateDeliveryNoteDto) {
-  @IsOptional()
-  deliveryNoteItems: Array<DeliveryNoteItem>;
 }
