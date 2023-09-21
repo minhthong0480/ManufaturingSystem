@@ -1,11 +1,12 @@
 import { Repository } from 'typeorm';
 import { Inventory } from '../entities/inventory.entity';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Delete } from '@nestjs/common';
 import { CreateInventoryDto } from '../dto/create-inventory.dto';
 import { ResultModel } from 'src/common/result-model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilterInventoryDto } from '../dto/filter-inventory.dto';
 import { ResultListModel } from 'src/common/result-list-model';
+import { UpdateInventoryDto } from '../dto/update-inventory.dto';
 
 @Injectable()
 export class InventoryService {
@@ -13,6 +14,40 @@ export class InventoryService {
     @InjectRepository(Inventory)
     private readonly inventoryRepository: Repository<Inventory>,
   ) {}
+
+  async get(id: number) {
+    const inventory = await this.inventoryRepository.findOneBy({ id });
+    if (!inventory) {
+      return ResultModel.fail({}, 'Get Inventory Failed');
+    }
+    return ResultModel.success(inventory, 'Success');
+  }
+
+  async delete(id: number) {
+    const inventory = await this.inventoryRepository.findOneBy({ id });
+    if (!inventory) {
+      return ResultModel.fail({}, 'Delete Inventory Failed');
+    }
+
+    await this.inventoryRepository.delete(inventory);
+
+    return ResultModel.success({}, 'Success');
+  }
+
+  async update(id: number, dto: UpdateInventoryDto) {
+    const inventory = await this.inventoryRepository.findOneBy({ id });
+    if (!inventory) {
+      return ResultModel.fail({}, 'Get Inventory Failed');
+    }
+
+    dto.lastUpdate = new Date();
+    const updated = await this.inventoryRepository.save({
+      ...inventory,
+      ...dto,
+    });
+
+    return ResultModel.success(updated, 'Success');
+  }
 
   async create(createInventoryDto: CreateInventoryDto) {
     if (!createInventoryDto.lastUpdate) {

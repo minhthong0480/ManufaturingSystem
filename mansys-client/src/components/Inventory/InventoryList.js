@@ -48,9 +48,8 @@ const InventoryList = () => {
   };
 
   const handleEdit = (record) => {
-    // let path = `/edit_inventory/${record.id}`;
-    // navigate(path);
-    console.log("edit")
+    let path = `/inventory_edit/${record.id}`;
+    navigate(path);
   };
 
   const handleDelete = async (record) => {
@@ -72,7 +71,7 @@ const InventoryList = () => {
     { title: "End Balance", dataIndex: "endBalance", key: "endBalance" },
     { title: "Stock In", dataIndex: "stockIn", key: "stockIn" },
     { title: "Stock Out", dataIndex: "stockOut", key: "stockOut" },
-    { title: "Last Modified", dataIndex: "lastUpdate", key: "lastUpdate" },
+    { title: "Last Update", dataIndex: "lastUpdate", key: "lastUpdate" },
     {
       title: "Actions",
       dataIndex: "actions",
@@ -98,6 +97,15 @@ const InventoryList = () => {
 
   return (
     <Fragment>
+      <div className="main-content-container">
+        <div className="text-align-right">
+          <Button type="primary" onClick={() => {
+            navigate("/inventory/create")
+          }}>
+            Create Inventory
+          </Button>
+        </div>
+      </div>
       <PaginatedTable
         columns={columns}
         pageSize={filter.pageSize}
